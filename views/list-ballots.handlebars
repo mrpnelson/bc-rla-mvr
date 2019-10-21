@@ -1,0 +1,61 @@
+<div>
+    <h1><i class="fa fa-list-ol"></i> List Ballots</h1>
+    <h2>{{ ballot_count }} Ballots</h2>
+    {{#if message}}
+        <div class="alert alert-info">
+            <h1><i class="fa fa-info-circle"></i> {{ message }}</h1>
+        </div>
+    {{/if }}
+</div>
+
+<div>
+    <a class="btn btn-success fa fa-plus" href="/templates/add/"> Add</a>
+</div>
+
+<div id="templates_container" class="corner10" style="border:0px solid purple; background-color: white; margin-bottom: 1px; margin-top:1px">
+    <table id="templates_table" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Name</th>
+                <th>ID</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td align="right">
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger fa fa-trash" href="/templates/delete/{{ this.TemplateID }}"> Delete</a>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+$(document).ready(function(){
+    templates_table = $('#templates_table').DataTable({
+        "columnDefs": [
+            { "orderable": false, "targets": [1, 4] }
+        ],
+        info: true,
+        ordering: true,
+        pageLength: 10,
+        paging: false,
+        responsive: true,
+        searching: true,
+        stateSave: false,
+        order: [ 2, "asc" ]
+    });
+    new $.fn.dataTable.FixedHeader( templates_table );
+});
+</script>

@@ -1,0 +1,19 @@
+<div>
+    <h1><i class="fa fa-upload"></i> Load Contest</h1>
+    {{#if message}}
+        <div class="alert alert-info">
+            <h1><i class="fa fa-info-circle"></i> {{ message }}</h1>
+        </div>
+    {{/if }}
+</div>
+
+<ul>
+    <li>Prompt for file upload</li>
+    <li>Upon upload: read, validate, echo, save in session</li>
+</ul>
+
+<div>
+    <a class="btn btn-success fa fa-plus" href="/templates/add/"> Load</a>
+</div>
+
+

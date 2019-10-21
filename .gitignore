@@ -1,6 +1,7 @@
 # Ignore files such as .DS_Store (OSX), *.bak
 .DS_STORE
 *.bak
+bak
 
 # Logs
 logs
