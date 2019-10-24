@@ -7,20 +7,110 @@
     {{/if }}
 </div>
 
-<ul>
-    <li>Prompt for file upload</li>
-    <li>Upon upload: read, validate, echo, save in session</li>
-</ul>
-
-<div>
-    <a class="btn btn-success fa fa-plus" href="/templates/add/"> Load</a>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Overview</h3>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Purpose of Page</h3>
+            </div>
+            <div class="panel-body">
+                <p>Load contest details such as:</p>
+                <ul>
+                    <li>Contest name</li>
+                    <li>Candidate names</li>
+                    <li>Unique candidate identifiers</li>
+                    <li>Candidate images</li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Audience</h3>
+            </div>
+            <div class="panel-body">
+                <p>Election administrator (or Laurent or Dan)</p>
+            </div>
+        </div>
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">Frequency</h3>
+            </div>
+            <div class="panel-body">
+                Run one time (for the pilot) or once per contest (in future elections)
+            </div>
+        </div>
+    </div>
 </div>
 
-<ol>
-    <li>big upload button</li>
-    <li>display area for JSON results</li>
-    <li>hard-code to ant, etc</li>
-    <li></li>
-</ol>
+<div>
+    <a class="btn btn-success btn-lg fa fa-upload" href="/templates/add/"> Upload Contest Details</a>
+</div>
 
+<h4>Upload results</h4>
+<p>
+    <span class="text-bold">File:</span> <span class="fa fa-upload"></span> mascot_contest.json
+</p>
+<p>
+    <span class="text-bold">Status:</span> <span class="fa fa-check"></span> Valid 
+</p>
+<p>
+    <span class="text-bold">Contents:</span>
+</p>
 
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="fa fa-file"></span> <code>mascot_contest.json</code></h3>
+    </div>
+    <div class="panel-body">
+        <pre>
+{
+	"contest-name": "City Mascot",
+	"contest-id": "987654321",
+	"candidates":[
+		{
+			"candidate-name": "Ant",
+			"candidate-id": "ant.png",
+			"candidate-image": "a1",
+		},
+		{
+			"candidate-name": "Bee",
+			"candidate-id": "bee.png",
+			"candidate-image": "b1",
+		},
+		{
+			"candidate-name": "Cat",
+			"candidate-id": "cat.png",
+			"candidate-image": "c3",
+		},
+		{
+			"candidate-name": "Dog",
+			"candidate-id": "dog.png",
+			"candidate-image": "d4",
+		},
+		{
+			"candidate-name": "Elk",
+			"candidate-id": "elk.png",
+			"candidate-image": "e5",
+		},
+		{
+			"candidate-name": "Fox",
+			"candidate-id": "fox.png",
+			"candidate-image": "f6",
+		},
+		{
+			"candidate-name": "Gnu",
+			"candidate-id": "ant.png",
+			"candidate-image": "g7",
+		},
+		{
+			"candidate-name": "Hog",
+			"candidate-id": "hog.png",
+			"candidate-image": "h8",
+		}
+	]
+}        </pre>
+    </div>
+</div>
