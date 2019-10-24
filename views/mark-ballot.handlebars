@@ -6,83 +6,114 @@
         </div>
     {{/if }}
 </div>
-
-<ul>
-    <li>Present Ballot Interface</li>
-    <li>Prompt</li>
-    <li>Submit Review</li>
-    <li>Submit Complete - Add another</li>
-</ul>
-
-<ol>
-    <li>input fields for tabulatorID+batchid+recordID</li>
-    <li>Stub oval then get it working</li>
-    <li>Populate from a JSON object</li>
-</ol>
-
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Overview</h3>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Purpose of Page</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>Transfer <span class="text-bold">ballot id</span> and <span class="text-bold"><em>literal</em> ballot selections</span> from selected paper ballot.</li>
+                    <li>Preview ballot status: valid, overvote, invalid, etc.</li>
+                    <li>Preview JSON: <span class="text-bold">as-is</span> (based on entry) and <span class="text-bold">post-processing</span> (based on any additional logic applied to ballot result)</li>
+                    <li>If applicable, mark ballot as unreadable. </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Target Audience</h3>
+            </div>
+            <div class="panel-body">
+                <p>Department of Elections staff</p>
+            </div>
+        </div>
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">Frequency</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>The page is run once per ballot.</li>
+                    <li>Multiple users on different computers can simultaneously enter ballots.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 <form name="ballot-form" id="ballot-form">
-
 <p>
-    <label for="tabulator-id">Tabulator ID</label>
+    <span class="text-bold">Contest:</span> Team Mascot
+</p>
+<p>
+    <label for="tabulator-id">Tabulator ID:</label>
     <input type="text" name="tabulator-id" id="tabulator-id" value="ABCDEFG"/>
-
-    <label for="batch-id">Batch ID</label>
+    <label for="batch-id">Batch ID:</label>
     <input type="text" name="batch-id" id="batch-id" value="HIJKLMONP"/>
-
-    <label for="record-id">Record ID</label>
+    <label for="record-id">Record ID:</label>
     <input type="text" name="record-id" id="record-id" value="QRSTUVWXYZ"/>
 </p>
-
-<div id="ballot-container" class="container border1"></div>
-
-<input type="Button" onclick="submit_ballot()" value="Submit Ballot">
-&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;
-<input type="Button" onclick="reset_ballot()" value="Reset Ballot">
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <span class="text-bold">Ballot ID</span> (concatenation of Tabular ID, Batch ID and Record ID): <code>ABCDEFGHIJKLMONPQRSTUVWXYZ</code>
+    </div>
+    <div class="panel-body">
+        <div id="ballot-container" class="container"></div>
+    </div>
+    <div class="panel-footer">
+        <div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-success btn-lg fa fa-save" onclick="submit_ballot()"> Submit Ballot</button>
+                </div>
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-warning btn-lg fa fa-refresh" onclick="reset_ballot()"> Reset Ballot</button>
+                </div>
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick=""> Flag Ballot as Invalid</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </form>
-
 <div id="ballot_results_JSON"></div>
-
-
 <script>
-
 function add_header_to_ballot(number_of_candidates) {
     let ballot_row = document.createElement('div')
     $(ballot_row).addClass('row')
-    .appendTo($("#ballot-container"))
-
+        .appendTo($("#ballot-container"))
     let spacer = document.createElement('div')
     $(spacer).addClass('col-xs-2')
-    .html("&nbsp;")
-    .appendTo(ballot_row)
-
+        .html("&nbsp;")
+        .appendTo(ballot_row)
     for (var i = 1; i <= number_of_candidates; i++) {
         let ballot_header = document.createElement('div')
         let ordinal = get_ordinal_suffix_of_integer(i)
         $(ballot_header).addClass('col-xs-1').addClass('text-bold')
-        .html(ordinal + " Choice")
-        .appendTo(ballot_row)
+            .html(ordinal + " Choice")
+            .appendTo(ballot_row)
     }
 }
-
-function add_candidate_to_ballot(number_of_candidates, candidate_number, candidate_name, candidate_image) {
+function add_candidate_to_ballot(number_of_candidates, candidate_number, candidate_name, candidate_identifier, candidate_image) {
     let d = document.createElement('div')
     $(d).addClass('row')
-    .appendTo($("#ballot-container"))
+        .appendTo($("#ballot-container"))
 
     let candidate = document.createElement('div')
     $(candidate).addClass('col-xs-2')
-    .html("<p><img src='"+candidate_image+"' border='1' width='40'>"+candidate_name+"</p>")
-    .appendTo(d)
-
+        .html("<div class='xsmall_image_container'><span class=' xsmall_image_border'><img class='img-circle' src='"+candidate_image+"' width='40'></span><span class='text-bold'>"+candidate_name+"</span>&nbsp;(id:<span class='text-bold'>"+candidate_identifier+"</span>)</div>")
+        .appendTo(d)
     for (var i = 1; i <= number_of_candidates; i++) {
         let ballot_checkbox = document.createElement('div')
         let ballot_id = "can"+candidate_number+"_rank" + i
         $(ballot_checkbox).addClass('col-xs-1')
-        .html("<div class='checkbox-oval'><input type='checkbox' id='"+ballot_id+"' /><label for='"+ballot_id+"'>&nbsp;</label></div>")
-        .appendTo(d)
+            .html("<div class='checkbox-oval'><input type='checkbox' id='"+ballot_id+"' /><label for='"+ballot_id+"'>&nbsp;</label></div>")
+            .appendTo(d)
     }
 }
 function submit_ballot() {
@@ -96,114 +127,30 @@ function submit_ballot() {
             console.log(varname + "  is checked:",is_checked)
         }
     }
-
     var json_output = ''
-
-/*
-    var obj = { name: "John", age: 30, city: "New York" };
-    var myJSON = JSON.stringify(obj);
-    console.log('obj', obj)
-    console.log('myJSON', myJSON)
-    var str = '{"2003":{"1":{"2":["test"],"3":["test2"]}}}';
-    var obj = {"2003":{"1":{"2":["test"],"3":["test2"]}}};
-    console.log( JSON.stringify(str) );  // {\"2003\":{\"1\":{\"2\":[\"test\"],\"3\":[\"test2\"]}}} 
-    console.log( JSON.stringify(obj) );
-*/
- 
-
     var manual_cvr = {}
-
     var ballot_id_json = {}
     var ballot_key = "ballot-id"
-    var ballot_value = "dingobingo"
+    var ballot_value = "ABCDEFGHIJKLMONPQRSTUVWXYZ"
     ballot_id_json[ ballot_key ] = ballot_value
-
-
     var b1 = {}
-
     var ballot_selections = []
-
-//    var bx1 = {"id-of-candidate-1-ant":1}
-//    var bx2 = {"id-of-candidate-1-ant":2}
-
     var bx1 = {}
     var bx2 = {}
     bx1["id-of-candidate-1-ant"] = 1
     bx2["id-of-candidate-1-ant"] = 2
-
-   // bx1 = Object.assign({"ballot-id": ballot_value}, bx1)
-//    var bx1 = "id-of-candidate-1-ant : 1"
-//    var bx2 = "id-of-candidate-1-ant : 2"
-
-
-
     ballot_selections.push(bx1)
     ballot_selections.push(bx2)
-
-
-    //manual_cvr = Object.assign({1: ballot_id_json}, manual_cvr)
-    //manual_cvr = Object.assign({2: b1}, manual_cvr)
-
     manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
     manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
-
-    //alerts = Object.assign({3: {app:'helloagain_again',message:'yet another message'}}, alerts)
-
-
    $('#ballot_results_JSON').html(JSON.stringify(manual_cvr))
-//   $('#ballot_results_JSON').html(JSON.stringify(b1))
-
-
-//https://stackoverflow.com/questions/617036/appending-to-an-object
-
-    /*
-
-var element = {};
-element[ yourKey ] = yourValue;
-
-{
-	"contest": "City Mascot",
-	"contest-id": "654321",
-	"manual-cvr":[
-		{
-			"ballot-id": "id-of-voter-1-ballot",
-			"ballot-selections": [
-				"id-of-candidate-1-ant": 1,
-				"id-of-candidate-2-bee": 2,
-				"id-of-candidate-3-cat": 3,
-				"id-of-candidate-4-dog": 4
-			]
-		},
-		{
-			"ballot-id": "id-of-voter-2-ballot",
-			"ballot-selections": [
-				"id-of-candidate-2-bee": 1,
-				"id-of-candidate-4-dog": 2
-			]
-		},
-		{
-			"ballot-id": "id-of-voter-3-ballot",
-			"ballot-selections": [
-				"id-of-candidate-3-cat": 4,
-				"id-of-candidate-4-dog": 2
-			]
-		}
-	]
-}
-
-
-
-    */
-
-
 }
 function reset_ballot() {
     console.log('reset ballot!')
     $('input[type=checkbox]').prop('checked',false)
     $('#ballot-form input[type=checkbox]').attr('checked',false)
 }
-
-// TODO - put in /lib/helper
+// TODO - put in /lib/helpers.js
 function get_ordinal_suffix_of_integer(i) {
     let j = i % 10,
         k = i % 100;
@@ -218,30 +165,50 @@ function get_ordinal_suffix_of_integer(i) {
     }
     return i + "th";
 }
-
-var num_candidates = 4
+var num_candidates = 8
 $(function(){
+    // TODO: Replace these hard-coded ballot details with content from uploaded JSON file.
     add_header_to_ballot(num_candidates)
-
     var candidate_num = 1
     var candidate_nam = "Ant"
+    var candidate_id = "a1"
     var candidate_img = "/img/candidates/ant.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_img)
-
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
     var candidate_num = 2
     var candidate_nam = "Bee"
+    var candidate_id = "b2"
     var candidate_img = "/img/candidates/bee.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_img)
-
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
     var candidate_num = 3
     var candidate_nam = "Cat"
+    var candidate_id = "c3"
     var candidate_img = "/img/candidates/cat.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_img)
-
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
     var candidate_num = 4
     var candidate_nam = "Dog"
+    var candidate_id = "d4"
     var candidate_img = "/img/candidates/dog.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_img)
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 5
+    var candidate_nam = "Elk"
+    var candidate_id = "e5"
+    var candidate_img = "/img/candidates/elk.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 6
+    var candidate_nam = "Fox"
+    var candidate_id = "f6"
+    var candidate_img = "/img/candidates/fox.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 7
+    var candidate_nam = "Gnu"
+    var candidate_id = "g7"
+    var candidate_img = "/img/candidates/gnu.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 8
+    var candidate_nam = "Hog"
+    var candidate_id = "h8"
+    var candidate_img = "/img/candidates/hog.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
 
 })
 

@@ -3,6 +3,19 @@ body {
     padding-bottom: 20px;
 }
 
+.small_image_container {
+    width:60px; 
+    height:60px; 
+}
+.small_image_border {
+    padding:4px; 
+    width:50px; 
+    height:50px; 
+    border:1px solid #ccc; 
+    border-radius: 16px;
+    display: block;
+}
+
 .checkbox-oval {position: relative;}
 .checkbox-oval label {
   background-color: #fff;
