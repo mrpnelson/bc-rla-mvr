@@ -2,6 +2,25 @@ body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
+
+.checkbox-oval {position: relative;}
+.checkbox-oval label {
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 28px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 40px;
+}
+.checkbox-oval input[type="checkbox"] {visibility: hidden;}
+.checkbox-oval input[type="checkbox"]:checked + label {
+  background-color: #202828;
+  border-color: #202828;
+}
+
 .text-right {
     text-align:right;
 }
@@ -58,4 +77,8 @@ body {
 }
 .page-footer p:last-child {
   margin-bottom: 0;
+}
+
+.text-bold {
+    font-weight: bold;
 }
