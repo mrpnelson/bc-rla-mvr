@@ -7,7 +7,75 @@
     {{/if }}
 </div>
 
-<ul>
-    <li>Prompt for Filename</li>
-    <li>Export it</li>
-</ul>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Overview</h3>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Purpose of Page</h3>
+            </div>
+            <div class="panel-body">
+                Export transformed ballots to JSON file for loading into next tool of the audit process.
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Target Audience</h3>
+            </div>
+            <div class="panel-body">
+                Election administrator (or Laurent or Dan)
+            </div>
+        </div>
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">Frequency</h3>
+            </div>
+            <div class="panel-body">
+                Run one time (for the pilot) or once per contest (in future elections)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <button type="button" class="btn btn-success btn-lg fa fa-download"> Export Ballots</button>
+</div>
+
+<h4>Export results</h4>
+<p>
+    <span class="text-bold">File:</span> <span class="fa fa-upload"></span> mascot_contest_ballots.json
+</p>
+<p>
+    <span class="text-bold">Ballots Entered:</span>&nbsp;6
+</p>
+<p>
+    <span class="text-bold">Invalid Ballots:</span>&nbsp;2
+</p>
+<p>
+    <span class="text-bold">Ballots Exported:</span>&nbsp;4
+</p>
+<p>
+    <span class="text-bold">Contents:</span>
+</p>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="fa fa-file"></span> <code>mascot_contest_ballots.json</code></h3>
+    </div>
+    <div class="panel-body">
+        <pre>
+{
+    "contest-name": "Team Mascot",
+    "contest-id": "987654321",
+    "valid-ballots": "4",
+    "manual-cvr":[
+        {"ballot-id":"ABCDEFGHIJKLMONPQRSTUVWXYZ", "ballot-selections":[{"a1":8},{"b2":7},{"c3":6},{"d4":5},{"e5":4},{"f6":3},{"g7":2},{"h8":1}]},
+        {"ballot-id":"ABCDEFGHIJKLMONPQQQ", "ballot-selections":[{"a1":1},{"b2":2}]},
+        {"ballot-id":"ABCDEFGHIJKLMONPSSS", "ballot-selections":[{"a1":1}]},
+        {"ballot-id":"ABCDEFGHIJKLMONPUUU", "ballot-selections":[{"a1":1}]}
+    ]
+}        </pre>
+    </div>
+</div>
