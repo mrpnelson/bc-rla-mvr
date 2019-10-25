@@ -7,7 +7,7 @@ router.get('/', function (req, res) {
     var message = req.query.message
         res.render('list-ballots', {
             message: message,
-            ballot_count: 55
+            ballot_count: 6
     })
 })
 
