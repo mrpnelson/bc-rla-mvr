@@ -84,10 +84,7 @@
     </div>
 </div>
 </form>
-<div id="ballot_results_JSON"></div>
 <script>
-
-
 function add_header_to_ballot(number_of_candidates) {
     let ballot_row = document.createElement('div')
     $(ballot_row).addClass('row')
@@ -148,7 +145,10 @@ function read_ballot_form() {
     ballot_selections.push(bx2)
     manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
     manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
-   $('#ballot_results_JSON').html(JSON.stringify(manual_cvr))
+
+    var mcvr_json = JSON.stringify(manual_cvr)
+    $('#ballot_string').text(mcvr_json)
+
 }
 function submit_ballot() {
        $("#ballot-form").submit();
@@ -218,6 +218,9 @@ $(function(){
     var candidate_img = "/img/candidates/hog.png"
     add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
 
+    $('input:checkbox').change(function() {
+        read_ballot_form()
+    });
 })
 
 </script>   
