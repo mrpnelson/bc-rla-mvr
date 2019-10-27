@@ -3,6 +3,9 @@
 *.bak
 bak
 
+# Run-time data
+data
+
 # Logs
 logs
 *.log

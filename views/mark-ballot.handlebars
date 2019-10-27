@@ -2,7 +2,7 @@
     <h1><i class="fa fa-check-circle"></i> Mark Ballot</h1>
     {{#if message}}
         <div class="alert alert-info">
-            <h1><i class="fa fa-info-circle"></i> {{ message }}</h1>
+            <h3><i class="fa fa-info-circle"></i> {{ message }}</h3>
         </div>
     {{/if }}
 </div>
@@ -45,7 +45,8 @@
         </div>
     </div>
 </div>
-<form name="ballot-form" id="ballot-form">
+<form name="ballot-form" id="ballot-form" action="/ballots/submit-ballot/" method="POST">
+
 <p>
     <span class="text-bold">Contest:</span> Team Mascot
 </p>
@@ -78,11 +79,15 @@
                 </div>
             </div>
         </div>
+        JSON:
+        <textarea name="ballot_string" id="ballot_string" rows="5" cols="200">{"ballot-id":"id-of-ballot", "ballot-selections":[]}</textarea>
     </div>
 </div>
 </form>
 <div id="ballot_results_JSON"></div>
 <script>
+
+
 function add_header_to_ballot(number_of_candidates) {
     let ballot_row = document.createElement('div')
     $(ballot_row).addClass('row')
@@ -116,8 +121,8 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
             .appendTo(d)
     }
 }
-function submit_ballot() {
-    console.log('submit ballot!')
+function read_ballot_form() {
+    console.log('read_ballot_form')
     let n = num_candidates
     for(var i = 1; i <= n; i++) {
         for(var j = 1; j <= n; j++) {
@@ -144,6 +149,9 @@ function submit_ballot() {
     manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
     manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
    $('#ballot_results_JSON').html(JSON.stringify(manual_cvr))
+}
+function submit_ballot() {
+       $("#ballot-form").submit();
 }
 function reset_ballot() {
     console.log('reset ballot!')

@@ -228,6 +228,9 @@ app.use('/load-contest', authorize, load_contest)
 var mark_ballot = require('./routes/mark-ballot')
 app.use('/mark-ballot', authorize, mark_ballot)
 
+var ballots = require('./routes/ballots')
+app.use('/ballots', authorize, ballots)
+
 var list_ballots = require('./routes/list-ballots')
 app.use('/list-ballots', authorize, list_ballots)
 
