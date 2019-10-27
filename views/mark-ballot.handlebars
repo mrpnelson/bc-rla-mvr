@@ -75,12 +75,17 @@
                     <button type="button" class="btn btn-warning btn-lg fa fa-refresh" onclick="reset_ballot()"> Reset Ballot</button>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick=""> Flag Ballot as Invalid</button>
+                    <button type="button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick="alert('TO DO')"> Flag Ballot as Invalid</button>
                 </div>
             </div>
         </div>
-        JSON:
-        <textarea name="ballot_string" id="ballot_string" rows="5" cols="200">{"ballot-id":"id-of-ballot", "ballot-selections":[]}</textarea>
+        Literal Ballot JSON:
+        <br/>
+        <textarea name="ballot_string" id="ballot_string" rows="5" cols="150">{"ballot-id":"ABCDEFGHIJKLMONPQRSTUVWXYZ","ballot-selections":[]}</textarea>
+        <br/>
+        Processed Ballot JSON:
+        <br/>
+        <textarea name="ballot_string_calc" id="ballot_string_calc" rows="5" cols="150">TO DO</textarea>
     </div>
 </div>
 </form>
@@ -114,21 +119,13 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
         let ballot_checkbox = document.createElement('div')
         let ballot_id = "can"+candidate_number+"_rank" + i
         $(ballot_checkbox).addClass('col-xs-1')
-            .html("<div class='checkbox-oval'><input type='checkbox' id='"+ballot_id+"' /><label for='"+ballot_id+"'>&nbsp;</label></div>")
+            .html("<div class='checkbox-oval'><input type='checkbox' id='"+ballot_id+"' data-can_id='"+candidate_identifier+"' /><label for='"+ballot_id+"'>&nbsp;</label></div>")
             .appendTo(d)
+        //$("#"+ballot_id).data("something")
     }
 }
 function read_ballot_form() {
-    console.log('read_ballot_form')
-    let n = num_candidates
-    for(var i = 1; i <= n; i++) {
-        for(var j = 1; j <= n; j++) {
-            let varname = "can" + i + "_rank" + j
-            console.log("varname",varname)
-            is_checked = $("#"+varname).is(':checked')
-            console.log(varname + "  is checked:",is_checked)
-        }
-    }
+    //console.log('read_ballot_form')
     var json_output = ''
     var manual_cvr = {}
     var ballot_id_json = {}
@@ -137,12 +134,26 @@ function read_ballot_form() {
     ballot_id_json[ ballot_key ] = ballot_value
     var b1 = {}
     var ballot_selections = []
-    var bx1 = {}
-    var bx2 = {}
-    bx1["id-of-candidate-1-ant"] = 1
-    bx2["id-of-candidate-1-ant"] = 2
-    ballot_selections.push(bx1)
-    ballot_selections.push(bx2)
+    let n = num_candidates
+    for(var i = 1; i <= n; i++) {
+        for(var j = 1; j <= n; j++) {
+            let varname = "can" + i + "_rank" + j
+            //console.log("varname",varname)
+            is_checked = $("#"+varname).is(':checked')
+            //console.log(varname + "  is checked:",is_checked)
+            if (is_checked){
+                var bx = {}
+                let candidate_id = $('#'+varname).attr('id')
+                //console.log('candidate_id',candidate_id)
+                let candidate_data = $('#'+candidate_id).attr('data-can_id')
+                //console.log('candidate_data',candidate_data)
+                bx[candidate_data] = j
+                ballot_selections.push(bx)
+            }
+        }
+    }
+
+
     manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
     manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
 
@@ -154,9 +165,10 @@ function submit_ballot() {
        $("#ballot-form").submit();
 }
 function reset_ballot() {
-    console.log('reset ballot!')
+    //console.log('reset_ballot')
     $('input[type=checkbox]').prop('checked',false)
     $('#ballot-form input[type=checkbox]').attr('checked',false)
+    $('#ballot_string').text('{"ballot-id":"ABCDEFGHIJKLMONPQRSTUVWXYZ","ballot-selections":[]}')
 }
 // TODO - put in /lib/helpers.js
 function get_ordinal_suffix_of_integer(i) {
