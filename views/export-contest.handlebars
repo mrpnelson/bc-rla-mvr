@@ -48,13 +48,13 @@
     <span class="text-bold">File:</span> <span class="fa fa-upload"></span> mascot_contest_ballots.json
 </p>
 <p>
-    <span class="text-bold">Ballots Entered:</span>&nbsp;6
+    <span class="text-bold">Ballots Entered:</span>&nbsp;TO DO
 </p>
 <p>
-    <span class="text-bold">Invalid Ballots:</span>&nbsp;2
+    <span class="text-bold">Invalid Ballots:</span>&nbsp;TO DO
 </p>
 <p>
-    <span class="text-bold">Ballots Exported:</span>&nbsp;4
+    <span class="text-bold">Ballots Exported:</span>&nbsp;TO DO
 </p>
 <p>
     <span class="text-bold">Contents:</span>
@@ -66,16 +66,10 @@
     </div>
     <div class="panel-body">
         <pre>
-{
-    "contest-name": "Team Mascot",
-    "contest-id": "987654321",
-    "valid-ballots": "4",
-    "manual-cvr":[
-        {"ballot-id":"ABCDEFGHIJKLMONPQRSTUVWXYZ", "ballot-selections":[{"a1":8},{"b2":7},{"c3":6},{"d4":5},{"e5":4},{"f6":3},{"g7":2},{"h8":1}]},
-        {"ballot-id":"ABCDEFGHIJKLMONPQQQ", "ballot-selections":[{"a1":1},{"b2":2}]},
-        {"ballot-id":"ABCDEFGHIJKLMONPSSS", "ballot-selections":[{"a1":1}]},
-        {"ballot-id":"ABCDEFGHIJKLMONPUUU", "ballot-selections":[{"a1":1}]}
-    ]
-}        </pre>
+{{#if json_content}}
+{{ json json_content }}
+{{/if }}
+        </pre>
     </div>
 </div>
+

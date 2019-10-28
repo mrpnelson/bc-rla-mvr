@@ -156,7 +156,7 @@ var querystring = require("querystring")
 // ===============================================
 // Specify port to listen on 
 // ===============================================
-app.set('port', process.env.PORT || 3000)
+app.set('port', process.env.PORT || 3001)
 
 // ===============================================
 // Load settings

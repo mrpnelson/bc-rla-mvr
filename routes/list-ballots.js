@@ -43,7 +43,6 @@ router.get('/', function (req, res) {
             //json_content: JSON.stringify(data)
         })
     })
-
 })
 
 module.exports = router
