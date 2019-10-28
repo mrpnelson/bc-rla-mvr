@@ -135,6 +135,18 @@ HB.registerHelper('convertDateToLocal', function(datetime, format) {
     }
 })
 
+// Register JSON helper
+// See also http://zshawnsyed.com/2015/04/30/output-json-in-handlebars/
+// See also https://stackoverflow.com/questions/10232574/handlebars-js-parse-object-instead-of-object-object
+HB.registerHelper('json', function(context) {
+    return JSON.stringify(context);
+});
+
+// var HB.registerHelper('toJSON', function(object){
+// 	return new Handlebars.SafeString(JSON.stringify(object));
+// });
+
+
 // ===============================================
 // Load Node.js utilities 
 // ===============================================

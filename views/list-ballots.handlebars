@@ -44,7 +44,7 @@
 </div>
 
 <div>
-    <h2>{{ ballot_count }} Ballots</h2>
+    <h2>Ballots</h2>
     {{#if message}}
         <div class="alert alert-info">
             <h1><i class="fa fa-info-circle"></i> {{ message }}</h1>
@@ -52,6 +52,18 @@
     {{/if }}
 </div>
 
+{{#if json_content}}
+JSON: {{ json json_content }}
+{{/if }}
+
+<form name="discard-all-ballots" id="discard-all-ballots" action="/ballots/submit-ballot/" method="POST">
+</form>
+
+<button type="submit" class="btn btn-danger fa fa-trash" onclick="discard_all_ballots()"> Discard All Ballots</button>
+</form>
+
+<h1> TODO: Implement table below</h1>
+<h2>Note: content below is placeholder data</h2>
 <div id="templates_container" class="corner10" style="border:0px solid purple; background-color: white; margin-bottom: 1px; margin-top:1px">
     <table id="templates_table" class="table table-striped table-bordered">
         <thead>
