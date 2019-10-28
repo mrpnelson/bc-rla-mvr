@@ -53,12 +53,10 @@
 </div>
 
 {{#if json_content}}
-JSON: {{ json json_content }}
+JSON Ballot Files: {{ json json_content }}
 {{/if }}
 
-<form name="discard-all-ballots" id="discard-all-ballots" action="/ballots/submit-ballot/" method="POST">
-</form>
-
+<form name="discard-all-ballots" id="discard-all-ballots" action="/ballots/discard-all-ballots/" method="POST">
 <button type="submit" class="btn btn-danger fa fa-trash" onclick="discard_all_ballots()"> Discard All Ballots</button>
 </form>
 
@@ -211,6 +209,10 @@ JSON: {{ json json_content }}
 </div>
 
 <script>
+function discard_all_ballots() {
+    $("#discard-all-ballots").submit();
+}
+
 $(document).ready(function(){
     templates_table = $('#templates_table').DataTable({
         "columnDefs": [

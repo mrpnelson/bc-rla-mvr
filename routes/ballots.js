@@ -28,6 +28,31 @@ router.post('/submit-ballot/', function (req, res) {
     res.redirect(303, '/mark-ballot/?message=' + message)
 })
 
+// discard-all-ballots
+router.post('/discard-all-ballots/', function (req, res) {
+    console.log('discard-all-ballots')
+
+    var fs = require('fs')
+    fs.readdir('./data', (err, files) => {
+        //console.log('files', files)
+        files.forEach(file => {
+            console.log(file)
+            var ext = file.substr(file.lastIndexOf('.') + 1)
+            if (ext === 'json') {
+                console.log(file)
+                var file_obj = fs.readFileSync('./data/'+file, 'utf8')
+                console.log(file_obj)
+
+                //fs.unlink('./data/'+file, callback) 
+                fs.unlinkSync('./data/'+file);
+            }
+        })
+        var message = querystring.escape('Success discarding all ballots.')
+        console.log('message:', message)
+        res.redirect(303, '/list-ballots/?message=' + message)    
+    })
+})
+
 module.exports = router
 
 function write_data_to_disk(filedata, filename) {
