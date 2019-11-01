@@ -6,6 +6,26 @@
         </div>
     {{/if }}
 </div>
+
+<!-- Invalid Ballot ID Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Invalid Ballot ID</h4>
+            </div>
+            <div class="modal-body alert alert-danger">
+                <p>Please enter a valid ballot id (or select a ballot id from the dropdown).</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title"><a data-toggle="collapse" href="#help-panel" aria-expanded="false" aria-controls="footwear"><span class="fa fa-question-circle"></span> Help</a></h3>
@@ -50,17 +70,12 @@
 <p>
     <span class="text-bold">Contest:</span> Team Mascot
 </p>
-<p>
-    <label for="tabulator-id">Tabulator ID:</label>
-    <input type="text" name="tabulator-id" id="tabulator-id" value="ABCDEFG"/>
-    <label for="batch-id">Batch ID:</label>
-    <input type="text" name="batch-id" id="batch-id" value="HIJKLMONP"/>
-    <label for="record-id">Record ID:</label>
-    <input type="text" name="record-id" id="record-id" value="QRSTUVWXYZ"/>
-</p>
-<div class="panel panel-success">
+<div id="ballot-panel" class="panel panel-success">
     <div class="panel-heading">
-        <span class="text-bold">Ballot ID</span> (concatenation of Tabular ID, Batch ID and Record ID): <code>ABCDEFGHIJKLMONPQRSTUVWXYZ</code>
+        <label for="imprinted-id">Imprinted ID:</label>
+        <input type="text" name="imprinted-id" id="imprinted-id" value="998"/>
+        Enter <em>Imprinted ID</em> manually or select from list:
+        <select id="imprinted-id-dropdown" name="imprinted-id-dropdown"></select>
     </div>
     <div class="panel-body">
         <div id="ballot-container" class="container"></div>
@@ -75,13 +90,13 @@
                     <button type="button" class="btn btn-warning btn-lg fa fa-refresh" onclick="reset_ballot()"> Reset Ballot</button>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick="alert('TO DO')"> Flag Ballot as Invalid</button>
+                    <button type="button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick="alert('TO DO')"> Flag Ballot</button>
                 </div>
             </div>
         </div>
         Literal Ballot JSON:
         <br/>
-        <textarea name="ballot_string" id="ballot_string" rows="5" cols="150">{"ballot-id":"ABCDEFGHIJKLMONPQRSTUVWXYZ","ballot-selections":[]}</textarea>
+        <textarea name="ballot_string" id="ballot_string" rows="5" cols="150">{"ballot-id":"","ballot-selections":[]}</textarea>
         <br/>
         Processed Ballot JSON:
         <br/>
@@ -130,7 +145,7 @@ function read_ballot_form() {
     var manual_cvr = {}
     var ballot_id_json = {}
     var ballot_key = "ballot-id"
-    var ballot_value = "ABCDEFGHIJKLMONPQRSTUVWXYZ"
+    var ballot_value = $("#imprinted-id").val()
     ballot_id_json[ ballot_key ] = ballot_value
     var b1 = {}
     var ballot_selections = []
@@ -153,7 +168,6 @@ function read_ballot_form() {
         }
     }
 
-
     manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
     manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
 
@@ -162,13 +176,27 @@ function read_ballot_form() {
 
 }
 function submit_ballot() {
-       $("#ballot-form").submit();
+    // Make sure ballot id is within the set
+    var selected_value = $('#imprinted-id').val()
+    console.log('selected_value', selected_value)
+    let is_ballot_id_valid = validate_ballot_id(selected_value)
+    console.log('is_ballot_id_valid', is_ballot_id_valid)
+    if (is_ballot_id_valid) {
+        //alert('submit form')
+        $("#ballot-form").submit()
+    } else {
+        $('#myModal').modal('show')
+    }
 }
 function reset_ballot() {
     //console.log('reset_ballot')
     $('input[type=checkbox]').prop('checked',false)
     $('#ballot-form input[type=checkbox]').attr('checked',false)
-    $('#ballot_string').text('{"ballot-id":"ABCDEFGHIJKLMONPQRSTUVWXYZ","ballot-selections":[]}')
+    $('#ballot_string').text('{"ballot-id":"","ballot-selections":[]}')
+    //validate_ballot_id($("#imprinted-id").val())
+    read_ballot_form()
+
+
 }
 // TODO - put in /lib/helpers.js
 function get_ordinal_suffix_of_integer(i) {
@@ -185,6 +213,78 @@ function get_ordinal_suffix_of_integer(i) {
     }
     return i + "th";
 }
+
+// Define set of ballots
+function getSetOfBallots() {
+    // TODO: replace hard-coded values with input from file
+    /*
+    TabulatorNum	BatchId	RecordId	ImprintedId
+    99808	81	1	99808-81-1
+    99808	81	20	99808-81-20*/
+
+    var ballot_id_list = {}
+    ballot_id_list.table = []
+    for (i=1; i <=20 ; i++){
+        let obj = {
+            batch_id:"81",
+            record_id:i,
+            imprinted_id:"99808-81-"+i
+        }
+        ballot_id_list.table.push(obj)
+    }
+    return ballot_id_list
+}
+
+function populate_ballot_dropdown() {
+    var ballot_id_list = getSetOfBallots()
+    console.log('ballot_id_list', ballot_id_list)
+    let dropdown = $('#imprinted-id-dropdown')
+    dropdown.empty()
+    dropdown.append('<option selected="true" disabled>Choose Imprinted ID</option>')
+    dropdown.prop('selectedIndex', 0)
+
+    //$.getJSON(url, function (data) {
+    //$.each(data, function (key, entry) {
+    // dropdown.append($('<option></option>').attr('value', entry.abbreviation).text(entry.name))
+
+    var ballot_entry_table = ballot_id_list.table
+
+    $.each(ballot_entry_table, function (key, entry) {
+        //console.log('key:',key)
+        //console.log('entry:',entry)
+        let imprinted_id = entry.imprinted_id
+        //console.log('imprinted_id',imprinted_id)
+        dropdown.append($('<option></option>').attr('value', imprinted_id).text(imprinted_id))
+    })
+}
+
+function on_change_ballot_dropdown(selected_value) {
+    $("#imprinted-id").val(selected_value)
+    read_ballot_form()
+}
+
+function validate_ballot_id(selected_value) {
+    var ballot_id_list = getSetOfBallots()
+    var ballot_entry_table = ballot_id_list.table
+    var found_ballot_id = false
+    $.each(ballot_entry_table, function (key, entry) {
+        let imprinted_id = entry.imprinted_id
+        if (imprinted_id === selected_value) {
+            found_ballot_id = true
+        }
+    })
+    $("#ballot-panel").removeClass("panel-success")
+    $("#ballot-panel").removeClass("panel-danger")
+    if (found_ballot_id) {
+        //alert('found it')
+        $("#ballot-panel").addClass("panel-success")
+    }else {
+        //alert('did not find it')
+        $("#ballot-panel").addClass("panel-danger")
+    }
+    return found_ballot_id
+}
+
 var num_candidates = 8
 $(function(){
     // TODO: Replace these hard-coded ballot details with content from uploaded JSON file.
@@ -230,9 +330,22 @@ $(function(){
     var candidate_img = "/img/candidates/hog.png"
     add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
 
+    populate_ballot_dropdown()
+
+    $("#imprinted-id").keyup(function(){
+        validate_ballot_id($("#imprinted-id").val())
+        read_ballot_form()
+    })
     $('input:checkbox').change(function() {
         read_ballot_form()
-    });
+    })
+
+    $('#imprinted-id-dropdown').change(function() {
+        var selected_value = $('#imprinted-id-dropdown').val()
+        //console.log('selected_value', selected_value)
+        on_change_ballot_dropdown(selected_value)
+        validate_ballot_id(selected_value)
+    })
 })
 
 </script>   
