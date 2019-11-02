@@ -204,7 +204,14 @@ function submit_for_verification() {
     //console.log('is_ballot_id_valid', is_ballot_id_valid)
 
     if (is_ballot_id_valid) {
-        var message_body =  "<h1>Confirm Submission.<h1/> <h2>The ballot is now read-only. Click 'Edit' to make changes.</h2><div>TODO SHOW RANKING RESULTS</div>"
+        let message_body = document.createElement('div')
+        $(message_body).addClass('alert alert-info')
+        let message_details = document.createElement('div')
+        let message_h1 = $('<h1>').text('Confirm Submission').appendTo(message_details)
+        var message_div = $('<div>')
+            .append('TODO SHOW RANKING RESULTS')
+            .appendTo(message_details)
+        $(message_details).appendTo(message_body)
         bootbox.confirm({
             size: 'large',
             message: message_body,
@@ -239,8 +246,15 @@ function submit_for_verification() {
                     // Make ballot read-only
                     disable_ballot()
 
+                    let message_body = document.createElement('div')
+                    $(message_body).addClass('alert alert-info')
+                    let message_h2 = $('<h2>').text('The ballot is now read-only. Click "Edit" to make changes.').appendTo(message_body)
+                    bootbox.alert({
+                        size: 'large',
+                        message: message_body
+                    })
                 } else {
-                    alert('go back')
+                    //alert('go back')
                 }
             }
         })
@@ -449,29 +463,6 @@ $(function(){
     })
 
     init_layout()
-
-    //var message_body = "<div>hello div</div>"
-    let message_body = document.createElement('div')
-    $(message_body).addClass('alert alert-info')
-    let message_details = document.createElement('div')
-    $(message_details).html("&nbsp;spacer")
-        .appendTo(message_body)
-
-    bootbox.confirm({
-            size: 'large',
-            message: message_body,
-            buttons: {
-                confirm: {
-                    label: 'Continue. Submit ballot for verification.'
-                },
-                cancel: {
-                    label: 'Cancel. Go back to ballot.'
-                }
-            },
-            callback: function (result) {
-                console.log('This was logged in the callback: ' + result)
-            }
-    })
 
 })
 
