@@ -248,7 +248,7 @@ function submit_for_verification() {
 
                     let message_body = document.createElement('div')
                     $(message_body).addClass('alert alert-info')
-                    let message_h1 = $('<h1>').text('Reviewer #1').appendTo(message_body)
+                    let message_h1 = $('<h1>').text('Reviewer #2').appendTo(message_body)
                     let message_h2 = $('<h2>').text('The ballot is now read-only. Click "Edit Ballot" to make changes.').appendTo(message_body)
                     bootbox.alert({
                         size: 'large',
@@ -391,7 +391,14 @@ function disable_ballot() {
 function enable_ballot() {
     $("input:checkbox").removeAttr('disabled');
     $("#imprinted-id").removeAttr('disabled')
-    alert('The ballot is now editable.')
+    let message_body = document.createElement('div')
+    $(message_body).addClass('alert alert-success')
+    let message_h1 = $('<h1>').text('Reviewer #2').appendTo(message_body)
+    let message_h2 = $('<h2>').text('The ballot is now editable.').appendTo(message_body)
+    bootbox.alert({
+        size: 'large',
+        message: message_body
+    })
 }
 
 function init_layout() {
