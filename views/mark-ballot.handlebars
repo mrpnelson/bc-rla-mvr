@@ -18,8 +18,31 @@
 }
 </style>
 
+<!-- Confirm Submission Modal -->
+<div class="modal fade" id="confirmSubmissionModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirm Submission</h4>
+            </div>
+            <div class="modal-body alert alert-warning">
+                <p>Are you sure you want to submit this ballot for submission?</p>
+            </div>
+            <div>
+                TODO: ballot details here
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Continue. Submit ballot for verification.</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel. Go back to ballot.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Invalid Ballot ID Modal -->
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="invalidBallotModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -36,6 +59,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -197,11 +222,15 @@ function read_ballot_form() {
 
 }
 function submit_for_verification() {
+    // Confirm submission
+    $('#confirmSubmissionModal').modal('show')
+
+
     // Make sure ballot id is within the set
     var selected_value = $('#imprinted-id').val()
-    console.log('selected_value', selected_value)
+    //console.log('selected_value', selected_value)
     let is_ballot_id_valid = validate_ballot_id(selected_value)
-    console.log('is_ballot_id_valid', is_ballot_id_valid)
+    //console.log('is_ballot_id_valid', is_ballot_id_valid)
     if (is_ballot_id_valid) {
         // Swap visibility of review names
         $("#reviewer-1").addClass("hidden")
@@ -221,7 +250,7 @@ function submit_for_verification() {
         $("#no-consensus-button").addClass("show")
 
     } else {
-        $('#myModal').modal('show')
+        $('#invalidBallotModal').modal('show')
     }
 }
 function submit_ballot() {
@@ -234,7 +263,7 @@ function submit_ballot() {
         //alert('submit form')
         $("#ballot-form").submit()
     } else {
-        $('#myModal').modal('show')
+        $('#invalidBallotModal').modal('show')
     }
 }
 function reset_ballot() {
@@ -403,7 +432,26 @@ $(function(){
     })
 
     init_layout()
-    //$("#verified-button").addClass("hidden")
+
+    $(function() {
+        bootbox.confirm({
+            size: 'extra-large',
+            message: "Confirm",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    sclassName: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    xclassName: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                console.log('This was logged in the callback: ' + result)
+            }
+        })
+    })
 
 })
 
