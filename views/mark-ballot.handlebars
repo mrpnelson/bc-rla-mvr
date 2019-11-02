@@ -91,12 +91,11 @@
     </div>
     <div class="panel-body">
         <div id="reviewer-1" class="alert alert-warning">
-            Reviewer #1: Mary Malone
+            <h1>Reviewer #1</h1>
         </div>
-        <div id="reviewer-2" class="alert alert-success">
-            Reviewer #2: Larry Lang
+        <div id="reviewer-2" class="alert alert-info">
+            <h1>Reviewer #2</h1>
         </div>
-
         <div id="ballot-container" class="container"></div>
     </div>
     <div class="panel-footer">
@@ -205,9 +204,10 @@ function submit_for_verification() {
 
     if (is_ballot_id_valid) {
         let message_body = document.createElement('div')
-        $(message_body).addClass('alert alert-info')
+        $(message_body).addClass('alert alert-warning')
         let message_details = document.createElement('div')
-        let message_h1 = $('<h1>').text('Confirm Submission').appendTo(message_details)
+        let message_h1 = $('<h1>').text('Reviewer #1').appendTo(message_details)
+        let message_h2 = $('<h2>').text('Confirm Submission').appendTo(message_details)
         var message_div = $('<div>')
             .append('TODO SHOW RANKING RESULTS')
             .appendTo(message_details)
@@ -248,7 +248,8 @@ function submit_for_verification() {
 
                     let message_body = document.createElement('div')
                     $(message_body).addClass('alert alert-info')
-                    let message_h2 = $('<h2>').text('The ballot is now read-only. Click "Edit" to make changes.').appendTo(message_body)
+                    let message_h1 = $('<h1>').text('Reviewer #1').appendTo(message_body)
+                    let message_h2 = $('<h2>').text('The ballot is now read-only. Click "Edit Ballot" to make changes.').appendTo(message_body)
                     bootbox.alert({
                         size: 'large',
                         message: message_body
