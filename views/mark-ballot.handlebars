@@ -227,10 +227,12 @@ function submit_for_verification() {
     //console.log('selected_value', selected_value)
     let is_ballot_id_valid = validate_ballot_id(selected_value)
     //console.log('is_ballot_id_valid', is_ballot_id_valid)
+
     if (is_ballot_id_valid) {
+        var message_body =  "<h1>Confirm Submission.<h1/> <h2>The ballot is now read-only. Click 'Edit' to make changes.</h2><div>TODO SHOW RANKING RESULTS</div>"
         bootbox.confirm({
             size: 'large',
-            message: "Confirm Submission.<br/> he ballot is now read-only. Click 'Edit' to make changes.</br>TODO SHOW RANKING RESULTS",
+            message: message_body,
             buttons: {
                 confirm: {
                     label: 'Continue. Submit ballot for verification.'
@@ -392,9 +394,13 @@ function edit_ballot() {
 }
 
 function disable_ballot() {
-    //alert('The ballot is now read-only. Click "Edit" to make changes.')
+    $("input:checkbox").attr('disabled', 'disabled')
+    $("#imprinted-id").attr('disabled', 'disabled')
+    // TODO Disable ballot id dropdown
 }
 function enable_ballot() {
+    $("input:checkbox").removeAttr('disabled');
+    $("#imprinted-id").removeAttr('disabled')
     alert('The ballot is now editable.')
 }
 
@@ -468,6 +474,7 @@ $(function(){
     })
 
     init_layout()
+
 })
 
 </script>   
