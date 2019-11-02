@@ -6,6 +6,17 @@
         </div>
     {{/if }}
 </div>
+<style>
+.show {
+  display: block !important;
+}
+.hidden {
+  display: none !important;
+}
+.invisible {
+  visibility: hidden;
+}
+</style>
 
 <!-- Invalid Ballot ID Modal -->
 <div class="modal fade" id="myModal" role="dialog">
@@ -70,6 +81,7 @@
 <p>
     <span class="text-bold">Contest:</span> Team Mascot
 </p>
+
 <div id="ballot-panel" class="panel panel-success">
     <div class="panel-heading">
         <label for="imprinted-id">Imprinted ID:</label>
@@ -78,19 +90,28 @@
         <select id="imprinted-id-dropdown" name="imprinted-id-dropdown"></select>
     </div>
     <div class="panel-body">
+        <div id="reviewer-1" class="alert alert-warning">
+            Reviewer #1: Mary Malone
+        </div>
+        <div id="reviewer-2" class="alert alert-success">
+            Reviewer #2: Larry Lang
+        </div>
+
         <div id="ballot-container" class="container"></div>
     </div>
     <div class="panel-footer">
         <div>
             <div class="row">
                 <div class="col-xs-4">
-                    <button type="button" class="btn btn-success btn-lg fa fa-save" onclick="submit_ballot()"> Submit Ballot</button>
+                    <button type="button" id="submit-button" class="btn btn-warning btn-lg fa fa-arrow-right" onclick="submit_for_verification()"> Submit for Verification</button>
+                    <button type="button" id="verified-button" class="btn btn-success btn-lg fa fa-save" onclick="submit_ballot()"> Verified</button>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" class="btn btn-warning btn-lg fa fa-refresh" onclick="reset_ballot()"> Reset Ballot</button>
+                    <button type="button" id="edit-button"  class="btn btn-default btn-lg fa fa-edit" onclick="alert('TO DO')"> Edit Ballot</button>
+                    <button type="button" id="reset-button" class="btn btn-default btn-lg fa fa-refresh" onclick="reset_ballot()"> Reset Ballot</button>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick="alert('TO DO')"> Flag Ballot</button>
+                    <button type="button" id="no-consensus-button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick="alert('TO DO')"> No Consensus</button>
                 </div>
             </div>
         </div>
@@ -175,6 +196,34 @@ function read_ballot_form() {
     $('#ballot_string').text(mcvr_json)
 
 }
+function submit_for_verification() {
+    // Make sure ballot id is within the set
+    var selected_value = $('#imprinted-id').val()
+    console.log('selected_value', selected_value)
+    let is_ballot_id_valid = validate_ballot_id(selected_value)
+    console.log('is_ballot_id_valid', is_ballot_id_valid)
+    if (is_ballot_id_valid) {
+        // Swap visibility of review names
+        $("#reviewer-1").addClass("hidden")
+        $("#reviewer-2").removeClass("hidden")
+        $("#reviewer-2").addClass("show")
+
+        // Swap submit buttons
+        $("#submit-button").addClass("hidden")
+        $("#verified-button").removeClass("hidden")
+        $("#verified-button").addClass("show")
+
+        // Show/hide 'Edit', 'Reset', 'No Consensus' buttons
+        $("#reset-button").addClass("hidden")
+        $("#edit-button").removeClass("hidden")
+        $("#edit-button").addClass("show")
+        $("#no-consensus-button").removeClass("hidden")
+        $("#no-consensus-button").addClass("show")
+
+    } else {
+        $('#myModal').modal('show')
+    }
+}
 function submit_ballot() {
     // Make sure ballot id is within the set
     var selected_value = $('#imprinted-id').val()
@@ -195,9 +244,8 @@ function reset_ballot() {
     $('#ballot_string').text('{"ballot-id":"","ballot-selections":[]}')
     //validate_ballot_id($("#imprinted-id").val())
     read_ballot_form()
-
-
 }
+
 // TODO - put in /lib/helpers.js
 function get_ordinal_suffix_of_integer(i) {
     let j = i % 10,
@@ -285,6 +333,13 @@ function validate_ballot_id(selected_value) {
     return found_ballot_id
 }
 
+function init_layout() {
+    $("#reviewer-2").addClass("hidden")
+    $("#verified-button").addClass("hidden")
+    $("#edit-button").addClass("hidden")
+    $("#no-consensus-button").addClass("hidden")
+}
+
 var num_candidates = 8
 $(function(){
     // TODO: Replace these hard-coded ballot details with content from uploaded JSON file.
@@ -346,6 +401,10 @@ $(function(){
         on_change_ballot_dropdown(selected_value)
         validate_ballot_id(selected_value)
     })
+
+    init_layout()
+    //$("#verified-button").addClass("hidden")
+
 })
 
 </script>   
