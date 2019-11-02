@@ -9,6 +9,17 @@ var path = require('path')
 var env = process.env.NODE_ENV || 'development'
 
 // ===============================================
+// Path to npm packages
+// ===============================================
+//app.use('/bs', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/bootbox', express.static(__dirname + '/node_modules/bootbox/dist')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+//var pathToJquery = require.resolve('jquery')
+//console.log('pathToJquery',pathToJquery)
+
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); 
+
+// ===============================================
 // Define static public directory
 // ===============================================
 app.use(express.static(__dirname + '/public'))
