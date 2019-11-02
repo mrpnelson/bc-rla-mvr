@@ -132,7 +132,7 @@
                     <button type="button" id="verified-button" class="btn btn-success btn-lg fa fa-save" onclick="submit_ballot()"> Verified</button>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" id="edit-button"  class="btn btn-default btn-lg fa fa-edit" onclick="alert('TO DO')"> Edit Ballot</button>
+                    <button type="button" id="edit-button"  class="btn btn-default btn-lg fa fa-edit" onclick="edit_ballot()"> Edit Ballot</button>
                     <button type="button" id="reset-button" class="btn btn-default btn-lg fa fa-refresh" onclick="reset_ballot()"> Reset Ballot</button>
                 </div>
                 <div class="col-xs-4">
@@ -230,7 +230,7 @@ function submit_for_verification() {
     if (is_ballot_id_valid) {
         bootbox.confirm({
             size: 'large',
-            message: "Confirm Submission.<br/> TODO SHOW RANKING RESULTS",
+            message: "Confirm Submission.<br/> he ballot is now read-only. Click 'Edit' to make changes.</br>TODO SHOW RANKING RESULTS",
             buttons: {
                 confirm: {
                     label: 'Continue. Submit ballot for verification.'
@@ -258,6 +258,10 @@ function submit_for_verification() {
                     $("#edit-button").addClass("show")
                     $("#no-consensus-button").removeClass("hidden")
                     $("#no-consensus-button").addClass("show")
+
+                    // Make ballot read-only
+                    disable_ballot()
+
                 } else {
                     alert('go back')
                 }
@@ -374,6 +378,24 @@ function validate_ballot_id(selected_value) {
         $("#ballot-panel").addClass("panel-danger")
     }
     return found_ballot_id
+}
+
+function edit_ballot() {
+    enable_ballot()
+    // show reset
+    $("#reset-button").removeClass("hidden")
+    $("#reset-button").addClass("show")
+
+    // hide self
+    $("#edit-button").addClass("hidden")
+
+}
+
+function disable_ballot() {
+    //alert('The ballot is now read-only. Click "Edit" to make changes.')
+}
+function enable_ballot() {
+    alert('The ballot is now editable.')
 }
 
 function init_layout() {
