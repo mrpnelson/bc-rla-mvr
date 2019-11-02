@@ -222,33 +222,47 @@ function read_ballot_form() {
 
 }
 function submit_for_verification() {
-    // Confirm submission
-    $('#confirmSubmissionModal').modal('show')
-
-
     // Make sure ballot id is within the set
     var selected_value = $('#imprinted-id').val()
     //console.log('selected_value', selected_value)
     let is_ballot_id_valid = validate_ballot_id(selected_value)
     //console.log('is_ballot_id_valid', is_ballot_id_valid)
     if (is_ballot_id_valid) {
-        // Swap visibility of review names
-        $("#reviewer-1").addClass("hidden")
-        $("#reviewer-2").removeClass("hidden")
-        $("#reviewer-2").addClass("show")
+        bootbox.confirm({
+            size: 'large',
+            message: "Confirm Submission.<br/> TODO SHOW RANKING RESULTS",
+            buttons: {
+                confirm: {
+                    label: 'Continue. Submit ballot for verification.'
+                },
+                cancel: {
+                    label: 'Cancel. Go back to ballot.'
+                }
+            },
+            callback: function (result) {
+                //console.log('This was logged in the callback: ' + result)
+                if (result) {
+                    // Swap visibility of review names
+                    $("#reviewer-1").addClass("hidden")
+                    $("#reviewer-2").removeClass("hidden")
+                    $("#reviewer-2").addClass("show")
 
-        // Swap submit buttons
-        $("#submit-button").addClass("hidden")
-        $("#verified-button").removeClass("hidden")
-        $("#verified-button").addClass("show")
+                    // Swap submit buttons
+                    $("#submit-button").addClass("hidden")
+                    $("#verified-button").removeClass("hidden")
+                    $("#verified-button").addClass("show")
 
-        // Show/hide 'Edit', 'Reset', 'No Consensus' buttons
-        $("#reset-button").addClass("hidden")
-        $("#edit-button").removeClass("hidden")
-        $("#edit-button").addClass("show")
-        $("#no-consensus-button").removeClass("hidden")
-        $("#no-consensus-button").addClass("show")
-
+                    // Show/hide 'Edit', 'Reset', 'No Consensus' buttons
+                    $("#reset-button").addClass("hidden")
+                    $("#edit-button").removeClass("hidden")
+                    $("#edit-button").addClass("show")
+                    $("#no-consensus-button").removeClass("hidden")
+                    $("#no-consensus-button").addClass("show")
+                } else {
+                    alert('go back')
+                }
+            }
+        })
     } else {
         $('#invalidBallotModal').modal('show')
     }
@@ -432,27 +446,6 @@ $(function(){
     })
 
     init_layout()
-
-    $(function() {
-        bootbox.confirm({
-            size: 'large',
-            message: "Confirm",
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    xclassName: 'btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    xclassName: 'btn-danger'
-                }
-            },
-            callback: function (result) {
-                console.log('This was logged in the callback: ' + result)
-            }
-        })
-    })
-
 })
 
 </script>   
