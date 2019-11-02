@@ -91,10 +91,10 @@
     </div>
     <div class="panel-body">
         <div id="reviewer-1" class="alert alert-warning">
-            <h1>Reviewer #1</h1>
+            <h1>Reviewer #1 - Enter choices from paper ballot</h1>
         </div>
         <div id="reviewer-2" class="alert alert-info">
-            <h1>Reviewer #2</h1>
+            <h1>Reviewer #2 - Read and verify (Edit as needed)</h1>
         </div>
         <div id="ballot-container" class="container alert alert-warning"></div>
     </div>
@@ -206,8 +206,7 @@ function submit_for_verification() {
         let message_body = document.createElement('div')
         $(message_body).addClass('alert alert-warning')
         let message_details = document.createElement('div')
-        let message_h1 = $('<h1>').text('Reviewer #1').appendTo(message_details)
-        let message_h2 = $('<h2>').text('Confirm Submission').appendTo(message_details)
+        let message_h1 = $('<h1>').text('Reviewer #1 - Confirm Submission').appendTo(message_details)
         var message_div = $('<div>')
             .append('TODO SHOW RANKING RESULTS')
             .appendTo(message_details)
@@ -217,7 +216,7 @@ function submit_for_verification() {
             message: message_body,
             buttons: {
                 confirm: {
-                    label: 'Continue. Submit ballot for verification.',
+                    label: 'Confirmed. Submit ballot for verification.',
                     className: 'btn-warning'
                 },
                 cancel: {
@@ -401,6 +400,8 @@ function enable_ballot() {
     $("#ballot-container").addClass("alert-success")
     $("#reviewer-2").removeClass("alert-info")
     $("#reviewer-2").addClass("alert-success")
+    $("#reviewer-2").html("<h1>Reviewer #2 - Edit and verify</h1>")
+    
 
     let message_body = document.createElement('div')
     $(message_body).addClass('alert alert-success')
