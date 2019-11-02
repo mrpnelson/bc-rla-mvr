@@ -96,18 +96,18 @@
         <div id="reviewer-2" class="alert alert-info">
             <h1>Reviewer #2</h1>
         </div>
-        <div id="ballot-container" class="container"></div>
+        <div id="ballot-container" class="container alert alert-warning"></div>
     </div>
     <div class="panel-footer">
         <div>
             <div class="row">
                 <div class="col-xs-4">
                     <button type="button" id="submit-button" class="btn btn-warning btn-lg fa fa-arrow-right" onclick="submit_for_verification()"> Submit for Verification</button>
-                    <button type="button" id="verified-button" class="btn btn-success btn-lg fa fa-save" onclick="submit_ballot()"> Verified</button>
+                    <button type="button" id="verified-button" class="btn btn-info btn-lg fa fa-save" onclick="submit_ballot()"> Verified</button>
                 </div>
                 <div class="col-xs-4">
                     <button type="button" id="edit-button"  class="btn btn-default btn-lg fa fa-edit" onclick="edit_ballot()"> Edit Ballot</button>
-                    <button type="button" id="reset-button" class="btn btn-default btn-lg fa fa-refresh" onclick="reset_ballot()"> Reset Ballot</button>
+                    <button type="button" id="reset-button" class="btn btn-default btn-lg fa fa-refresh" onclick="reset_ballot()"> Clear Ballot</button>
                 </div>
                 <div class="col-xs-4">
                     <button type="button" id="no-consensus-button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick="alert('TO DO')"> No Consensus</button>
@@ -217,7 +217,8 @@ function submit_for_verification() {
             message: message_body,
             buttons: {
                 confirm: {
-                    label: 'Continue. Submit ballot for verification.'
+                    label: 'Continue. Submit ballot for verification.',
+                    className: 'btn-warning'
                 },
                 cancel: {
                     label: 'Cancel. Go back to ballot.'
@@ -236,12 +237,15 @@ function submit_for_verification() {
                     $("#verified-button").removeClass("hidden")
                     $("#verified-button").addClass("show")
 
-                    // Show/hide 'Edit', 'Reset', 'No Consensus' buttons
+                    // Show/hide 'Edit', 'Clear', 'No Consensus' buttons
                     $("#reset-button").addClass("hidden")
                     $("#edit-button").removeClass("hidden")
                     $("#edit-button").addClass("show")
                     $("#no-consensus-button").removeClass("hidden")
                     $("#no-consensus-button").addClass("show")
+
+                    $("#ballot-container").removeClass("alert-warning")
+                    $("#ballot-container").addClass("alert-info")
 
                     // Make ballot read-only
                     disable_ballot()
@@ -389,8 +393,15 @@ function disable_ballot() {
     // TODO Disable ballot id dropdown
 }
 function enable_ballot() {
-    $("input:checkbox").removeAttr('disabled');
+    $("input:checkbox").removeAttr('disabled')
     $("#imprinted-id").removeAttr('disabled')
+    $("#verified-button").removeClass("btn-info")
+    $("#verified-button").addClass("btn-success")
+    $("#ballot-container").removeClass("alert-info")
+    $("#ballot-container").addClass("alert-success")
+    $("#reviewer-2").removeClass("alert-info")
+    $("#reviewer-2").addClass("alert-success")
+
     let message_body = document.createElement('div')
     $(message_body).addClass('alert alert-success')
     let message_h1 = $('<h1>').text('Reviewer #2').appendTo(message_body)
