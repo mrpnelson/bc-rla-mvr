@@ -68,10 +68,14 @@ function write_data_to_disk(filedata, filename) {
     // }
     //fs.writeFile ("data/"+filename, JSON.stringify(data), function(err) {
     fs.writeFile ("data/"+filename, filedata, function(err) {
-            if (err) throw err;
-        console.log('complete');
-        }
-    );
+        if (err) throw err
+        console.log('complete')
+        // Write backup file to logs
+        fs.writeFile ("logs/"+filename, filedata, function(err) {
+            if (err) throw err
+            console.log('complete')
+        })
+    })
 }
 
 function getRawDate() {
