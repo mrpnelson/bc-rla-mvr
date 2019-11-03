@@ -7,25 +7,6 @@
     {{/if }}
 </div>
 
-<!-- Invalid Ballot ID Modal -->
-<div class="modal fade" id="invalidBallotModal" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Invalid Ballot ID</h4>
-            </div>
-            <div class="modal-body alert alert-danger">
-                <p>Please enter a valid ballot id (or select a ballot id from the dropdown).</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title"><a data-toggle="collapse" href="#help-panel" aria-expanded="false" aria-controls="footwear"><span class="fa fa-question-circle"></span> Help</a></h3>
@@ -64,11 +45,9 @@
     </div>
 </div>
 <form name="ballot-form" id="ballot-form" action="/ballots/submit-ballot/" method="POST">
-
-<p>
+<div id="contest-name">
     <span class="text-bold">Contest:</span> Team Mascot
-</p>
-
+</div>
 <div id="ballot-panel" class="panel panel-success">
     <div class="panel-heading">
         <label for="imprinted-id">Imprinted ID:</label>
@@ -111,7 +90,76 @@ Processed Ballot JSON:
 <br/>
 <textarea name="ballot_string_calc" id="ballot_string_calc" rows="5" cols="150">TO DO</textarea>
 </form>
+
+<!-- Invalid Ballot ID Modal -->
+<div class="modal fade" id="invalidBallotModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Invalid Ballot ID</h4>
+            </div>
+            <div class="modal-body alert alert-danger">
+                <p>Please enter a valid ballot id (or select a ballot id from the dropdown).</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+
+// ===========================================================
+// Page setup functions
+// ===========================================================
+function populate_ballot_checkboxes() {
+    // TODO: Replace these hard-coded ballot details with content from uploaded JSON file.
+    num_candidates = 8
+    add_header_to_ballot(num_candidates)
+    var candidate_num = 1
+    var candidate_nam = "Ant"
+    var candidate_id = "a1"
+    var candidate_img = "/img/candidates/ant.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 2
+    var candidate_nam = "Bee"
+    var candidate_id = "b2"
+    var candidate_img = "/img/candidates/bee.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 3
+    var candidate_nam = "Cat"
+    var candidate_id = "c3"
+    var candidate_img = "/img/candidates/cat.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 4
+    var candidate_nam = "Dog"
+    var candidate_id = "d4"
+    var candidate_img = "/img/candidates/dog.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 5
+    var candidate_nam = "Elk"
+    var candidate_id = "e5"
+    var candidate_img = "/img/candidates/elk.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 6
+    var candidate_nam = "Fox"
+    var candidate_id = "f6"
+    var candidate_img = "/img/candidates/fox.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 7
+    var candidate_nam = "Gnu"
+    var candidate_id = "g7"
+    var candidate_img = "/img/candidates/gnu.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 8
+    var candidate_nam = "Hog"
+    var candidate_id = "h8"
+    var candidate_img = "/img/candidates/hog.png"
+    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+}
 function add_header_to_ballot(number_of_candidates) {
     let ballot_row = document.createElement('div')
     $(ballot_row).addClass('row')
@@ -146,43 +194,60 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
         //$("#"+ballot_id).data("something")
     }
 }
-function read_ballot_form() {
-    //console.log('read_ballot_form')
-    var json_output = ''
-    var manual_cvr = {}
-    var ballot_id_json = {}
-    var ballot_key = "ballot-id"
-    var ballot_value = $("#imprinted-id").val()
-    ballot_id_json[ ballot_key ] = ballot_value
-    var b1 = {}
-    var ballot_selections = []
-    let n = num_candidates
-    for(var i = 1; i <= n; i++) {
-        for(var j = 1; j <= n; j++) {
-            let varname = "can" + i + "_rank" + j
-            //console.log("varname",varname)
-            is_checked = $("#"+varname).is(':checked')
-            //console.log(varname + "  is checked:",is_checked)
-            if (is_checked){
-                var bx = {}
-                let candidate_id = $('#'+varname).attr('id')
-                //console.log('candidate_id',candidate_id)
-                let candidate_data = $('#'+candidate_id).attr('data-can_id')
-                //console.log('candidate_data',candidate_data)
-                bx[candidate_data] = j
-                ballot_selections.push(bx)
-            }
-        }
-    }
+function populate_ballot_dropdown() {
+    var ballot_id_list = getSetOfBallots()
+    console.log('ballot_id_list', ballot_id_list)
+    let dropdown = $('#imprinted-id-dropdown')
+    dropdown.empty()
+    dropdown.append('<option selected="true" disabled>Choose Imprinted ID</option>')
+    dropdown.prop('selectedIndex', 0)
 
-    manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
-    manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
+    //$.getJSON(url, function (data) {
+    //$.each(data, function (key, entry) {
+    // dropdown.append($('<option></option>').attr('value', entry.abbreviation).text(entry.name))
 
-    var mcvr_json = JSON.stringify(manual_cvr)
-    $('#ballot_string').text(mcvr_json)
+    var ballot_entry_table = ballot_id_list.table
 
+    $.each(ballot_entry_table, function (key, entry) {
+        //console.log('key:',key)
+        //console.log('entry:',entry)
+        let imprinted_id = entry.imprinted_id
+        //console.log('imprinted_id',imprinted_id)
+        dropdown.append($('<option></option>').attr('value', imprinted_id).text(imprinted_id))
+    })
 }
 
+// Define set of ballots
+function getSetOfBallots() {
+    // TODO: replace hard-coded values with input from file
+    /*
+    TabulatorNum	BatchId	RecordId	ImprintedId
+    99808	81	1	99808-81-1
+    99808	81	20	99808-81-20*/
+
+    var ballot_id_list = {}
+    ballot_id_list.table = []
+    for (i=1; i <=20 ; i++){
+        let obj = {
+            tabulator_num:"99808",
+            batch_id:"81",
+            record_id:i,
+            imprinted_id:"99808-81-"+i
+        }
+        ballot_id_list.table.push(obj)
+    }
+    return ballot_id_list
+}
+function init_layout() {
+    $("#reviewer-2").addClass("hidden")
+    $("#verified-button").addClass("hidden")
+    $("#edit-button").addClass("hidden")
+    $("#no-consensus-button").addClass("hidden")
+}
+
+// ===========================================================
+// UI/UX Workflow Functions
+// ===========================================================
 function submit_for_verification() {
     // Make sure ballot id is within the set
     var selected_value = $('#imprinted-id').val()
@@ -196,7 +261,6 @@ function submit_for_verification() {
         $('#invalidBallotModal').modal('show')
     }
 }
-
 function submit_for_verification_with_confirmation() {
     // Make sure ballot id is within the set
     var selected_value = $('#imprinted-id').val()
@@ -271,6 +335,47 @@ function prepare_ballot_for_review() {
     // Make ballot read-only
     disable_ballot()
 }
+function reset_ballot() {
+    //console.log('reset_ballot')
+    $('input[type=checkbox]').prop('checked',false)
+    $('#ballot-form input[type=checkbox]').attr('checked',false)
+    $('#ballot_string').text('{"ballot-id":"","ballot-selections":[]}')
+    //validate_ballot_id($("#imprinted-id").val())
+    read_ballot_form()
+}
+function edit_ballot() {
+    enable_ballot()
+    // show reset
+    $("#reset-button").removeClass("hidden")
+    $("#reset-button").addClass("show")
+    // hide self
+    $("#edit-button").addClass("hidden")
+}
+function disable_ballot() {
+    $("input:checkbox").attr('disabled', 'disabled')
+    $("#imprinted-id").attr('disabled', 'disabled')
+    // TODO Disable ballot id dropdown
+}
+function enable_ballot() {
+    $("input:checkbox").removeAttr('disabled')
+    $("#imprinted-id").removeAttr('disabled')
+    $("#verified-button").removeClass("btn-info")
+    $("#verified-button").addClass("btn-success")
+    $("#ballot-container").removeClass("alert-info")
+    $("#ballot-container").addClass("alert-success")
+    $("#reviewer-2").removeClass("alert-info")
+    $("#reviewer-2").addClass("alert-success")
+    $("#reviewer-2").html("<h1>Reviewer #2 - Edit and verify</h1>")
+    
+    //let message_body = document.createElement('div')
+    //$(message_body).addClass('alert alert-success')
+    //let message_h1 = $('<h1>').text('Reviewer #2').appendTo(message_body)
+    //let message_h2 = $('<h2>').text('The ballot is now editable.').appendTo(message_body)
+    //bootbox.alert({
+    //    size: 'large',
+    //    message: message_body
+    //})
+}
 function submit_ballot() {
     // Make sure ballot id is within the set
     var selected_value = $('#imprinted-id').val()
@@ -323,80 +428,43 @@ function submit_ballot_with_confirmation() {
         $('#invalidBallotModal').modal('show')
     }
 }
-function reset_ballot() {
-    //console.log('reset_ballot')
-    $('input[type=checkbox]').prop('checked',false)
-    $('#ballot-form input[type=checkbox]').attr('checked',false)
-    $('#ballot_string').text('{"ballot-id":"","ballot-selections":[]}')
-    //validate_ballot_id($("#imprinted-id").val())
-    read_ballot_form()
-}
 
-// TODO - put in /lib/helpers.js
-function get_ordinal_suffix_of_integer(i) {
-    let j = i % 10,
-        k = i % 100;
-    if (j == 1 && k != 11) {
-        return i + "st";
-    }
-    if (j == 2 && k != 12) {
-        return i + "nd";
-    }
-    if (j == 3 && k != 13) {
-        return i + "rd";
-    }
-    return i + "th";
-}
-
-// Define set of ballots
-function getSetOfBallots() {
-    // TODO: replace hard-coded values with input from file
-    /*
-    TabulatorNum	BatchId	RecordId	ImprintedId
-    99808	81	1	99808-81-1
-    99808	81	20	99808-81-20*/
-
-    var ballot_id_list = {}
-    ballot_id_list.table = []
-    for (i=1; i <=20 ; i++){
-        let obj = {
-            batch_id:"81",
-            record_id:i,
-            imprinted_id:"99808-81-"+i
+// ===========================================================
+// Read and process ballot form
+// ===========================================================
+function read_ballot_form() {
+    //console.log('read_ballot_form')
+    var json_output = ''
+    var manual_cvr = {}
+    var ballot_id_json = {}
+    var ballot_key = "ballot-id"
+    var ballot_value = $("#imprinted-id").val()
+    ballot_id_json[ ballot_key ] = ballot_value
+    var b1 = {}
+    var ballot_selections = []
+    let n = num_candidates
+    for(var i = 1; i <= n; i++) {
+        for(var j = 1; j <= n; j++) {
+            let varname = "can" + i + "_rank" + j
+            //console.log("varname",varname)
+            is_checked = $("#"+varname).is(':checked')
+            //console.log(varname + "  is checked:",is_checked)
+            if (is_checked){
+                var bx = {}
+                let candidate_id = $('#'+varname).attr('id')
+                //console.log('candidate_id',candidate_id)
+                let candidate_data = $('#'+candidate_id).attr('data-can_id')
+                //console.log('candidate_data',candidate_data)
+                bx[candidate_data] = j
+                ballot_selections.push(bx)
+            }
         }
-        ballot_id_list.table.push(obj)
     }
-    return ballot_id_list
+    manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
+    manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
+    var mcvr_json = JSON.stringify(manual_cvr)
+    $('#ballot_string').text(mcvr_json)
 }
-
-function populate_ballot_dropdown() {
-    var ballot_id_list = getSetOfBallots()
-    console.log('ballot_id_list', ballot_id_list)
-    let dropdown = $('#imprinted-id-dropdown')
-    dropdown.empty()
-    dropdown.append('<option selected="true" disabled>Choose Imprinted ID</option>')
-    dropdown.prop('selectedIndex', 0)
-
-    //$.getJSON(url, function (data) {
-    //$.each(data, function (key, entry) {
-    // dropdown.append($('<option></option>').attr('value', entry.abbreviation).text(entry.name))
-
-    var ballot_entry_table = ballot_id_list.table
-
-    $.each(ballot_entry_table, function (key, entry) {
-        //console.log('key:',key)
-        //console.log('entry:',entry)
-        let imprinted_id = entry.imprinted_id
-        //console.log('imprinted_id',imprinted_id)
-        dropdown.append($('<option></option>').attr('value', imprinted_id).text(imprinted_id))
-    })
-}
-
-function on_change_ballot_dropdown(selected_value) {
-    $("#imprinted-id").val(selected_value)
-    read_ballot_form()
-}
-
 function validate_ballot_id(selected_value) {
     var ballot_id_list = getSetOfBallots()
     var ballot_entry_table = ballot_id_list.table
@@ -419,96 +487,41 @@ function validate_ballot_id(selected_value) {
     return found_ballot_id
 }
 
-function edit_ballot() {
-    enable_ballot()
-    // show reset
-    $("#reset-button").removeClass("hidden")
-    $("#reset-button").addClass("show")
-
-    // hide self
-    $("#edit-button").addClass("hidden")
+// ===========================================================
+// Functions tied to listeners
+// ===========================================================
+function on_change_ballot_dropdown(selected_value) {
+    $("#imprinted-id").val(selected_value)
+    read_ballot_form()
 }
 
-function disable_ballot() {
-    $("input:checkbox").attr('disabled', 'disabled')
-    $("#imprinted-id").attr('disabled', 'disabled')
-    // TODO Disable ballot id dropdown
-}
-function enable_ballot() {
-    $("input:checkbox").removeAttr('disabled')
-    $("#imprinted-id").removeAttr('disabled')
-    $("#verified-button").removeClass("btn-info")
-    $("#verified-button").addClass("btn-success")
-    $("#ballot-container").removeClass("alert-info")
-    $("#ballot-container").addClass("alert-success")
-    $("#reviewer-2").removeClass("alert-info")
-    $("#reviewer-2").addClass("alert-success")
-    $("#reviewer-2").html("<h1>Reviewer #2 - Edit and verify</h1>")
-    
-    //let message_body = document.createElement('div')
-    //$(message_body).addClass('alert alert-success')
-    //let message_h1 = $('<h1>').text('Reviewer #2').appendTo(message_body)
-    //let message_h2 = $('<h2>').text('The ballot is now editable.').appendTo(message_body)
-    //bootbox.alert({
-    //    size: 'large',
-    //    message: message_body
-    //})
+// ===========================================================
+// TODO - put in /lib/helpers.js
+// ===========================================================
+function get_ordinal_suffix_of_integer(i) {
+    let j = i % 10,
+        k = i % 100
+    if (j == 1 && k != 11) {
+        return i + "st"
+    }
+    if (j == 2 && k != 12) {
+        return i + "nd"
+    }
+    if (j == 3 && k != 13) {
+        return i + "rd"
+    }
+    return i + "th"
 }
 
-function init_layout() {
-    $("#reviewer-2").addClass("hidden")
-    $("#verified-button").addClass("hidden")
-    $("#edit-button").addClass("hidden")
-    $("#no-consensus-button").addClass("hidden")
-}
-
-var num_candidates = 8
+// ===========================================================
+// Initial page load
+// ===========================================================
+var num_candidates
 $(function(){
-    // TODO: Replace these hard-coded ballot details with content from uploaded JSON file.
-    add_header_to_ballot(num_candidates)
-    var candidate_num = 1
-    var candidate_nam = "Ant"
-    var candidate_id = "a1"
-    var candidate_img = "/img/candidates/ant.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 2
-    var candidate_nam = "Bee"
-    var candidate_id = "b2"
-    var candidate_img = "/img/candidates/bee.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 3
-    var candidate_nam = "Cat"
-    var candidate_id = "c3"
-    var candidate_img = "/img/candidates/cat.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 4
-    var candidate_nam = "Dog"
-    var candidate_id = "d4"
-    var candidate_img = "/img/candidates/dog.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 5
-    var candidate_nam = "Elk"
-    var candidate_id = "e5"
-    var candidate_img = "/img/candidates/elk.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 6
-    var candidate_nam = "Fox"
-    var candidate_id = "f6"
-    var candidate_img = "/img/candidates/fox.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 7
-    var candidate_nam = "Gnu"
-    var candidate_id = "g7"
-    var candidate_img = "/img/candidates/gnu.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 8
-    var candidate_nam = "Hog"
-    var candidate_id = "h8"
-    var candidate_img = "/img/candidates/hog.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-
+    populate_ballot_checkboxes()
     populate_ballot_dropdown()
-
+    init_layout()
+    // Set up listeners for ballot id text input and dropdown
     $("#imprinted-id").keyup(function(){
         validate_ballot_id($("#imprinted-id").val())
         read_ballot_form()
@@ -516,16 +529,11 @@ $(function(){
     $('input:checkbox').change(function() {
         read_ballot_form()
     })
-
     $('#imprinted-id-dropdown').change(function() {
         var selected_value = $('#imprinted-id-dropdown').val()
         //console.log('selected_value', selected_value)
         on_change_ballot_dropdown(selected_value)
         validate_ballot_id(selected_value)
     })
-
-    init_layout()
-
 })
-
 </script>
