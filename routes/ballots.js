@@ -13,17 +13,17 @@ var querystring = require('querystring')
 // Submit
 router.post('/submit-ballot/', function (req, res) {
     //console.log('submit-ballot')
-
-    console.log('write_json_to_disk')
+    //console.log('write_json_to_disk')
     var ballot_string = req.body.ballot_string
-    console.log('ballot_string',ballot_string)
+    //console.log('ballot_string',ballot_string)
 
     var filenameprefix=getRawDate();
     let filename = filenameprefix + '.json'
 
     write_data_to_disk(ballot_string,filename)
 
-    var message = querystring.escape('Success. Contents of ballot ' + filename + ' - ' + ballot_string)
+    //var message = querystring.escape('Success. Contents of ballot ' + filename + ' - ' + ballot_string)
+    var message = querystring.escape('Success processing ballot.')
     //console.log('message:', message)
     res.redirect(303, '/mark-ballot/?message=' + message)
 })
