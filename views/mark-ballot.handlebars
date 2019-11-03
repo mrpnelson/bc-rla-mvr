@@ -185,7 +185,7 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
         .appendTo(d)
     for (var i = 1; i <= number_of_candidates; i++) {
         let ballot_checkbox = document.createElement('div')
-        let ballot_id = "can"+candidate_number+"_rank" + i
+        let ballot_id = "rank"+i+"_can" + candidate_number
         $(ballot_checkbox).addClass('col-xs-1')
             .html("<div class='checkbox-oval'><input type='checkbox' id='"+ballot_id+"' data-can_id='"+candidate_identifier+"' /><label for='"+ballot_id+"'>&nbsp;</label></div>")
             .appendTo(d)
@@ -432,7 +432,7 @@ function submit_ballot_with_confirmation() {
 // ===========================================================
 function update_json_preview() {
     let mcvr_json = read_ballot_form()
-    alert(mcvr_json)
+    //console.log('mcvr_json', mcvr_json)
     $('#ballot_string').text(mcvr_json)
 }
 function read_ballot_form() {
@@ -447,17 +447,18 @@ function read_ballot_form() {
     let n = num_candidates
     for(var i = 1; i <= n; i++) {
         for(var j = 1; j <= n; j++) {
-            let varname = "can" + i + "_rank" + j
-            //console.log("varname",varname)
+            let varname = "rank" + i + "_can" + j
+            console.log("***************************************")
+            console.log("varname",varname)
             is_checked = $("#"+varname).is(':checked')
-            //console.log(varname + "  is checked:",is_checked)
+            console.log(varname + "  is checked:",is_checked)
             if (is_checked){
                 var bx = {}
                 let candidate_id = $('#'+varname).attr('id')
-                //console.log('candidate_id',candidate_id)
+                console.log('candidate_id',candidate_id)
                 let candidate_data = $('#'+candidate_id).attr('data-can_id')
-                //console.log('candidate_data',candidate_data)
-                bx[candidate_data] = j
+                console.log('candidate_data',candidate_data)
+                bx[candidate_data] = i
                 ballot_selections.push(bx)
             }
         }
