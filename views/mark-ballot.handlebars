@@ -85,8 +85,8 @@
 Literal Ballot:
 <div name="ballot_string" id="ballot_string" class="alert alert-danger"></div>
 <br/>
-Processed Ballot:
-<div name="ballot_string_calc" id="ballot_string_calc" class="alert alert-danger">TO DO</div>
+Counted Ballot:
+<div name="ballot_string_calc" id="ballot_string_calc" class="alert alert-danger"></div>
 </form>
 
 <!-- Invalid Ballot ID Modal -->
@@ -432,8 +432,9 @@ function submit_ballot_with_confirmation() {
 // ===========================================================
 function update_json_preview() {
     let mcvr_json = read_ballot_form()
-    //console.log('mcvr_json', mcvr_json)
     $('#ballot_string').text(mcvr_json)
+    let counted_json = count_ballot_form()
+    $('#ballot_string_calc').text(counted_json)
 }
 function read_ballot_form() {
     var json_output = ''
@@ -448,20 +449,92 @@ function read_ballot_form() {
     for(var i = 1; i <= n; i++) {
         for(var j = 1; j <= n; j++) {
             let varname = "rank" + i + "_can" + j
-            console.log("***************************************")
-            console.log("varname",varname)
+            //console.log("varname",varname)
             is_checked = $("#"+varname).is(':checked')
-            console.log(varname + "  is checked:",is_checked)
+            //console.log(varname + "  is checked:",is_checked)
             if (is_checked){
                 var bx = {}
                 let candidate_id = $('#'+varname).attr('id')
-                console.log('candidate_id',candidate_id)
+                //console.log('candidate_id',candidate_id)
                 let candidate_data = $('#'+candidate_id).attr('data-can_id')
-                console.log('candidate_data',candidate_data)
+                //console.log('candidate_data',candidate_data)
                 bx[candidate_data] = i
                 ballot_selections.push(bx)
             }
         }
+    }
+    manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
+    manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
+    let mcvr_json = JSON.stringify(manual_cvr)
+    return mcvr_json
+}
+function count_ballot_form() {
+    var json_output = ''
+    var manual_cvr = {}
+    var ballot_id_json = {}
+    var ballot_key = "ballot-id"
+    var ballot_value = $("#imprinted-id").val()
+    ballot_id_json[ ballot_key ] = ballot_value
+    var b1 = {}
+    var ballot_selections = []
+    var candidates_with_vote = []
+    let n = num_candidates
+    var flag_have_first_choice = false
+    var flag_found_overvote = false
+    var flag_ballot_invalid = false
+    var rank_counter = 1;
+    for(var rank = 1; rank <= n; rank++) {
+        var flag_have_nth_choice = false
+        var flag_okay_write_nth = false
+        for(var candidate = 1; candidate <= n; candidate++) {
+            let varname = "rank" + rank + "_can" + candidate
+            //console.log("varname",varname)
+            is_checked = $("#"+varname).is(':checked')
+            //console.log(varname + "  is checked:",is_checked)
+            if (is_checked){
+                // See if have nth choice yet. If not then there is an overvote
+                if (flag_have_nth_choice) {
+                    flag_found_overvote = true
+                    flag_okay_write_nth = false
+                    // If there is an overvote before we have first choice then
+                    // the ballot is invalid
+                    if (!flag_have_first_choice) {
+                        // console.log('First choice overvote. Ballot invalid')
+                        flag_ballot_invalid = true
+                    }
+                } else {
+                    let candidate_id = $('#'+varname).attr('id')
+                    var candidate_data = $('#'+candidate_id).attr('data-can_id')
+                    console.log('candidate_id',candidate_id)
+                    console.log('candidate_data',candidate_data)
+                    // Only include if the candidate has not already been selected.
+                    var index = candidates_with_vote.indexOf(candidate_data);
+                    console.log('index', index)
+                    if (index == -1) {
+                        //Toggle flag to say we have nth choice
+                        flag_have_nth_choice = true
+                        flag_okay_write_nth = true
+                        //var bx = {}
+                        //bx[candidate_data] = rank
+                        candidates_with_vote.push(candidate_data)
+                    }
+                }
+            }
+        }
+        // only push if we have valid nth choice and no overvote
+        if (flag_okay_write_nth && !flag_found_overvote) {
+            var bx = {}
+            bx[candidate_data] = rank_counter
+            rank_counter++
+            ballot_selections.push(bx)
+
+            // If not yet first then toggle first
+            if (!flag_have_first_choice) flag_have_first_choice = true
+        }
+    }
+    // If ballot is invalid send blank
+    if (flag_ballot_invalid) {
+        ballot_selections = []
     }
     manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
     manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
