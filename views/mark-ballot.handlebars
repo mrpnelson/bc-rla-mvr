@@ -193,7 +193,22 @@ function read_ballot_form() {
     $('#ballot_string').text(mcvr_json)
 
 }
+
 function submit_for_verification() {
+    // Make sure ballot id is within the set
+    var selected_value = $('#imprinted-id').val()
+    //console.log('selected_value', selected_value)
+    let is_ballot_id_valid = validate_ballot_id(selected_value)
+    //console.log('is_ballot_id_valid', is_ballot_id_valid)
+
+    if (is_ballot_id_valid) {
+        prepare_ballot_for_review()
+    } else {
+        $('#invalidBallotModal').modal('show')
+    }
+}
+
+function submit_for_verification_with_confirmation() {
     // Make sure ballot id is within the set
     var selected_value = $('#imprinted-id').val()
     //console.log('selected_value', selected_value)
@@ -224,28 +239,7 @@ function submit_for_verification() {
             callback: function (result) {
                 //console.log('This was logged in the callback: ' + result)
                 if (result) {
-                    // Swap visibility of review names
-                    $("#reviewer-1").addClass("hidden")
-                    $("#reviewer-2").removeClass("hidden")
-                    $("#reviewer-2").addClass("show")
-
-                    // Swap submit buttons
-                    $("#submit-button").addClass("hidden")
-                    $("#verified-button").removeClass("hidden")
-                    $("#verified-button").addClass("show")
-
-                    // Show/hide 'Edit', 'Clear', 'No Consensus' buttons
-                    $("#reset-button").addClass("hidden")
-                    $("#edit-button").removeClass("hidden")
-                    $("#edit-button").addClass("show")
-                    $("#no-consensus-button").removeClass("hidden")
-                    $("#no-consensus-button").addClass("show")
-
-                    $("#ballot-container").removeClass("alert-warning")
-                    $("#ballot-container").addClass("alert-info")
-
-                    // Make ballot read-only
-                    disable_ballot()
+                    prepare_ballot_for_review()
 
                     let message_body = document.createElement('div')
                     $(message_body).addClass('alert alert-info')
@@ -264,7 +258,43 @@ function submit_for_verification() {
         $('#invalidBallotModal').modal('show')
     }
 }
+function prepare_ballot_for_review() {
+    // Swap visibility of review names
+    $("#reviewer-1").addClass("hidden")
+    $("#reviewer-2").removeClass("hidden")
+    $("#reviewer-2").addClass("show")
+
+    // Swap submit buttons
+    $("#submit-button").addClass("hidden")
+    $("#verified-button").removeClass("hidden")
+    $("#verified-button").addClass("show")
+
+    // Show/hide 'Edit', 'Clear', 'No Consensus' buttons
+    $("#reset-button").addClass("hidden")
+    $("#edit-button").removeClass("hidden")
+    $("#edit-button").addClass("show")
+    $("#no-consensus-button").removeClass("hidden")
+    $("#no-consensus-button").addClass("show")
+
+    $("#ballot-container").removeClass("alert-warning")
+    $("#ballot-container").addClass("alert-info")
+
+    // Make ballot read-only
+    disable_ballot()
+}
 function submit_ballot() {
+    // Make sure ballot id is within the set
+    var selected_value = $('#imprinted-id').val()
+    console.log('selected_value', selected_value)
+    let is_ballot_id_valid = validate_ballot_id(selected_value)
+    console.log('is_ballot_id_valid', is_ballot_id_valid)
+    if (is_ballot_id_valid) {
+        $("#ballot-form").submit()
+    } else {
+        $('#invalidBallotModal').modal('show')
+    }
+}
+function submit_ballot_with_confirmation() {
     // Make sure ballot id is within the set
     var selected_value = $('#imprinted-id').val()
     console.log('selected_value', selected_value)
@@ -408,7 +438,6 @@ function edit_ballot() {
 
     // hide self
     $("#edit-button").addClass("hidden")
-
 }
 
 function disable_ballot() {
@@ -427,15 +456,14 @@ function enable_ballot() {
     $("#reviewer-2").addClass("alert-success")
     $("#reviewer-2").html("<h1>Reviewer #2 - Edit and verify</h1>")
     
-
-    let message_body = document.createElement('div')
-    $(message_body).addClass('alert alert-success')
-    let message_h1 = $('<h1>').text('Reviewer #2').appendTo(message_body)
-    let message_h2 = $('<h2>').text('The ballot is now editable.').appendTo(message_body)
-    bootbox.alert({
-        size: 'large',
-        message: message_body
-    })
+    //let message_body = document.createElement('div')
+    //$(message_body).addClass('alert alert-success')
+    //let message_h1 = $('<h1>').text('Reviewer #2').appendTo(message_body)
+    //let message_h2 = $('<h2>').text('The ballot is now editable.').appendTo(message_body)
+    //bootbox.alert({
+    //    size: 'large',
+    //    message: message_body
+    //})
 }
 
 function init_layout() {
