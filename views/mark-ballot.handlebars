@@ -339,7 +339,7 @@ function reset_ballot() {
     $('#ballot-form input[type=checkbox]').attr('checked',false)
     $('#ballot_string').text('{"ballot-id":"","ballot-selections":[]}')
     //validate_ballot_id($("#imprinted-id").val())
-    read_ballot_form()
+    update_json_preview()
 }
 function edit_ballot() {
     enable_ballot()
@@ -430,8 +430,12 @@ function submit_ballot_with_confirmation() {
 // ===========================================================
 // Read and process ballot form
 // ===========================================================
+function update_json_preview() {
+    let mcvr_json = read_ballot_form()
+    alert(mcvr_json)
+    $('#ballot_string').text(mcvr_json)
+}
 function read_ballot_form() {
-    //console.log('read_ballot_form')
     var json_output = ''
     var manual_cvr = {}
     var ballot_id_json = {}
@@ -460,8 +464,8 @@ function read_ballot_form() {
     }
     manual_cvr = Object.assign({"ballot-selections": ballot_selections}, manual_cvr)
     manual_cvr = Object.assign({"ballot-id": ballot_value}, manual_cvr)
-    var mcvr_json = JSON.stringify(manual_cvr)
-    $('#ballot_string').text(mcvr_json)
+    let mcvr_json = JSON.stringify(manual_cvr)
+    return mcvr_json
 }
 function validate_ballot_id(selected_value) {
     var ballot_id_list = getSetOfBallots()
@@ -490,7 +494,7 @@ function validate_ballot_id(selected_value) {
 // ===========================================================
 function on_change_ballot_dropdown(selected_value) {
     $("#imprinted-id").val(selected_value)
-    read_ballot_form()
+    update_json_preview()
 }
 
 // ===========================================================
@@ -519,14 +523,14 @@ $(function(){
     populate_ballot_checkboxes()
     populate_ballot_dropdown()
     init_layout()
-    read_ballot_form()
+    update_json_preview()
     // Set up listeners for ballot id text input and dropdown
     $("#imprinted-id").keyup(function(){
         validate_ballot_id($("#imprinted-id").val())
-        read_ballot_form()
+        update_json_preview()
     })
     $('input:checkbox').change(function() {
-        read_ballot_form()
+        update_json_preview()
     })
     $('#imprinted-id-dropdown').change(function() {
         var selected_value = $('#imprinted-id-dropdown').val()
