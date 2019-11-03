@@ -273,8 +273,35 @@ function submit_ballot() {
     let is_ballot_id_valid = validate_ballot_id(selected_value)
     console.log('is_ballot_id_valid', is_ballot_id_valid)
     if (is_ballot_id_valid) {
-        //alert('submit form')
-        $("#ballot-form").submit()
+        let message_body = document.createElement('div')
+        $(message_body).addClass('alert alert-info')
+        let message_details = document.createElement('div')
+        let message_h1 = $('<h1>').text('Reviewer #2 - Confirm Submission').appendTo(message_details)
+        var message_div = $('<div>')
+            .append('TODO SHOW RANKING RESULTS')
+            .appendTo(message_details)
+        $(message_details).appendTo(message_body)
+        bootbox.confirm({
+            size: 'large',
+            message: message_body,
+            buttons: {
+                confirm: {
+                    label: 'Confirmed. Submit ballot.',
+                    className: 'btn-info'
+                },
+                cancel: {
+                    label: 'Cancel. Go back to ballot.'
+                }
+            },
+            callback: function (result) {
+                //console.log('This was logged in the callback: ' + result)
+                if (result) {
+                    $("#ballot-form").submit()
+                } else {
+                    //alert('go back')
+                }
+            }
+        })
     } else {
         $('#invalidBallotModal').modal('show')
     }
@@ -486,4 +513,4 @@ $(function(){
 
 })
 
-</script>   
+</script>
