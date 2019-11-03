@@ -82,13 +82,11 @@
         </div>
     </div>
 </div>
-Literal Ballot JSON:
+Literal Ballot:
+<div name="ballot_string" id="ballot_string" class="alert alert-danger"></div>
 <br/>
-<textarea name="ballot_string" id="ballot_string" rows="5" cols="150">{"ballot-id":"","ballot-selections":[]}</textarea>
-<br/>
-Processed Ballot JSON:
-<br/>
-<textarea name="ballot_string_calc" id="ballot_string_calc" rows="5" cols="150">TO DO</textarea>
+Processed Ballot:
+<div name="ballot_string_calc" id="ballot_string_calc" class="alert alert-danger">TO DO</div>
 </form>
 
 <!-- Invalid Ballot ID Modal -->
@@ -521,6 +519,7 @@ $(function(){
     populate_ballot_checkboxes()
     populate_ballot_dropdown()
     init_layout()
+    read_ballot_form()
     // Set up listeners for ballot id text input and dropdown
     $("#imprinted-id").keyup(function(){
         validate_ballot_id($("#imprinted-id").val())
