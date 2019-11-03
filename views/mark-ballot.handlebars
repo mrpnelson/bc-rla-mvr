@@ -48,10 +48,8 @@
             </div>
             <div class="panel-body">
                 <ul>
-                    <li>Transfer <span class="text-bold">ballot id</span> and <span class="text-bold"><em>literal</em> ballot selections</span> from selected paper ballot.</li>
-                    <li>Preview ballot status: valid, overvote, invalid, etc.</li>
-                    <li>Preview JSON: <span class="text-bold">as-is</span> (based on entry) and <span class="text-bold">post-processing</span> (based on any additional logic applied to ballot result)</li>
-                    <li>If applicable, mark ballot as unreadable. </li>
+                    <li>Reviewer #1 - Transfer <span class="text-bold">ballot id</span> and <span class="text-bold"><em>literal</em> ballot selections</span> from selected paper ballot.</li>
+                    <li>Reviewer #2 - Verify that values entered by <em>Reviewer #1</em> match the paper ballot. </li>
                 </ul>
             </div>
         </div>
@@ -69,7 +67,7 @@
             </div>
             <div class="panel-body">
                 <ul>
-                    <li>The page is run once per ballot.</li>
+                    <li>The page is run once per ballot by two reviewers at the same computer.</li>
                     <li>Multiple users on different computers can simultaneously enter ballots.</li>
                 </ul>
             </div>
@@ -114,15 +112,15 @@
                 </div>
             </div>
         </div>
-        Literal Ballot JSON:
-        <br/>
-        <textarea name="ballot_string" id="ballot_string" rows="5" cols="150">{"ballot-id":"","ballot-selections":[]}</textarea>
-        <br/>
-        Processed Ballot JSON:
-        <br/>
-        <textarea name="ballot_string_calc" id="ballot_string_calc" rows="5" cols="150">TO DO</textarea>
     </div>
 </div>
+Literal Ballot JSON:
+<br/>
+<textarea name="ballot_string" id="ballot_string" rows="5" cols="150">{"ballot-id":"","ballot-selections":[]}</textarea>
+<br/>
+Processed Ballot JSON:
+<br/>
+<textarea name="ballot_string_calc" id="ballot_string_calc" rows="5" cols="150">TO DO</textarea>
 </form>
 <script>
 function add_header_to_ballot(number_of_candidates) {
