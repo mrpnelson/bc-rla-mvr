@@ -14,7 +14,7 @@ var querystring = require('querystring')
 router.post('/submit-ballot/', function (req, res) {
     //console.log('submit-ballot')
     //console.log('write_json_to_disk')
-    var ballot_string = req.body.ballot_string
+    var ballot_string = req.body.ballot_string_calc
     //console.log('ballot_string',ballot_string)
 
     var filenameprefix=getRawDate();

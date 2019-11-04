@@ -82,11 +82,11 @@
         </div>
     </div>
 </div>
-Literal Ballot:
-<div name="ballot_string" id="ballot_string" class="alert alert-warning"></div>
+Literal Ballot:<br/>
+<textarea rows="5" cols="150" name="ballot_string" id="ballot_string" class="alert alert-warning"/></textarea>
 <br/>
-Counted Ballot:
-<div name="ballot_string_calc" id="ballot_string_calc" class="alert alert-success"></div>
+Counted Ballot:<br/>
+<textarea rows="5" cols="150" name="ballot_string_calc" id="ballot_string_calc" class="alert alert-success"></textarea>
 </form>
 
 <!-- Invalid Ballot ID Modal -->
@@ -392,7 +392,7 @@ function submit_ballot() {
     console.log('is_ballot_id_valid', is_ballot_id_valid)
     if (is_ballot_id_valid) {
         let mcvr_json = read_ballot_form()
-        $('#ballot_string').text(mcvr_json)
+        $('#ballot_string').val(mcvr_json)
         let counted_json = count_ballot_form()
         $('#ballot_string_calc').text(counted_json)
 
@@ -488,7 +488,7 @@ function submit_ballot() {
 // ===========================================================
 function update_json_preview() {
     let mcvr_json = read_ballot_form()
-    $('#ballot_string').text(mcvr_json)
+    $('#ballot_string').val(mcvr_json)
     let counted_json = count_ballot_form()
     $('#ballot_string_calc').text(counted_json)
 }
