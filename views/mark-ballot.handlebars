@@ -60,7 +60,7 @@
             <h1>Reviewer #1 - Enter choices as marked on paper ballot</h1>
         </div>
         <div id="reviewer-2" class="alert alert-info">
-            <h1>Reviewer #2 - Read and verify (Edit as needed)</h1>
+            <h1>Reviewer #2 - Review and confirm (revise as needed)</h1>
         </div>
         <div id="ballot-container" class="container alert alert-warning"></div>
     </div>
@@ -68,15 +68,15 @@
         <div>
             <div class="row">
                 <div class="col-xs-4">
-                    <button type="button" id="submit-button" class="btn btn-warning btn-lg fa fa-arrow-right" onclick="submit_for_verification()"> Submit for Verification</button>
-                    <button type="button" id="verified-button" class="btn btn-info btn-lg fa fa-save" onclick="submit_ballot()"> Verified</button>
+                    <button type="button" id="no-consensus-button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick="alert('Refer ballot to adjudicator.')"> No Consensus</button>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" id="edit-button"  class="btn btn-default btn-lg fa fa-edit" onclick="edit_ballot()"> Edit Ballot</button>
+                    <button type="button" id="edit-button"  class="btn btn-warning btn-lg fa fa-edit" onclick="edit_ballot()"> Revise Selections</button>
                     <button type="button" id="reset-button" class="btn btn-default btn-lg fa fa-refresh" onclick="reset_ballot()"> Clear Ballot</button>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" id="no-consensus-button" class="btn btn-danger btn-lg fa fa-exclamation-triangle" onclick="alert('TO DO')"> No Consensus</button>
+                    <button type="button" id="submit-button" class="btn btn-warning btn-lg fa fa-arrow-right" onclick="submit_for_verification()"> Submit for Verification</button>
+                    <button type="button" id="verified-button" class="btn btn-success btn-lg fa fa-save" onclick="submit_ballot()"> Confirmed</button>
                 </div>
             </div>
         </div>
@@ -355,8 +355,8 @@ function disable_ballot() {
 function enable_ballot() {
     $("input:checkbox").removeAttr('disabled')
     $("#imprinted-id").removeAttr('disabled')
-    $("#verified-button").removeClass("btn-info")
-    $("#verified-button").addClass("btn-success")
+    //$("#verified-button").removeClass("btn-info")
+    //$("#verified-button").addClass("btn-success")
     $("#ballot-container").removeClass("alert-info")
     $("#ballot-container").addClass("alert-success")
     $("#reviewer-2").removeClass("alert-info")
@@ -397,6 +397,9 @@ function submit_ballot() {
         $('#ballot_string_calc').text(counted_json)
 
         let message_body = document.createElement('div')
+
+        var h = $('<h3>').appendTo(message_body)
+        $(h).text('Ballot Details')
 
         $(message_body).addClass('row')
         let d1 = document.createElement('div')
@@ -457,25 +460,11 @@ function submit_ballot() {
                         }).appendTo(li)
             }
         })
-        bootbox.confirm({
+        bootbox.alert({
             size: 'large',
             message: message_body,
-            buttons: {
-                confirm: {
-                    label: 'Confirmed. Submit ballot.',
-                    className: 'btn-info'
-                },
-                cancel: {
-                    label: 'Cancel. Go back to ballot.'
-                }
-            },
             callback: function (result) {
-                //console.log('This was logged in the callback: ' + result)
-                if (result) {
-                    $("#ballot-form").submit()
-                } else {
-                    //alert('go back')
-                }
+                $("#ballot-form").submit()
             }
         })
     } else {
