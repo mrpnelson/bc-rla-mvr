@@ -419,7 +419,7 @@ function submit_ballot() {
             for ( var candidate in entry ) {
                 console.log("candidate", candidate );
                 let rank_choice = entry[candidate]
-                rank_choice = get_ordinal_suffix_of_integer(rank_choice)
+                rank_choice = helperget_ordinal_suffix_of_integer(rank_choice)
                 console.log("rank_choice", rank_choice );
                 li = $('<li>').appendTo(ul)
                 span1 = $('<span>').appendTo(li)
@@ -614,24 +614,6 @@ function validate_ballot_id(selected_value) {
 function on_change_ballot_dropdown(selected_value) {
     $("#imprinted-id").val(selected_value)
     update_json_preview()
-}
-
-// ===========================================================
-// TODO - put in /lib/helpers.js
-// ===========================================================
-function get_ordinal_suffix_of_integer(i) {
-    let j = i % 10,
-        k = i % 100
-    if (j == 1 && k != 11) {
-        return i + "st"
-    }
-    if (j == 2 && k != 12) {
-        return i + "nd"
-    }
-    if (j == 3 && k != 13) {
-        return i + "rd"
-    }
-    return i + "th"
 }
 
 // ===========================================================
