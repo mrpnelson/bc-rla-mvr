@@ -78,13 +78,12 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
         $(ballot_checkbox).addClass('col-xs-1')
             .html("<div class='checkbox-oval'><input type='checkbox' id='"+ballot_id+"' data-can_id='"+candidate_identifier+"' /><label for='"+ballot_id+"'>&nbsp;</label></div>")
             .appendTo(d)
-        //$("#"+ballot_id).data("something")
     }
 }
 function populate_ballot_dropdown() {
     var ballot_id_list = getSetOfBallots()
     console.log('ballot_id_list', ballot_id_list)
-    let dropdown = $('#imprinted-id-dropdown')
+    let dropdown = $('#imprinted_id_dropdown')
     dropdown.empty()
     dropdown.append('<option selected="true" disabled>Choose Imprinted ID</option>')
     dropdown.prop('selectedIndex', 0)
@@ -137,9 +136,9 @@ function init_layout() {
 // ===========================================================
 function submit_for_verification() {
     // Make sure ballot id is within the set
-    var selected_value = $('#imprinted-id').val()
+    var selected_value = $('#imprinted_id').val()
     //console.log('selected_value', selected_value)
-    let is_ballot_id_valid = validate_ballot_id(selected_value)
+    let is_ballot_id_valid = validate_imprinted_id(selected_value)
     //console.log('is_ballot_id_valid', is_ballot_id_valid)
 
     if (is_ballot_id_valid) {
@@ -150,9 +149,9 @@ function submit_for_verification() {
 }
 function submit_for_verification_with_confirmation() {
     // Make sure ballot id is within the set
-    var selected_value = $('#imprinted-id').val()
+    var selected_value = $('#imprinted_id').val()
     //console.log('selected_value', selected_value)
-    let is_ballot_id_valid = validate_ballot_id(selected_value)
+    let is_ballot_id_valid = validate_imprinted_id(selected_value)
     //console.log('is_ballot_id_valid', is_ballot_id_valid)
 
     if (is_ballot_id_valid) {
@@ -199,6 +198,26 @@ function submit_for_verification_with_confirmation() {
     }
 }
 function prepare_ballot_for_review() {
+    //$("#reviewer_heading").removeClass("alert-warning")
+    //$("#reviewer_heading").addClass("alert-info")
+
+    // Change panel color from warning to info
+    $("#ballot-panel").removeClass("panel-warning")
+    $("#ballot-panel").addClass("panel-info")
+
+    // Change dropdown color from warning to gray
+    $("#ballot-id-container").removeClass("alert-success")
+    $("#ballot-id-container").removeClass("alert-danger")
+    $("#ballot-id-container").removeClass("alert-warning")
+    $("#ballot-id-container").addClass("alert-default")
+
+    // Hide ballot id dropdown
+    $("#dropdown-container").removeClass("show")
+    $("#dropdown-container").addClass("hidden")
+
+    $("#ballot-container").removeClass("alert-warning")
+    $("#ballot-container").addClass("alert-info")
+
     // Swap visibility of review names
     $("#reviewer-1").addClass("hidden")
     $("#reviewer-2").removeClass("hidden")
@@ -215,9 +234,6 @@ function prepare_ballot_for_review() {
     $("#edit-button").addClass("show")
     $("#no-consensus-button").removeClass("hidden")
     $("#no-consensus-button").addClass("show")
-
-    $("#ballot-container").removeClass("alert-warning")
-    $("#ballot-container").addClass("alert-info")
 
     // Make ballot read-only
     disable_ballot()
@@ -238,20 +254,31 @@ function edit_ballot() {
 }
 function disable_ballot() {
     $("input:checkbox").attr('disabled', 'disabled')
-    $("#imprinted-id").attr('disabled', 'disabled')
+    $("#imprinted_id").attr('disabled', 'disabled')
+    $("#ballot-panel").removeClass("panel-success")
+    $("#ballot-panel").removeClass("panel-danger")
+    $("#ballot-panel").addClass("panel-default")
     // TODO Disable ballot id dropdown
 }
 function enable_ballot() {
-    $("input:checkbox").removeAttr('disabled')
-    $("#imprinted-id").removeAttr('disabled')
-    //$("#verified-button").removeClass("btn-info")
-    //$("#verified-button").addClass("btn-success")
+    // Change ballot colors from info to success
+    $("#ballot-panel").removeClass("panel-info")
+    $("#ballot-panel").addClass("panel-success")
+    $("#ballot-id-container").removeClass("alert-info")
+    $("#ballot-id-container").addClass("alert-success")
     $("#ballot-container").removeClass("alert-info")
     $("#ballot-container").addClass("alert-success")
-    $("#reviewer-2").removeClass("alert-info")
-    $("#reviewer-2").addClass("alert-success")
-    $("#reviewer-2").html("<h1>Reviewer #2 - Edit and verify</h1>")
+
+    // Update instructions to end user
+    $("#reviewer-2").html("<h1>Reviewer #2 - Revise and verify</h1>")
     
+    // Enable ballot-id input and ballot checkboxes
+    $("#imprinted_id").removeAttr('disabled')
+    $("#dropdown-container").removeClass("hidden")
+    $("#dropdown-container").addClass("show")
+    $("input:checkbox").removeAttr('disabled')
+
+    // Confirmation popup
     //let message_body = document.createElement('div')
     //$(message_body).addClass('alert alert-success')
     //let message_h1 = $('<h1>').text('Reviewer #2').appendTo(message_body)
@@ -261,11 +288,11 @@ function enable_ballot() {
     //    message: message_body
     //})
 }
-function submit_ballot_without_confirmation() {
+function submit_ballot() {
     // Make sure ballot id is within the set
-    var selected_value = $('#imprinted-id').val()
+    var selected_value = $('#imprinted_id').val()
     console.log('selected_value', selected_value)
-    let is_ballot_id_valid = validate_ballot_id(selected_value)
+    let is_ballot_id_valid = validate_imprinted_id(selected_value)
     console.log('is_ballot_id_valid', is_ballot_id_valid)
     if (is_ballot_id_valid) {
         $("#ballot-form").submit()
@@ -273,11 +300,11 @@ function submit_ballot_without_confirmation() {
         $('#invalidBallotModal').modal('show')
     }
 }
-function submit_ballot() {
+function submit_ballot_with_confirmation() {
     // Make sure ballot id is within the set
-    var selected_value = $('#imprinted-id').val()
+    var selected_value = $('#imprinted_id').val()
     console.log('selected_value', selected_value)
-    let is_ballot_id_valid = validate_ballot_id(selected_value)
+    let is_ballot_id_valid = validate_imprinted_id(selected_value)
     console.log('is_ballot_id_valid', is_ballot_id_valid)
     if (is_ballot_id_valid) {
         let mcvr_json = read_ballot_form()
@@ -361,6 +388,37 @@ function submit_ballot() {
     }
 }
 
+function display_selection(ballot_json) {
+    let message_body = document.createElement('div')
+    let d1 = document.createElement('div')
+    $(d1).appendTo(message_body)
+    var ul = $('<ul>').appendTo(d1)
+    console.log('ballot_json', ballot_json)
+    var obj = $.parseJSON(ballot_json)
+    console.log('obj', obj)
+    var ballot_selections = obj.ballot_selections
+    console.log('ballot_selections', ballot_selections)
+    ballot_selections.forEach(function(entry) {
+        console.log("entry",entry);
+        console.log("object.keys", Object.keys(entry));
+        for ( var candidate in entry ) {
+            console.log("candidate", candidate );
+            let rank_choice = entry[candidate]
+            rank_choice = get_ordinal_suffix_of_integer(rank_choice)
+            console.log("rank_choice", rank_choice );
+            li = $('<li>').appendTo(ul)
+            span1 = $('<span>').appendTo(li)
+            span1.text(rank_choice + ' - ' + candidate )
+            var img = $('<img />').attr({
+                        'src': '/img/candidates/'+candidate+'.png',
+                        'width': 40,
+                        'class': 'img-circle'
+                    }).appendTo(li)
+        }
+    });
+    return message_body
+}
+
 // ===========================================================
 // Read and process ballot form
 // ===========================================================
@@ -375,7 +433,7 @@ function read_ballot_form() {
     var manual_cvr = {}
     var ballot_id_json = {}
     var ballot_key = "ballot_id"
-    var ballot_value = $("#imprinted-id").val()
+    var ballot_value = $("#imprinted_id").val()
     ballot_id_json[ ballot_key ] = ballot_value
     var b1 = {}
     var ballot_selections = []
@@ -407,7 +465,7 @@ function count_ballot_form() {
     var manual_cvr = {}
     var ballot_id_json = {}
     var ballot_key = "ballot_id"
-    var ballot_value = $("#imprinted-id").val()
+    var ballot_value = $("#imprinted_id").val()
     ballot_id_json[ ballot_key ] = ballot_value
     var b1 = {}
     var ballot_selections = []
@@ -475,7 +533,7 @@ function count_ballot_form() {
     let mcvr_json = JSON.stringify(manual_cvr)
     return mcvr_json
 }
-function validate_ballot_id(selected_value) {
+function validate_imprinted_id(selected_value) {
     var ballot_id_list = getSetOfBallots()
     var ballot_entry_table = ballot_id_list.table
     var found_ballot_id = false
@@ -485,22 +543,22 @@ function validate_ballot_id(selected_value) {
             found_ballot_id = true
         }
     })
-    $("#ballot-panel").removeClass("panel-success")
-    $("#ballot-panel").removeClass("panel-danger")
+    $("#ballot-id-container").removeClass("alert-success")
+    $("#ballot-id-container").removeClass("alert-danger")
+    $("#ballot-id-container").removeClass("alert-warning")
+    console.log('selectd_value',selected_value)
+    console.log('found_ballot_id',found_ballot_id)
     if (found_ballot_id) {
-        //alert('found it')
-        $("#ballot-panel").addClass("panel-success")
+        $("#ballot-id-container").addClass("alert-success")
     }else {
-        //alert('did not find it')
-        $("#ballot-panel").addClass("panel-danger")
+        $("#ballot-id-container").addClass("alert-danger")
     }
     return found_ballot_id
 }
-
 // ===========================================================
 // Functions tied to listeners
 // ===========================================================
 function on_change_ballot_dropdown(selected_value) {
-    $("#imprinted-id").val(selected_value)
+    $("#imprinted_id").val(selected_value)
     update_json_preview()
 }

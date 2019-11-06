@@ -4,31 +4,25 @@ var router = express.Router()
 
 var querystring = require('querystring')
 
-// middleware that is specific to this router
-//router.use(function timeLog (req, res, next) {
-// console.log('Time: ', Date.now())
-// next()
-//})
-
-// Submit
 router.post('/submit-ballot/', function (req, res) {
-    //console.log('submit-ballot')
-    //console.log('write_json_to_disk')
-    var ballot_string = req.body.ballot_string_calc
-    //console.log('ballot_string',ballot_string)
-
+    //console.log("submit-ballot req.body", req.body)
+    var ballot_string_calc = req.body.ballot_string_calc
     var filenameprefix=getRawDate();
     let filename = filenameprefix + '.json'
-
-    write_data_to_disk(ballot_string,filename)
-
-    //var message = querystring.escape('Success. Contents of ballot ' + filename + ' - ' + ballot_string)
-    var message = querystring.escape('Success processing ballot.')
-    //console.log('message:', message)
-    res.redirect(303, '/mark-ballot/?message=' + message)
+    write_data_to_disk(ballot_string_calc,filename)
+    res.redirect(307, '/ballots/ballot-success/') // 307 Temporary Redirect preserves form data
 })
-
-// discard-all-ballots
+router.post('/ballot-success/', function (req, res) {
+    var ballot_id = req.body.imprinted_id
+    var ballot_string = req.body.ballot_string
+    var ballot_string_calc = req.body.ballot_string_calc
+    //console.log("ballot-success req.body", req.body)
+    res.render('ballot-success', {
+        ballot_id: ballot_id,
+        ballot_string: ballot_string,
+        ballot_string_calc: ballot_string_calc
+    })
+})
 router.post('/discard-all-ballots/', function (req, res) {
     console.log('discard-all-ballots')
 
@@ -52,45 +46,22 @@ router.post('/discard-all-ballots/', function (req, res) {
         res.redirect(303, '/list-ballots/?message=' + message)    
     })
 })
-
 module.exports = router
 
 function write_data_to_disk(filedata, filename) {
     var fs = require('fs');
-    // var data = {}
-    // data.table = []
-    // for (i=0; i <26 ; i++){
-    // var obj = {
-    //     id: i,
-    //     square: i * i
-    // }
-    // data.table.push(obj)
-    // }
-    //fs.writeFile ("data/"+filename, JSON.stringify(data), function(err) {
     fs.writeFile ("data/"+filename, filedata, function(err) {
         if (err) throw err
-        console.log('complete')
         // Write backup file to logs
         fs.writeFile ("logs/"+filename, filedata, function(err) {
             if (err) throw err
-            console.log('complete')
         })
     })
 }
-
 function getRawDate() {
     var date = new Date()
-
     var moment = require('moment')
-    var tz = require('moment-timezone')
-
     var dt = moment.tz(date, 'America/Los_Angeles')
-
-    //dt = moment(dt).add(7, 'hours')
-
-    //dt = dt.format('LLLL')
-    //dt = dt.format('YYYY-MM-DD HH:mm:ss')
     dt = dt.format('YYYYMMDDHHmmss')
-
     return dt
 }

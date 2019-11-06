@@ -48,19 +48,29 @@
 <div id="contest-name">
     <span class="text-bold">Contest:</span> Team Mascot
 </div>
-<div id="ballot-panel" class="panel panel-success">
+<div id="ballot-panel" class="panel panel-warning">
     <div class="panel-heading">
-        <label for="imprinted-id">Imprinted ID:</label>
-        <input type="text" name="imprinted-id" id="imprinted-id" value="998"/>
-        Enter <em>Imprinted ID</em> manually or select from list:
-        <select id="imprinted-id-dropdown" name="imprinted-id-dropdown"></select>
-    </div>
-    <div class="panel-body">
-        <div id="reviewer-1" class="alert alert-warning">
+        <div id="reviewer-1">
             <h1>Reviewer #1 - Enter choices as marked on paper ballot</h1>
         </div>
-        <div id="reviewer-2" class="alert alert-info">
+        <div id="reviewer-2">
             <h1>Reviewer #2 - Review and confirm (revise as needed)</h1>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div id="ballot-id-container" class="alert alert-warning">
+            <div class="row">
+                <div class="col-xs-4">
+                    <label for="imprinted_id">Imprinted ID:</label>
+                    <input type="text" name="imprinted_id" id="imprinted_id" value="998"/>
+                </div>
+                <div class="col-xs-8">
+                    <div id="dropdown-container">
+                        Enter <em>Imprinted ID</em> manually or select from list:
+                        <select id="imprinted_id_dropdown" name="imprinted_id_dropdown"></select>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="ballot-container" class="container alert alert-warning"></div>
     </div>
@@ -109,7 +119,6 @@ Counted Ballot:<br/>
 </div>
 
 <script>
-
 // ===========================================================
 // Initial page load
 // ===========================================================
@@ -119,18 +128,18 @@ $(function(){
     init_layout()
     update_json_preview()
     // Set up listeners for ballot id text input and dropdown
-    $("#imprinted-id").keyup(function(){
-        validate_ballot_id($("#imprinted-id").val())
+    $("#imprinted_id").keyup(function(){
+        validate_imprinted_id($("#imprinted_id").val())
         update_json_preview()
     })
     $('input:checkbox').change(function() {
         update_json_preview()
     })
-    $('#imprinted-id-dropdown').change(function() {
-        var selected_value = $('#imprinted-id-dropdown').val()
+    $('#imprinted_id_dropdown').change(function() {
+        var selected_value = $('#imprinted_id_dropdown').val()
         //console.log('selected_value', selected_value)
         on_change_ballot_dropdown(selected_value)
-        validate_ballot_id(selected_value)
+        validate_imprinted_id(selected_value)
     })
 })
 </script>
