@@ -48,6 +48,7 @@ function populate_ballot_checkboxes() {
     add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
 }
 function add_header_to_ballot(number_of_candidates) {
+
     let ballot_row = document.createElement('div')
     $(ballot_row).addClass('row')
         .appendTo($("#ballot-container"))
@@ -64,6 +65,7 @@ function add_header_to_ballot(number_of_candidates) {
     }
 }
 function add_candidate_to_ballot(number_of_candidates, candidate_number, candidate_name, candidate_identifier, candidate_image) {
+
     let d = document.createElement('div')
     $(d).addClass('row')
         .appendTo($("#ballot-container"))

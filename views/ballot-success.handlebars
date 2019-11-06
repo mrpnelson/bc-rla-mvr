@@ -5,16 +5,14 @@
     <div class="panel-body">
         <div class="panel panel-success">
             <div class="panel-heading">
-                <h3 class="panel-title">Ballot ID</h3>
-            </div>
-            <div class="panel-body">
-                {{#if ballot_id}}
-                    <div class="alert alert-success">
+                <h3 class="panel-title">
+                    Ballot ID: 
+                    {{#if ballot_id}}
                         {{ballot_id}}
-                    </div>
-                {{else}}
-                    Ballot ID not passed.
-                {{/if }}
+                    {{else}}
+                        resubmitting form is disabled
+                    {{/if }}
+                </h3>
             </div>
         </div>
         <div class="panel panel-success">
