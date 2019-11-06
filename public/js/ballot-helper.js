@@ -543,15 +543,15 @@ function validate_imprinted_id(selected_value) {
     var found_ballot_id = false
     $.each(ballot_entry_table, function (key, entry) {
         let imprinted_id = entry.imprinted_id
-        if (imprinted_id === selected_value) {
+        let imprinted_id_no_dashes = imprinted_id.replace(/-/g, "")
+        let selected_value_no_dashes = selected_value.replace(/-/g, "")
+        if (imprinted_id_no_dashes === selected_value_no_dashes) {
             found_ballot_id = true
         }
     })
     $("#ballot-id-container").removeClass("alert-success")
     $("#ballot-id-container").removeClass("alert-danger")
     $("#ballot-id-container").removeClass("alert-warning")
-    console.log('selectd_value',selected_value)
-    console.log('found_ballot_id',found_ballot_id)
     if (found_ballot_id) {
         $("#ballot-id-container").addClass("alert-success")
     }else {

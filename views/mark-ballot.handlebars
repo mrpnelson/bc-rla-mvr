@@ -123,6 +123,11 @@ Counted Ballot:<br/>
 // Initial page load
 // ===========================================================
 $(function(){
+    // Disable form submit on enter via input box
+    $('form :input').on('keypress', function(e) {
+        return e.which !== 13
+    });
+
     populate_ballot_checkboxes()
     populate_ballot_dropdown()
     init_layout()
