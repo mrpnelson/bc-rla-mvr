@@ -92,11 +92,13 @@
         </div>
     </div>
 </div>
-Literal Ballot:<br/>
-<textarea rows="5" cols="150" name="ballot_string" id="ballot_string" class="alert alert-warning"/></textarea>
-<br/>
-Counted Ballot:<br/>
-<textarea rows="5" cols="150" name="ballot_string_calc" id="ballot_string_calc" class="alert alert-success"></textarea>
+<div id="json_preview">
+    Literal Ballot:<br/>
+    <textarea rows="5" cols="150" name="ballot_string" id="ballot_string" class="alert alert-warning"/></textarea>
+    <br/>
+    Counted Ballot:<br/>
+    <textarea rows="5" cols="150" name="ballot_string_calc" id="ballot_string_calc" class="alert alert-success"></textarea>
+</div>
 </form>
 
 <!-- Invalid Ballot ID Modal -->
@@ -127,7 +129,6 @@ $(function(){
     $('form :input').on('keypress', function(e) {
         return e.which !== 13
     });
-
     populate_ballot_checkboxes()
     populate_ballot_dropdown()
     init_layout()
@@ -146,5 +147,8 @@ $(function(){
         on_change_ballot_dropdown(selected_value)
         validate_imprinted_id(selected_value)
     })
+    // Hide JSON preview
+    $("#json_preview").addClass("hidden")
+
 })
 </script>
