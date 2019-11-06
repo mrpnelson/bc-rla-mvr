@@ -303,6 +303,7 @@ function submit_ballot() {
 }
 function submit_ballot_with_confirmation() {
     // Make sure ballot id is within the set
+    $("#imprinted_id").removeAttr('disabled')
     var selected_value = $('#imprinted_id').val()
     console.log('selected_value', selected_value)
     let is_ballot_id_valid = validate_imprinted_id(selected_value)
