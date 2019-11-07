@@ -1,7 +1,7 @@
 <div>
     <h1><i class="fa fa-upload"></i> Load Contest</h1>
     {{#if message}}
-        <div class="alert alert-info">
+        <div class="alert alert-danger">
             <h1><i class="fa fa-info-circle"></i> {{ message }}</h1>
         </div>
     {{/if }}
@@ -45,21 +45,51 @@
     </div>
 </div>
 
-
 <form method='post' enctype="multipart/form-data" name="contest-form" id="contest-form" action="/load-contest/preview/">
 
 <div class="alert alert-info">
-    <input type='file' name='fileUploaded'>
+    <input type='file' name='file_to_upload' id='file_to_upload'>
+    <input type='hidden' name='testing123' id='testing123' value='testing123'>
 </div>
 <div>
     <button type="submit" class="btn btn-success btn-lg fa fa-upload"> Upload Contest Details</button>
 </div>
 </form>
 
-<div class="alert alert-danger" style="margin-top:10px">
-    TO DO:
-<pre>
-    - Display minimum requirements (hard-code a sample)
-</pre>
+<div class="panel panel-warning" style="margin-top:10px">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="fa fa-file"></span> <code>Structure and minimum requirements for uploaded JSON file:</code></h3>
+    </div>
+    <div class="panel-body">
+        <pre>
+{
+    "Contest": {
+        "Description": "TEAM MASCOT",
+        "Id": 333
+    },
+    "Candidates": [
+        {
+            "Description": "ANGEL",
+            "Id": 11,
+            "Type": "Regular"
+        },
+        {
+            "Description": "BEAR",
+            "Id": 12,
+            "Type": "Regular"
+        },
+        {
+            "Description": "CARDINAL",
+            "Id": 13,
+            "Type": "Regular"
+        },
+        {
+            "Description": "Write-in",
+            "Id": 99,
+            "Type": "WriteIn"
+        }
+    ]
+}
+        </pre>
+    </div>
 </div>
-
