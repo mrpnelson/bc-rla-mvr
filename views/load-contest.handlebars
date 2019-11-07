@@ -31,7 +31,7 @@
                 <h3 class="panel-title">Target Audience</h3>
             </div>
             <div class="panel-body">
-                Election administrator (or Laurent or Dan)
+                Election administrator
             </div>
         </div>
         <div class="panel panel-warning">
@@ -46,76 +46,20 @@
 </div>
 
 
-<form method='post' enctype="multipart/form-data" name="contest-form" id="contest-form" action="/contests/submit-contest-candidates/">
+<form method='post' enctype="multipart/form-data" name="contest-form" id="contest-form" action="/load-contest/preview/">
 
-<div>
+<div class="alert alert-info">
     <input type='file' name='fileUploaded'>
-    <button type="button" class="btn btn-success btn-lg fa fa-upload"> Upload Contest Details</button>
+</div>
+<div>
+    <button type="submit" class="btn btn-success btn-lg fa fa-upload"> Upload Contest Details</button>
 </div>
 </form>
 
-<h4>Upload results</h4>
-<p>
-    <span class="text-bold">File:</span> <span class="fa fa-upload"></span> mascot_contest.json
-</p>
-<p>
-    <span class="text-bold">Status:</span> <span class="fa fa-check"></span> Valid 
-</p>
-<p>
-    <span class="text-bold">Contents:</span>
-</p>
-
-<div class="panel panel-success">
-    <div class="panel-heading">
-        <h3 class="panel-title"><span class="fa fa-file"></span> <code>mascot_contest.json</code></h3>
-    </div>
-    <div class="panel-body">
-        <pre>
-{
-	"contest-name": "Team Mascot",
-	"contest-id": "987654321",
-	"candidates":[
-		{
-			"candidate-name": "Ant",
-			"candidate-image": "ant.png",
-			"candidate-id": "ant",
-		},
-		{
-			"candidate-name": "Bee",
-			"candidate-image": "bee.png",
-			"candidate-id": "bee",
-		},
-		{
-			"candidate-name": "Cat",
-			"candidate-image": "cat.png",
-			"candidate-id": "cat",
-		},
-		{
-			"candidate-name": "Dog",
-			"candidate-image": "dog.png",
-			"candidate-id": "dog",
-		},
-		{
-			"candidate-name": "Elk",
-			"candidate-image": "elk.png",
-			"candidate-id": "elk",
-		},
-		{
-			"candidate-name": "Fox",
-			"candidate-image": "fox.png",
-			"candidate-id": "fox",
-		},
-		{
-			"candidate-name": "Gnu",
-			"candidate-image": "gnu.png",
-			"candidate-id": "gnu",
-		},
-		{
-			"candidate-name": "Hog",
-			"candidate-image": "hog.png",
-			"candidate-id": "hog",
-		}
-	]
-}        </pre>
-    </div>
+<div class="alert alert-danger" style="margin-top:10px">
+    TO DO:
+<pre>
+    - Display minimum requirements (hard-code a sample)
+</pre>
 </div>
+

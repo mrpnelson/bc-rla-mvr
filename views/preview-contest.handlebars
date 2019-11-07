@@ -1,0 +1,46 @@
+<div>
+    <h1><i class="fa fa-upload"></i> Load Contest</h1>
+    {{#if message}}
+        <div class="alert alert-info">
+            <h1><i class="fa fa-info-circle"></i> {{ message }}</h1>
+        </div>
+    {{/if }}
+</div>
+
+<pre>
+if valided json say so.
+show contest detials
+show contestant detials
+prompt for Continue
+(on coninue write files - go to page that says continue to x to y to z)
+post uploaded filename to next page. 
+</pre>
+
+<pre>
+if not validated explain so. 'Try again'
+</pre>
+
+<h4>Upload results</h4>
+<p>
+    <span class="text-bold">File:</span> <span class="fa fa-upload"></span> TODO file name here
+</p>
+<p>
+    <span class="text-bold">Status:</span> <span class="fa fa-check"></span> Valid 
+</p>
+
+<form method='post' name="contest-confirm-form" id="contest-confirm-form" action="/load-contest/confirmed/">
+<div>
+    <button type="submit" class="btn btn-success btn-lg fa fa-arrow-right"> Create Contest</button>
+</div>
+</form>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="fa fa-file"></span> <code>TODO filename here</code></h3>
+    </div>
+    <div class="panel-body">
+        <pre>
+TODO FILE CONTENT GOES HERE IF VALID JSON
+       </pre>
+    </div>
+</div>

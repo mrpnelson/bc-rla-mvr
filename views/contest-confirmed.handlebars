@@ -1,0 +1,28 @@
+<div>
+    <h1><i class="fa fa-upload"></i> Load Contest</h1>
+    {{#if message}}
+        <div class="alert alert-info">
+            <h1><i class="fa fa-info-circle"></i> {{ message }}</h1>
+        </div>
+    {{/if }}
+</div>
+<pre>
+    TODO
+    Create Contest
+    - remove/archive files/folders?
+    - new files (contest json and supporting files) and backup
+    - new folder /data/contest_history/timestamp
+</pre>
+
+<div class="alert alert-success">
+    <h4 class="fa fa-upload"> Success loading and creating contest!</h4>
+</div>
+
+Suggested next pages:
+<div>
+    <a href="/mark-ballot" class="btn btn-success fa fa-check-circle"> Mark Ballot</a>
+</div>
+<br/>
+<div>
+    <a href="/list-ballots" class="btn btn-success fa fa-list-ol"> List Ballots</a>
+</div>

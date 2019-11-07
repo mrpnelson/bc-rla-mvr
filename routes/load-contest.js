@@ -10,4 +10,20 @@ router.get('/', function (req, res) {
     })
 })
 
+// Preview Contest
+router.post('/preview', function (req, res) {
+    var message = req.body.message
+    res.render('preview-contest', {
+        message: message
+    })
+})
+
+// Contest Confirmed
+router.post('/confirmed', function (req, res) {
+    var message = req.body.message
+    res.render('contest-confirmed', {
+        message: message
+    })
+})
+
 module.exports = router
