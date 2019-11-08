@@ -19,7 +19,7 @@ router.post('/preview', function (req, res) {
     form.uploadDir = "./data/uploads/raw";
     form.parse(req, function (err, fields, files) {
         //console.log('form fields', fields)
-        console.log('files', files)
+        //console.log('files', files)
         // If not a JSON file go back via message
         if (files.file_to_upload.type !== 'application/json') {
             var message = 'Please upload a JSON file (.json)'
@@ -27,27 +27,24 @@ router.post('/preview', function (req, res) {
                 message: message
             })
         } else {
-            // Halt if not files.file_to_upload.type: 'application/json',
-            var oldpath = files.file_to_upload.path
-            var newpath = './data/uploads/' + files.file_to_upload.name
-            // console.log('oldpath', oldpath)
-            // console.log('newpath', newpath)
-            fs.copyFile(oldpath, newpath, function (err) {
+            var upload_name = files.file_to_upload.name
+            var old_path = files.file_to_upload.path
+            var new_path = './data/uploads/' + upload_name
+            fs.copyFile(old_path, new_path, function (err) {
                 if (err) throw err
                 // Validate the uploaded JSON file
-                var response = validate_upload(newpath)
+                var response = validate_upload(new_path)
                 var status = response.status
                 var message = response.message
-                console.log('status:', status)
+                var json = response.json
                 if (status === false) {
-                    //var message = 'The selected file is not in the correct JSON format. Please fix or upload another JSON file.'
                     res.render('load-contest', {
                         message: message
                     })
                 } else {
-                    var message = req.body.message
                     res.render('preview-contest', {
-                        message: message
+                        upload_name: upload_name,
+                        upload_json: json
                     })    
                 }
             })
@@ -60,12 +57,12 @@ function validate_upload(filepath) {
     var contents = fs.readFileSync(filepath, 'utf8');
     //console.log('contents', contents)
     var json = JSON.parse(contents);
+    //console.log('json', json)
 
     var response = {}
     response.status = true
     response.message = ''
-
-    console.log('json', json)
+    response.json = json
 
     // Check for 'Contest' object
     if(!json.hasOwnProperty('Contest')){

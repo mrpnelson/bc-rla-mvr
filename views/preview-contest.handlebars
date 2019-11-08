@@ -7,26 +7,9 @@
     {{/if }}
 </div>
 
-<pre>
-if valided json say so.
-show contest detials
-show contestant detials
-prompt for Continue
-(on coninue write files - go to page that says continue to x to y to z)
-post uploaded filename to next page. 
-</pre>
+<h2 class="alert alert-info"><i class="fa fa-info-circle"></i> Confirm new contest</h2>
 
-<pre>
-if not validated explain so. 'Try again'
-</pre>
-
-<h4>Upload results</h4>
-<p>
-    <span class="text-bold">File:</span> <span class="fa fa-upload"></span> TODO file name here
-</p>
-<p>
-    <span class="text-bold">Status:</span> <span class="fa fa-check"></span> Valid 
-</p>
+<h4 class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> Note! Creating a new contest will end the current contest (if any)</h4>
 
 <form method='post' name="contest-confirm-form" id="contest-confirm-form" action="/load-contest/confirmed/">
 <div>
@@ -36,11 +19,21 @@ if not validated explain so. 'Try again'
 
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title"><span class="fa fa-file"></span> <code>TODO filename here</code></h3>
+        <h3 class="panel-title"><span class="fa fa-file"></span> <code>{{upload_name}}</code></h3>
     </div>
     <div class="panel-body">
-        <pre>
-TODO FILE CONTENT GOES HERE IF VALID JSON
+        <pre id="upload_json">
        </pre>
     </div>
 </div>
+
+<script>
+// ===========================================================
+// Initial page load
+// ===========================================================
+$(function(){
+    var upload_json = {{{json upload_json}}}
+    var upload_string = JSON.stringify(upload_json)
+    $("#upload_json").append(upload_string)
+})
+</script>
