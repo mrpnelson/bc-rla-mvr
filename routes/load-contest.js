@@ -72,12 +72,18 @@ router.post('/confirmed', function (req, res) {
         arrayBallots.push('Read ballot ID list from CSV file')
         arrayBallots.push('Save as JSON file')
         jsonBallots = JSON.stringify(arrayBallots)
-
+        // Remove ballots
+        var folderpath = './data/ballots/'
+        clear_folder(folderpath)
+        // Remove contest
+        var folderpath = './data/contest/'
+        clear_folder(folderpath)
         // Write JSON to contest files
         write_json_file(JSON.stringify(jsonContest), 'contest.json')
         write_json_file(jsonCandidates, 'candidates.json')
         write_json_file(jsonBallots, 'ballots.json')
-
+        write_json_file(JSON.stringify({}), 'ballots_marked.json')
+        // Proceed to final 'success' page
         res.render('contest-confirmed', {
             upload_name: upload_name,
             jsonCandidateList:jsonCandidates,
@@ -89,10 +95,29 @@ router.post('/confirmed', function (req, res) {
 module.exports = router
 
 function write_json_file(filedata, filename) {
-    var fs = require('fs');
     fs.writeFile ("data/contest/"+filename, filedata, function(err) {
         if (err) throw err
-        // TODO create duplicate in data/contest_history/timestamp/
+        // Create duplicate in data/contest_history/timestamp/
+        var rawdate = getRawDate();
+        var datedir = "data/contest_history/"+rawdate
+        if (!fs.existsSync(datedir)){
+            fs.mkdirSync(datedir);
+        }
+        fs.writeFile (datedir+ "/"+filename, filedata, function(err) {
+            if (err) throw err
+        })
+    })
+}
+
+function clear_folder(folderpath) {
+    fs.readdir(folderpath, (err, files) => {
+        //console.log('files', files)
+        files.forEach(file => {
+            var ext = file.substr(file.lastIndexOf('.') + 1)
+            if (ext === 'json') {
+                fs.unlinkSync(folderpath+file);
+            }
+        })
     })
 }
 
@@ -156,4 +181,12 @@ function validate_upload(filepath) {
 
     }
     return response
+}
+
+function getRawDate() {
+    var date = new Date()
+    var moment = require('moment')
+    var dt = moment.tz(date, 'America/Los_Angeles')
+    dt = dt.format('YYYYMMDDHHmmss')
+    return dt
 }

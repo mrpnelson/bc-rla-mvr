@@ -30,25 +30,20 @@ router.post('/ballot-success/', function (req, res) {
     })
 })
 router.post('/discard-all-ballots/', function (req, res) {
-    console.log('discard-all-ballots')
-
+    //console.log('discard-all-ballots')
     var fs = require('fs')
     fs.readdir('./data', (err, files) => {
         //console.log('files', files)
         files.forEach(file => {
-            console.log(file)
+            //console.log(file)
             var ext = file.substr(file.lastIndexOf('.') + 1)
             if (ext === 'json') {
-                console.log(file)
-                var file_obj = fs.readFileSync('./data/'+file, 'utf8')
-                console.log(file_obj)
-
-                //fs.unlink('./data/'+file, callback) 
+                //console.log(file)
                 fs.unlinkSync('./data/'+file);
             }
         })
         var message = querystring.escape('Success discarding all ballots.')
-        console.log('message:', message)
+        //console.log('message:', message)
         res.redirect(303, '/list-ballots/?message=' + message)    
     })
 })

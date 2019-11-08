@@ -22,13 +22,13 @@ router.get('/', function (req, res) {
     fs.readdir('./data', (err, files) => {
         //console.log('files', files)
         files.forEach(file => {
-            console.log(file)
+            //console.log(file)
             var ext = file.substr(file.lastIndexOf('.') + 1)
             if (ext === 'json') {
-                console.log(file)
+                //console.log(file)
                 var file_obj = fs.readFileSync('./data/'+file, 'utf8')
                 //var file_obj = JSON.parse(fs.readFileSync('./data/'+file, 'utf8'))
-                console.log(file_obj)
+                //console.log(file_obj)
                 var obj = {
                     ballot_filename: file,
                     contents: file_obj
