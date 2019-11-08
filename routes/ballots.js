@@ -1,6 +1,7 @@
 // See also https://expressjs.com/en/guide/routing.html
 var express = require('express')
 var router = express.Router()
+var fs = require('fs')
 
 var querystring = require('querystring')
 
@@ -23,10 +24,16 @@ router.post('/ballot-success/', function (req, res) {
     var ballot_string = req.body.ballot_string
     var ballot_string_calc = req.body.ballot_string_calc
     //console.log("ballot-success req.body", req.body)
+
+    // Read candidates from JSON.
+    var filepath = './data/contest/candidates.json'
+    var candidates = fs.readFileSync(filepath, 'utf8')
+    // TODO catch/report file read errors
     res.render('ballot-success', {
         ballot_id: ballot_id,
         ballot_string: ballot_string,
-        ballot_string_calc: ballot_string_calc
+        ballot_string_calc: ballot_string_calc,
+        candidates: candidates
     })
 })
 router.post('/discard-all-ballots/', function (req, res) {
@@ -50,7 +57,6 @@ router.post('/discard-all-ballots/', function (req, res) {
 module.exports = router
 
 function write_data_to_disk(filepath, historypath, filename, filedata) {
-        var fs = require('fs');
     fs.writeFile (filepath+filename, filedata, function(err) {
         if (err) throw err
         // Write backup file to logs

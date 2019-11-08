@@ -129,9 +129,13 @@ $(function(){
     $('form :input').on('keypress', function(e) {
         return e.which !== 13
     });
-    populate_ballot_checkboxes()
+
+    var candidates = {{{candidates}}}
+    $("#candidates").append(JSON.stringify(candidates))
+    populate_ballot_checkboxes(candidates)
+
     populate_ballot_dropdown()
-    init_layout()
+    layout_ballot()
     update_json_preview()
     // Set up listeners for ballot id text input and dropdown
     $("#imprinted_id").keyup(function(){

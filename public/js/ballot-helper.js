@@ -2,50 +2,31 @@ var num_candidates
 // ===========================================================
 // Page setup functions
 // ===========================================================
-function populate_ballot_checkboxes() {
-    // TODO: Replace these hard-coded ballot details with content from uploaded JSON file.
-    num_candidates = 8
+function populate_ballot_checkboxes(candidates) {
+    console.log('candidates', candidates)
+    num_candidates = candidates.length
     add_header_to_ballot(num_candidates)
-    var candidate_num = 1
-    var candidate_nam = "Ant"
-    var candidate_id = "ant"
-    var candidate_img = "/img/candidates/ant.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 2
-    var candidate_nam = "Bee"
-    var candidate_id = "bee"
-    var candidate_img = "/img/candidates/bee.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 3
-    var candidate_nam = "Cat"
-    var candidate_id = "cat"
-    var candidate_img = "/img/candidates/cat.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 4
-    var candidate_nam = "Dog"
-    var candidate_id = "dog"
-    var candidate_img = "/img/candidates/dog.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 5
-    var candidate_nam = "Elk"
-    var candidate_id = "elk"
-    var candidate_img = "/img/candidates/elk.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 6
-    var candidate_nam = "Fox"
-    var candidate_id = "fox"
-    var candidate_img = "/img/candidates/fox.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 7
-    var candidate_nam = "Gnu"
-    var candidate_id = "gnu"
-    var candidate_img = "/img/candidates/gnu.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
-    var candidate_num = 8
-    var candidate_nam = "Hog"
-    var candidate_id = "hog"
-    var candidate_img = "/img/candidates/hog.png"
-    add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    var candidate_num = 0
+    var candidate_nam = ""
+    var candidate_id = 0
+    for(let candidate of candidates) {
+        console.log(candidate)
+        candidate_num++
+        var candidate_nam = candidate.Description
+        var candidate_id = candidate.Id
+        if (candidate.Image)
+            var candidate_img = '/img/candidates/' + candidate.Image
+        else
+            var candidate_img = '/img/candidates/generic.png'
+        add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+    }
+    
+    // var candidate_num = 3
+    // var candidate_nam = "Write-in"
+    // var candidate_id = 45
+    // var candidate_img = "/img/candidates/generic.png"
+    // add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
+
 }
 function add_header_to_ballot(number_of_candidates) {
 
@@ -72,14 +53,20 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
 
     let candidate = document.createElement('div')
     $(candidate).addClass('col-xs-2')
-        .html("<div class='xsmall_image_container'><span class=' xsmall_image_border'><img class='img-circle' src='"+candidate_image+"' width='40'></span><span class='text-bold'>"+candidate_name+"</span>&nbsp;(id:<span class='text-bold'>"+candidate_identifier+"</span>)</div>")
+        .html("<div class='xsmall_image_container'><span class=' xsmall_image_border'><img class='img-circle' src='"+candidate_image+"' width='40'></span><span class='text-bold'>"+candidate_name+"</span></div>")
         .appendTo(d)
+    // $(candidate).addClass('col-xs-2')
+    //     .html("<div class='xsmall_image_container'><span class=' xsmall_image_border'><img class='img-circle' src='"+candidate_image+"' width='40'></span><span class='text-bold'>"+candidate_name+"</span>&nbsp;(id:<span class='text-bold'>"+candidate_identifier+"</span>)</div>")
+    //     .appendTo(d)
     for (var i = 1; i <= number_of_candidates; i++) {
         let ballot_checkbox = document.createElement('div')
         let ballot_id = "rank"+i+"_can" + candidate_number
         $(ballot_checkbox).addClass('col-xs-1')
             .html("<div class='checkbox-oval'><input type='checkbox' id='"+ballot_id+"' data-can_id='"+candidate_identifier+"' /><label for='"+ballot_id+"'>&nbsp;</label></div>")
             .appendTo(d)
+        // $(ballot_checkbox).addClass('col-xs-1')
+        //     .html("<div class='checkbox-oval'><input type='checkbox' id='"+ballot_id+"' data-can_id='"+candidate_identifier+"' /><label for='"+ballot_id+"'>&nbsp;</label></div>")
+        //     .appendTo(d)
     }
 }
 function populate_ballot_dropdown() {
@@ -126,7 +113,7 @@ function getSetOfBallots() {
     }
     return ballot_id_list
 }
-function init_layout() {
+function layout_ballot() {
     $("#reviewer-2").addClass("hidden")
     $("#verified-button").addClass("hidden")
     $("#edit-button").addClass("hidden")
@@ -392,7 +379,7 @@ function submit_ballot_with_confirmation() {
     }
 }
 
-function display_selection(ballot_json) {
+function display_selection(candidates, ballot_json) {
     let message_body = document.createElement('div')
     let d1 = document.createElement('div')
     $(d1).appendTo(message_body)
@@ -405,19 +392,34 @@ function display_selection(ballot_json) {
     ballot_selections.forEach(function(entry) {
         console.log("entry",entry);
         console.log("object.keys", Object.keys(entry));
-        for ( var candidate in entry ) {
-            console.log("candidate", candidate );
-            let rank_choice = entry[candidate]
+        for ( var selected_candidate in entry ) {
+            console.log("selected_candidate", selected_candidate )
+            console.log("candidates", candidates )
+            // Lookup selected_candidate name from the id.
+            var selected_name = ''
+            var selected_image = 'generic.png'
+            for(let can of candidates) {
+                console.log('can',can)
+                console.log('can.Description', can.Description)
+                console.log('can.Id', can.Id)
+                if (can.Id.toString() === selected_candidate.toString()){
+                    selected_name = can.Description
+                    if (can.Image) {
+                        selected_image = can.Image
+                    }
+                }
+            }
+            let rank_choice = entry[selected_candidate]
             rank_choice = get_ordinal_suffix_of_integer(rank_choice)
             console.log("rank_choice", rank_choice );
             li = $('<li>').appendTo(ul)
             span1 = $('<span>').appendTo(li)
-            span1.text(rank_choice + ' - ' + candidate )
-            var img = $('<img />').attr({
-                        'src': '/img/candidates/'+candidate+'.png',
-                        'width': 40,
-                        'class': 'img-circle'
-                    }).appendTo(li)
+            span1.text(rank_choice + ' - ' + selected_name )
+                $('<img />').attr({
+                       'src': '/img/candidates/'+selected_image,
+                       'width': 40,
+                       'class': 'img-circle'
+                }).appendTo(li)
         }
     });
     return message_body
