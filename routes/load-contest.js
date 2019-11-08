@@ -51,6 +51,50 @@ router.post('/preview', function (req, res) {
         }
     })
 })
+// Contest Confirmed
+router.post('/confirmed', function (req, res) {
+    var upload_name = req.body.upload_name
+    var upload_file = './data/uploads/' + upload_name
+    var response = validate_upload(upload_file)
+    var status = response.status
+    var message = response.message
+    var json = response.json
+    if (status === false) {
+        res.render('load-contest', {
+            message: message
+        })
+    } else {
+        jsonContest = json.Contest
+        jsonCandidates = JSON.stringify(json.Candidates)//convert the Candidates array to a JSON object
+        //console.log('jsonCandidates',jsonCandidates)
+        arrayBallots = []
+        arrayBallots.push('TODO')
+        arrayBallots.push('Read ballot ID list from CSV file')
+        arrayBallots.push('Save as JSON file')
+        jsonBallots = JSON.stringify(arrayBallots)
+
+        // Write JSON to contest files
+        write_json_file(JSON.stringify(jsonContest), 'contest.json')
+        write_json_file(jsonCandidates, 'candidates.json')
+        write_json_file(jsonBallots, 'ballots.json')
+
+        res.render('contest-confirmed', {
+            upload_name: upload_name,
+            jsonCandidateList:jsonCandidates,
+            jsonContest:jsonContest,
+            jsonBallots:jsonBallots
+        })
+    }
+})
+module.exports = router
+
+function write_json_file(filedata, filename) {
+    var fs = require('fs');
+    fs.writeFile ("data/contest/"+filename, filedata, function(err) {
+        if (err) throw err
+        // TODO create duplicate in data/contest_history/timestamp/
+    })
+}
 
 function validate_upload(filepath) {
     //filepathconsole.log('filepath', filepath)
@@ -111,18 +155,5 @@ function validate_upload(filepath) {
         }
 
     }
-
-//if (item instanceof JSONArray)
-
     return response
 }
-
-// Contest Confirmed
-router.post('/confirmed', function (req, res) {
-    var message = req.body.message
-    res.render('contest-confirmed', {
-        message: message
-    })
-})
-
-module.exports = router

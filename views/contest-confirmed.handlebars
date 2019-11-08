@@ -6,16 +6,30 @@
         </div>
     {{/if }}
 </div>
-<pre>
-    TODO
-    Create Contest
-    - remove/archive files/folders?
-    - new files (contest json and supporting files) and backup
-    - new folder /data/contest_history/timestamp
-</pre>
+<code>{{upload_name}}</code>
 
 <div class="alert alert-success">
-    <h4 class="fa fa-upload"> Success loading and creating contest!</h4>
+    <h4><i class="fa fa-upload"></i> Success loading and creating contest!</h4>
+</div>
+
+<div class="container">
+    <div class="row alert alert-success" id="jsonContest">
+
+    </div>
+    <div class="row">
+        <div class="col-xs-6 alert alert-success">
+            Candidates
+        </div>
+        <div class="col-xs-6 alert alert-success">
+            Ballot IDs
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 alert alert-success" id="jsonCandidates">
+        </div>
+        <div class="col-xs-6 alert alert-success" id="jsonBallots">
+        </div>
+    </div>
 </div>
 
 Suggested next pages:
@@ -26,3 +40,22 @@ Suggested next pages:
 <div>
     <a href="/list-ballots" class="btn btn-success fa fa-list-ol"> List Ballots</a>
 </div>
+
+<script>
+// ===========================================================
+// Initial page load
+// ===========================================================
+$(function(){
+    var jsonContest = {{{json jsonContest}}}
+    var stringContest = JSON.stringify(jsonContest)
+    $("#jsonContest").append(stringContest);
+    
+    var jsonCandidateList = {{{json jsonCandidateList}}}
+    $("#jsonCandidates").append(jsonCandidateList)
+
+    var jsonBallotList = {{{json jsonBallots}}}
+    $("#jsonBallots").append(jsonBallotList)
+
+
+})
+</script>
