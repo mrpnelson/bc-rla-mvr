@@ -4,7 +4,9 @@
 bak
 
 # Run-time data
-data
+data/
+data/ballots/
+data/ballot_history/
 
 # Logs
 logs
