@@ -10,6 +10,12 @@ router.post('/submit-ballot/', function (req, res) {
     var filenameprefix=getRawDate();
     let filename = filenameprefix + '.json'
     write_data_to_disk(ballot_string_calc,filename)
+
+    let filedata = ballot_string_calc
+    let filepath='data/ballots/'
+    let historypath='data/ballots_history/'
+    write_data_to_disk(filepath, historypath, filename, filedata)
+
     res.redirect(307, '/ballots/ballot-success/') // 307 Temporary Redirect preserves form data
 })
 router.post('/ballot-success/', function (req, res) {
@@ -48,12 +54,12 @@ router.post('/discard-all-ballots/', function (req, res) {
 })
 module.exports = router
 
-function write_data_to_disk(filedata, filename) {
-    var fs = require('fs');
-    fs.writeFile ("data/"+filename, filedata, function(err) {
+function write_data_to_disk(filepath, historypath, filename, filedata) {
+        var fs = require('fs');
+    fs.writeFile (filepath+filename, filedata, function(err) {
         if (err) throw err
         // Write backup file to logs
-        fs.writeFile ("logs/"+filename, filedata, function(err) {
+        fs.writeFile (historypath+filename, filedata, function(err) {
             if (err) throw err
         })
     })
