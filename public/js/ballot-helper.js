@@ -3,14 +3,14 @@ var num_candidates
 // Page setup functions
 // ===========================================================
 function populate_ballot_checkboxes(candidates) {
-    console.log('candidates', candidates)
+    //console.log('candidates', candidates)
     num_candidates = candidates.length
     add_header_to_ballot(num_candidates)
     var candidate_num = 0
     var candidate_nam = ""
     var candidate_id = 0
     for(let candidate of candidates) {
-        console.log(candidate)
+        //console.log(candidate)
         candidate_num++
         var candidate_nam = candidate.Description
         var candidate_id = candidate.Id
@@ -71,7 +71,7 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
 }
 function populate_ballot_dropdown() {
     var ballot_id_list = getSetOfBallots()
-    console.log('ballot_id_list', ballot_id_list)
+    //console.log('ballot_id_list', ballot_id_list)
     let dropdown = $('#imprinted_id_dropdown')
     dropdown.empty()
     dropdown.append('<option selected="true" disabled>Choose Imprinted ID</option>')
@@ -281,9 +281,9 @@ function submit_ballot() {
     // Make sure ballot id is within the set
     $("#imprinted_id").removeAttr('disabled')
     var selected_value = $('#imprinted_id').val()
-    console.log('selected_value', selected_value)
+    //console.log('selected_value', selected_value)
     let is_ballot_id_valid = validate_imprinted_id(selected_value)
-    console.log('is_ballot_id_valid', is_ballot_id_valid)
+    //console.log('is_ballot_id_valid', is_ballot_id_valid)
     if (is_ballot_id_valid) {
         $("#ballot-form").submit()
     } else {
@@ -294,9 +294,9 @@ function submit_ballot_with_confirmation() {
     // Make sure ballot id is within the set
     $("#imprinted_id").removeAttr('disabled')
     var selected_value = $('#imprinted_id').val()
-    console.log('selected_value', selected_value)
+    //console.log('selected_value', selected_value)
     let is_ballot_id_valid = validate_imprinted_id(selected_value)
-    console.log('is_ballot_id_valid', is_ballot_id_valid)
+    //console.log('is_ballot_id_valid', is_ballot_id_valid)
     if (is_ballot_id_valid) {
         let mcvr_json = read_ballot_form()
         $('#ballot_string').val(mcvr_json)
@@ -318,16 +318,16 @@ function submit_ballot_with_confirmation() {
         // loop mcvr_json
         var obj = $.parseJSON(mcvr_json)
         var ballot_selections = obj.ballot_selections
-        console.log("obj",obj)
-        console.log("ballot_selections",ballot_selections)
+        //console.log("obj",obj)
+        //console.log("ballot_selections",ballot_selections)
         ballot_selections.forEach(function(entry) {
-            console.log(entry);
-            console.log("object.keys", Object.keys(entry));
+            //console.log(entry);
+            //console.log("object.keys", Object.keys(entry));
             for ( var candidate in entry ) {
-                console.log("candidate", candidate );
+                //console.log("candidate", candidate );
                 let rank_choice = entry[candidate]
                 rank_choice = get_ordinal_suffix_of_integer(rank_choice)
-                console.log("rank_choice", rank_choice );
+                //console.log("rank_choice", rank_choice );
                 li = $('<li>').appendTo(ul)
                 span1 = $('<span>').appendTo(li)
                 span1.text(rank_choice + ' - ' + candidate )
@@ -347,16 +347,16 @@ function submit_ballot_with_confirmation() {
         // loop counted_json
         var obj = $.parseJSON(counted_json)
         var ballot_selections = obj.ballot_selections
-        console.log("obj",obj)
-        console.log("ballot_selections",ballot_selections)
+        //console.log("obj",obj)
+        //console.log("ballot_selections",ballot_selections)
         ballot_selections.forEach(function(entry) {
-            console.log(entry);
-            console.log("object.keys", Object.keys(entry));
+            //console.log(entry);
+            //console.log("object.keys", Object.keys(entry));
             for ( var candidate in entry ) {
-                console.log("candidate", candidate );
+                //console.log("candidate", candidate );
                 let rank_choice = entry[candidate]
                 rank_choice = get_ordinal_suffix_of_integer(rank_choice)
-                console.log("rank_choice", rank_choice );
+                //console.log("rank_choice", rank_choice );
                 li = $('<li>').appendTo(ul)
                 span1 = $('<span>').appendTo(li)
                 span1.text(rank_choice + ' - ' + candidate )
@@ -384,24 +384,24 @@ function display_selection(candidates, ballot_json) {
     let d1 = document.createElement('div')
     $(d1).appendTo(message_body)
     var ul = $('<ul>').appendTo(d1)
-    console.log('ballot_json', ballot_json)
+    //console.log('ballot_json', ballot_json)
     var obj = $.parseJSON(ballot_json)
-    console.log('obj', obj)
+    //console.log('obj', obj)
     var ballot_selections = obj.ballot_selections
-    console.log('ballot_selections', ballot_selections)
+    //console.log('ballot_selections', ballot_selections)
     ballot_selections.forEach(function(entry) {
-        console.log("entry",entry);
-        console.log("object.keys", Object.keys(entry));
+        //console.log("entry",entry);
+        //console.log("object.keys", Object.keys(entry));
         for ( var selected_candidate in entry ) {
-            console.log("selected_candidate", selected_candidate )
-            console.log("candidates", candidates )
+            //console.log("selected_candidate", selected_candidate )
+            //console.log("candidates", candidates )
             // Lookup selected_candidate name from the id.
             var selected_name = ''
             var selected_image = 'generic.png'
             for(let can of candidates) {
-                console.log('can',can)
-                console.log('can.Description', can.Description)
-                console.log('can.Id', can.Id)
+                //console.log('can',can)
+                //console.log('can.Description', can.Description)
+                //console.log('can.Id', can.Id)
                 if (can.Id.toString() === selected_candidate.toString()){
                     selected_name = can.Description
                     if (can.Image) {
@@ -411,7 +411,7 @@ function display_selection(candidates, ballot_json) {
             }
             let rank_choice = entry[selected_candidate]
             rank_choice = get_ordinal_suffix_of_integer(rank_choice)
-            console.log("rank_choice", rank_choice );
+            //console.log("rank_choice", rank_choice );
             li = $('<li>').appendTo(ul)
             span1 = $('<span>').appendTo(li)
             span1.text(rank_choice + ' - ' + selected_name )
@@ -441,7 +441,6 @@ function read_ballot_form() {
     var ballot_key = "ballot_id"
     var ballot_value = $("#imprinted_id").val()
     ballot_id_json[ ballot_key ] = ballot_value
-    var b1 = {}
     var ballot_selections = []
     let n = num_candidates
     for(var i = 1; i <= n; i++) {
@@ -467,6 +466,7 @@ function read_ballot_form() {
     return mcvr_json
 }
 function count_ballot_form() {
+    //console.log("count_ballot_form")
     var json_output = ''
     var manual_cvr = {}
     var ballot_id_json = {}
@@ -497,37 +497,46 @@ function count_ballot_form() {
                     // If there is an overvote before we have first choice then
                     // the ballot is invalid
                     if (!flag_have_first_choice) {
-                        // console.log('First choice overvote. Ballot invalid')
+                        //console.log('First choice overvote. Ballot invalid')
                         flag_ballot_invalid = true
                     }
                 } else {
                     let candidate_id = $('#'+varname).attr('id')
-                    var candidate_data = $('#'+candidate_id).attr('data-can_id')
-                    console.log('candidate_id',candidate_id)
-                    console.log('candidate_data',candidate_data)
-                    // Only include if the candidate has not already been selected.
-                    var index = candidates_with_vote.indexOf(candidate_data);
-                    console.log('index', index)
-                    if (index == -1) {
-                        //Toggle flag to say we have nth choice
-                        flag_have_nth_choice = true
-                        flag_okay_write_nth = true
-                        //var bx = {}
-                        //bx[candidate_data] = rank
-                        candidates_with_vote.push(candidate_data)
+                    //console.log('candidate_id:', candidate_id)
+                    if (candidate_id != 9999) {// Ignore write-in candidates
+                        var candidate_data = $('#'+candidate_id).attr('data-can_id')
+                        //console.log('candidate_id',candidate_id)
+                        //console.log('candidate_data',candidate_data)
+                        // Only include if the candidate has not already been selected.
+                        var index = candidates_with_vote.indexOf(candidate_data);
+                        //console.log('index', index)
+                        if (index == -1) {
+                            //Toggle flag to say we have nth choice
+                            flag_have_nth_choice = true
+                            flag_okay_write_nth = true
+                            //var bx = {}
+                            //bx[candidate_data] = rank
+                            candidates_with_vote.push(candidate_data)
+                        }
                     }
                 }
             }
         }
-        // only push if we have valid nth choice and no overvote
+        // Only push if we have valid nth choice and no overvote
         if (flag_okay_write_nth && !flag_found_overvote) {
-            var bx = {}
-            bx[candidate_data] = rank_counter
-            rank_counter++
-            ballot_selections.push(bx)
+            // Ignore write-in id "9999" for the pilot.
+            //console.log('candidate_data', candidate_data)
+            if (candidate_data !== "9999") {
+                var bx = {}
+                bx[candidate_data] = rank_counter
+                rank_counter++
+                ballot_selections.push(bx)
+    
+                // If not yet first then toggle first
+                if (!flag_have_first_choice) flag_have_first_choice = true
+    
+            }
 
-            // If not yet first then toggle first
-            if (!flag_have_first_choice) flag_have_first_choice = true
         }
     }
     // If ballot is invalid send blank
