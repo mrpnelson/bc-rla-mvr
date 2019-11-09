@@ -79,37 +79,8 @@ function populate_ballot_dropdown(ballot_id_list) {
     for(let ballot_id of ballot_id_list) {
         dropdown.append($('<option></option>').attr('value', ballot_id).text(ballot_id))
     }
-    
-    //$.getJSON(url, function (data) {
-    //$.each(data, function (key, entry) {
-    // dropdown.append($('<option></option>').attr('value', entry.abbreviation).text(entry.name))
-
-
-    //$.each(ballot_id_list, function (key, entry) {
-    //    let imprinted_id = entry.imprinted_id
-    //    dropdown.append($('<option></option>').attr('value', imprinted_id).text(imprinted_id))
-    //})
 }
 
-// Define set of ballots
-function getSetOfBallots() {
-    /*
-    TabulatorNum	BatchId	RecordId	ImprintedId
-    99808	81	1	99808-81-1
-    99808	81	20	99808-81-20*/
-    var ballot_id_list = {}
-    ballot_id_list.table = []
-    for (i=1; i <=20 ; i++){
-        let obj = {
-            tabulator_num:"99808",
-            batch_id:"81",
-            record_id:i,
-            imprinted_id:"99808-81-"+i
-        }
-        ballot_id_list.table.push(obj)
-    }
-    return ballot_id_list
-}
 function layout_ballot() {
     $("#reviewer-2").addClass("hidden")
     $("#verified-button").addClass("hidden")
@@ -546,10 +517,9 @@ function count_ballot_form() {
     return mcvr_json
 }
 function validate_imprinted_id(selected_value) {
-    var ballot_id_list = getSetOfBallots()
-    var ballot_entry_table = ballot_id_list.table
+    return true
     var found_ballot_id = false
-    $.each(ballot_entry_table, function (key, entry) {
+    $.each(ballots_array, function (key, entry) {
         let imprinted_id = entry.imprinted_id
         let imprinted_id_no_dashes = imprinted_id.replace(/-/g, "")
         let selected_value_no_dashes = selected_value.replace(/-/g, "")

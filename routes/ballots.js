@@ -10,14 +10,13 @@ router.post('/submit-ballot/', function (req, res) {
 
     // Write ballot to JSON
     var ballot_string_calc = req.body.ballot_string_calc
-    var filenameprefix=getRawDate();
-    let filename = filenameprefix + '.json'
-    write_data_to_disk(ballot_string_calc,filename)
 
-    // Write history to JSON
-    let filedata = ballot_string_calc
+    // Write ballot and history to JSON
     let filepath='data/ballots/'
     let historypath='data/ballots_history/'
+    var filenameprefix=getRawDate();
+    let filename = filenameprefix + '.json'
+    let filedata = ballot_string_calc
     write_data_to_disk(filepath, historypath, filename, filedata)
 
     // Append ballot id to list of marked ballots
