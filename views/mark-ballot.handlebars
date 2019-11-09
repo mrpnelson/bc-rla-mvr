@@ -119,6 +119,9 @@
         </div>
     </div>
 </div>
+<div id="candidates">candidates</div>
+<div id="ballots">ballots</div>
+
 
 <script>
 // ===========================================================
@@ -134,7 +137,10 @@ $(function(){
     $("#candidates").append(JSON.stringify(candidates))
     populate_ballot_checkboxes(candidates)
 
-    populate_ballot_dropdown()
+    var ballots = {{{ballots}}}
+    $("#ballots").append(JSON.stringify(ballots))
+
+    populate_ballot_dropdown(ballots)
     layout_ballot()
     update_json_preview()
     // Set up listeners for ballot id text input and dropdown

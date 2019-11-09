@@ -9,9 +9,31 @@ router.get('/', function (req, res) {
     var filepath = './data/contest/candidates.json'
     var candidates = fs.readFileSync(filepath, 'utf8')
     // TODO catch/report file read errors
+
+    // Read ballots from JSON
+    var filepath = './data/contest/ballots.json'
+    var ballots = fs.readFileSync(filepath, 'utf8')
+    var ballots_json = JSON.parse(ballots)
+    var ballots_array = []
+    for(let ballot_json of ballots_json) {
+        ballots_array.push(ballot_json)
+    }
+    // Read ballots marked from JSON
+    var filepath = './data/contest/ballots_marked.json'
+    var ballots_marked = fs.readFileSync(filepath, 'utf8')
+    ballots_marked_json = JSON.parse(ballots_marked)
+    // Remove marked ballots from list of available ballots
+    for(let ballot_marked of ballots_marked_json) {
+        let index = ballots_array.indexOf(ballot_marked);
+        if (index !== -1) {
+            ballots_array.splice(index, 1)
+        }
+    }
+    // TODO if all ballots marked go to different page
     res.render('mark-ballot', {
         message: message,
-        candidates, candidates
+        candidates: candidates,
+        ballots: JSON.stringify(ballots_array)
     })
 })
 

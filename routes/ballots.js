@@ -7,15 +7,33 @@ var querystring = require('querystring')
 
 router.post('/submit-ballot/', function (req, res) {
     //console.log("submit-ballot req.body", req.body)
+
+    // Write ballot to JSON
     var ballot_string_calc = req.body.ballot_string_calc
     var filenameprefix=getRawDate();
     let filename = filenameprefix + '.json'
     write_data_to_disk(ballot_string_calc,filename)
 
+    // Write history to JSON
     let filedata = ballot_string_calc
     let filepath='data/ballots/'
     let historypath='data/ballots_history/'
     write_data_to_disk(filepath, historypath, filename, filedata)
+
+    // Append ballot id to list of marked ballots
+    var ballot_id = req.body.imprinted_id
+    var ballots_marked = fs.readFileSync('data/contest/ballots_marked.json', 'utf8')
+    var ballots_marked_json = JSON.parse(ballots_marked)
+    var ballots_marked_array = []
+    for(let ballot_json of ballots_marked_json) {
+        ballots_marked_array.push(ballot_json)
+    }
+    ballots_marked_array.push(ballot_id)
+    var ballots_back_to_json = JSON.stringify(ballots_marked_array)
+
+    fs.writeFile ("data/contest/ballots_marked.json", ballots_back_to_json, function(err) {
+        if (err) throw err
+    })
 
     res.redirect(307, '/ballots/ballot-success/') // 307 Temporary Redirect preserves form data
 })

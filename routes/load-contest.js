@@ -67,22 +67,34 @@ router.post('/confirmed', function (req, res) {
         jsonContest = json.Contest
         jsonCandidates = JSON.stringify(json.Candidates)//convert the Candidates array to a JSON object
         //console.log('jsonCandidates',jsonCandidates)
+
+        // TODO: Read ballot ID list from CSV file and save as JSON file
+        //arrayBallots.push('Save as JSON file')
+        //var ballot_id_list = {}
         arrayBallots = []
-        arrayBallots.push('TODO')
-        arrayBallots.push('Read ballot ID list from CSV file')
-        arrayBallots.push('Save as JSON file')
+        arrayBallotDetails = []
+        for (i=1; i <=8 ; i++){
+            let imprinted_id = "99808-81-"+i
+            let obj = {
+                imprinted_id:imprinted_id,
+                cart:"ABC",
+                tray:"XYZ"
+            }
+            arrayBallots.push(imprinted_id)
+            arrayBallotDetails.push(obj)
+        }
         jsonBallots = JSON.stringify(arrayBallots)
         // Remove ballots
         var folderpath = './data/ballots/'
         clear_folder(folderpath)
         // Remove contest
         var folderpath = './data/contest/'
-        clear_folder(folderpath)
+        // Don't clear the contest folder (unless you wrap in callback). Files in this will will automatically be overwritten
         // Write JSON to contest files
         write_json_file(JSON.stringify(jsonContest), 'contest.json')
         write_json_file(jsonCandidates, 'candidates.json')
         write_json_file(jsonBallots, 'ballots.json')
-        write_json_file(JSON.stringify({}), 'ballots_marked.json')
+        write_json_file(JSON.stringify([]), 'ballots_marked.json')
         // Proceed to final 'success' page
         res.render('contest-confirmed', {
             upload_name: upload_name,
