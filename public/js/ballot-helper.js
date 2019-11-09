@@ -70,7 +70,7 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
     }
 }
 function populate_ballot_dropdown(ballot_id_list) {
-    console.log('ballot_id_list', ballot_id_list)
+    //console.log('ballot_id_list', ballot_id_list)
     let dropdown = $('#imprinted_id_dropdown')
     dropdown.empty()
     dropdown.append('<option selected="true" disabled>Choose Imprinted ID</option>')

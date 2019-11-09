@@ -48,9 +48,15 @@
 <form method='post' enctype="multipart/form-data" name="contest-form" id="contest-form" action="/load-contest/preview/">
 
 <div class="alert alert-info">
-    <input type='file' name='file_to_upload' id='file_to_upload'>
-    <input type='hidden' name='testing123' id='testing123' value='testing123'>
+    <label for="file_to_upload">Contestants (JSON)</label>
+    <input type='file' name='contestants_upload' id='contestants_upload'>
 </div>
+
+<div class="alert alert-info">
+    <label for="file_to_upload">Ballots (CSV)</label>
+    <input type='file' name='ballots_upload' id='ballots_upload'>
+</div>
+
 <div>
     <button type="submit" class="btn btn-success btn-lg fa fa-upload"> Upload Contest Details</button>
 </div>
