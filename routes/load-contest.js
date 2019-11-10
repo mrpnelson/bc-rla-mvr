@@ -230,26 +230,21 @@ function validate_upload_json(filepath) {
 }
 
 function validate_upload_csv2jsonObj(csv2jsonObj) {
-    //console.log('validate_upload_csv2jsonObj.csv2jsonObj', csv2jsonObj)
-
+    //console.log('validate_upload_csv2jsonObj.csv2jsonObj:', csv2jsonObj)
     var status = true
-
-    //var json = JSON.parse(contents);
-    //console.log('json', json)
     var ballots_json = []
-    //["99808-81-1","99808-81-2","99808-81-4"]
-
+    var response = {}
     if (!Array.isArray(csv2jsonObj)) {
         response.message += ' The "csv2jsonObj" object in the converted ballots file is not an array. '
         response.status = false
     } else {
         for(let ballot_obj of csv2jsonObj) {
-            //{ 'ballot-id': '99808-81-1', cart: 'A', tray: '1' }
-            if(!ballot_obj.hasOwnProperty('BallotId')){
+            //{"cart":"3","tray":"1","tabulator":"99808","batch":"81","ballot in batch":"1","imprint":"99808-81-1","absolute ballot index":"1"}
+            if(!ballot_obj.hasOwnProperty('imprint')){
                 response.message += ' The selected ballot file is missing the object "BallotId". '
                 status = false
             } else {
-                let b = ballot_obj.BallotId
+                let b = ballot_obj.imprint
                 ballots_json.push(b)
             }
         }
