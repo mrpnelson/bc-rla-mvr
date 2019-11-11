@@ -48,11 +48,11 @@ router.post('/preview', function (req, res) {
             error_message = ''
             var upload_json_name = contestants_upload.name
             var old_path = contestants_upload.path
-            var xnew_path = './data/uploads/' + upload_json_name
-            //console.log('xnew_path:', xnew_path)
-            fs.copyFile(old_path, xnew_path, function (err) {
+            var new_path = './data/uploads/' + upload_json_name
+            //console.log('new_path:', new_path)
+            fs.copyFile(old_path, new_path, function (err) {
                 if (err) throw err
-                var response = validate_upload_json(xnew_path)
+                var response = validate_upload_json(new_path)
                 var status = response.status
                 var message = response.message
                 json = response.json
@@ -60,15 +60,13 @@ router.post('/preview', function (req, res) {
                     error_message += message
                 }
 
-                    // Convert the CSV file to JSON
+                // Convert the CSV file to JSON
                 error_message = ''
                 var upload_csv_name = ballots_upload.name
-                var old_path = ballots_upload.path
-                var new_path = './data/uploads/' + upload_csv_name
-
+                var upload_csv_path = ballots_upload.path
                 const csvtojson=require('csvtojson')
                 csvtojson()
-                .fromFile(old_path)
+                .fromFile(upload_csv_path)
                 .then((csv2jsonObj)=>{
                     //console.log('csv2jsonObj:',csv2jsonObj)
                     var response = validate_upload_csv2jsonObj(csv2jsonObj)
@@ -241,7 +239,7 @@ function validate_upload_csv2jsonObj(csv2jsonObj) {
         for(let ballot_obj of csv2jsonObj) {
             //{"cart":"3","tray":"1","tabulator":"99808","batch":"81","ballot in batch":"1","imprint":"99808-81-1","absolute ballot index":"1"}
             if(!ballot_obj.hasOwnProperty('imprint')){
-                response.message += ' The selected ballot file is missing the object "BallotId". '
+                response.message += ' The selected ballot file is missing the object "imprint". '
                 status = false
             } else {
                 let b = ballot_obj.imprint
