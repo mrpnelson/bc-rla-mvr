@@ -25,7 +25,7 @@
                 <h3 class="panel-title">Target Audience</h3>
             </div>
             <div class="panel-body">
-                Election administrator (or Laurent or Dan)
+                Election administrator
             </div>
         </div>
         <div class="panel panel-warning">
@@ -39,37 +39,66 @@
     </div>
 </div>
 
-<div>
-    <button type="button" class="btn btn-success btn-lg fa fa-download"> Export Ballots</button>
+<div class="panel panel-info" style="margin-top:10px">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="fa fa-info-circle"></span> Contest</h3>
+    </div>
+    <div class="panel-body">
+       <div id="contest_details">{{contest_details}}</div>
+    </div>
 </div>
 
-<h4>Export results</h4>
-<p>
-    <span class="text-bold">File:</span> <span class="fa fa-upload"></span> mascot_contest_ballots.json
-</p>
-<p>
-    <span class="text-bold">Ballots Entered:</span>&nbsp;TO DO
-</p>
-<p>
-    <span class="text-bold">Invalid Ballots:</span>&nbsp;TO DO
-</p>
-<p>
-    <span class="text-bold">Ballots Exported:</span>&nbsp;TO DO
-</p>
-<p>
-    <span class="text-bold">Contents:</span>
-</p>
+<div class="panel panel-info" style="margin-top:10px">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="fa fa-info-circle"></span> Candidates</h3>
+    </div>
+    <div class="panel-body">
+       <div id="candidate_list">{{candidate_list}}</div>
+    </div>
+</div>
+
+<div class="panel panel-info" style="margin-top:10px">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="fa fa-info-circle"></span> Ballot List</h3>
+    </div>
+    <div class="panel-body">
+       <div id="ballot_ids_list">{{ballot_ids_list}}</div>
+    </div>
+</div>
+
+<div class="panel panel-info" style="margin-top:10px">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="fa fa-info-circle"></span> Ballots</h3>
+    </div>
+    <div class="panel-body">
+       <div id="ballots_list"></div>
+    </div>
+</div>
 
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title"><span class="fa fa-file"></span> <code>mascot_contest_ballots.json</code></h3>
+        <h3 class="panel-title"><span class="fa fa-file"></span> <code>{{export_filename}}</code></h3>
     </div>
     <div class="panel-body">
         <pre>
-{{#if json_content}}
-{{ json json_content }}
+{{#if export_data}}
+{{ json export_data }}
 {{/if }}
         </pre>
     </div>
 </div>
 
+<div>
+    <a type="button" href="./output/{{export_filename}}" class="btn btn-success btn-lg fa fa-download" download="{{export_filename}}"> Download {{export_filename}}</a>
+</div>
+
+
+<script>
+// ===========================================================
+// Initial page load
+// ===========================================================
+$(function(){
+    var ballots = {{{json ballot_contents_list}}}
+    $("#ballots_list").append(JSON.stringify(ballots))
+})
+</script>
