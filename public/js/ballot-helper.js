@@ -459,7 +459,6 @@ function update_json_preview() {
     $('#ballot_string_calc').text(counted_json)
 }
 function read_ballot_form() {
-    var json_output = ''
     var manual_cvr = {}
     var ballot_id_json = {}
     var ballot_key = "ballot_id"
@@ -491,7 +490,6 @@ function read_ballot_form() {
 }
 function count_ballot_form() {
     //console.log("count_ballot_form")
-    var json_output = ''
     var manual_cvr = {}
     var ballot_id_json = {}
     var ballot_key = "ballot_id"
@@ -552,18 +550,12 @@ function count_ballot_form() {
             // Ignore write-in id "45" for the pilot.
             //console.log('candidate_data', candidate_data)
             if (candidate_data !== "45") {
-                var bx = {}
-                bx[candidate_data] = rank_counter
-                //console.log('bx:', bx)
                 var vote = {}
                 vote[candidate_data] = rank_counter
                 //console.log('vote:', vote)
-
                 rank_counter++
-
-                ballot_selections.push(bx)
                 ballot_selections2 = Object.assign(vote, ballot_selections2)
-                
+              
                 // If not yet first then toggle first
                 if (!flag_have_first_choice) flag_have_first_choice = true
             }
@@ -571,19 +563,13 @@ function count_ballot_form() {
     }
     // If ballot is invalid send blank
     if (flag_ballot_invalid) {
-        ballot_selections = []
         ballot_selections2 = {}
     }
     var votes = {}
     var contest_id = $('input[name="contest_id"]').val()
     votes[contest_id] = ballot_selections2
     manual_cvr = Object.assign({"votes": votes}, manual_cvr)
-
-    //manual_cvr = Object.assign({"ballot_selections": ballot_selections}, manual_cvr)
-
     manual_cvr = Object.assign({"id": ballot_value}, manual_cvr)
-    //manual_cvr = Object.assign({"ballot_id": ballot_value}, manual_cvr)
-
     let mcvr_json = JSON.stringify(manual_cvr)
     return mcvr_json
 }
@@ -621,3 +607,28 @@ function on_change_ballot_dropdown(selected_value) {
     $("#imprinted_id").val(selected_value)
     update_json_preview()
 }
+
+function reverseObject(object) {
+    var newObject = {};
+    var keys = [];
+
+    for (var key in object) {
+        //console.log('key:', key)
+        keys.push(key);
+    }
+
+    //for (var i = 0; i < keys.length; i++) {
+    for (var i = keys.length - 1; i >= 0; i--) {
+        //console.log("i:", i)
+        //console.log("keys[i]:", keys[i])
+
+        var value = object[keys[i]]
+        //console.log('value:', value)
+
+        //console.log('newObject BEFORE:', newObject)
+        newObject[keys[i]]= value
+        //console.log('newObject AFTER:', newObject)
+    }
+
+    return newObject;
+  }

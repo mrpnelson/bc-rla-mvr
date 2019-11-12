@@ -119,8 +119,8 @@
         </div>
     </div>
 </div>
-<div id="candidates">candidates</div>
-<div id="ballots">ballots</div>
+<div id="candidates"></div>
+<div id="ballots"></div>
 <input type="hidden" name="contest_id">
 
 <script>
@@ -136,11 +136,11 @@ $(function(){
     $('input[name="contest_id"]').val(contest_id)
 
     var candidates = {{{candidates}}}
-    $("#candidates").append(JSON.stringify(candidates))
+    //$("#candidates").append(JSON.stringify(candidates))
     populate_ballot_checkboxes(candidates)
 
     var ballots = {{{ballots}}}
-    $("#ballots").append(JSON.stringify(ballots))
+    //$("#ballots").append(JSON.stringify(ballots))
 
     populate_ballot_dropdown(ballots)
     layout_ballot()
@@ -160,6 +160,6 @@ $(function(){
         validate_imprinted_id(selected_value)
     })
     // Hide JSON preview
-    //$("#json_preview").addClass("hidden")
+    $("#json_preview").addClass("hidden")
 })
 </script>
