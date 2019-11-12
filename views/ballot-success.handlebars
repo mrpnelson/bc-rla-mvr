@@ -36,7 +36,6 @@
     </div>
 </div>
 <div id="candidates"></div>
-<div id="jsoncandidates"></div>
 
 <script>
 // ===========================================================
@@ -46,14 +45,14 @@ $(function(){
     // TODO: Implement. Currently this try block does not catch syntax error on form resubmit. 
     try {
         var candidates = {{{candidates}}}
-        $("#candidates").append(JSON.stringify(candidates))
+        //$("#candidates").append(JSON.stringify(candidates))
 
         var ballot_string_1 = {{{json ballot_string}}}
-        var div_1 = display_selection(candidates, ballot_string_1)
+        var div_1 = display_selection1(candidates, ballot_string_1)
         $("#ballot_string_1").append(div_1)
 
         var ballot_string_2 = {{{json ballot_string_calc}}}
-        var div_2 = display_selection(candidates, ballot_string_2)
+        var div_2 = display_selection2(candidates, ballot_string_2)
         $("#ballot_string_2").append(div_2)
     }
     catch(err) {

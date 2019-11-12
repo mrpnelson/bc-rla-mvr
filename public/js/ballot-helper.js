@@ -53,7 +53,7 @@ function add_candidate_to_ballot(number_of_candidates, candidate_number, candida
 
     let candidate = document.createElement('div')
     $(candidate).addClass('col-xs-2')
-        .html("<div class='xsmall_image_container'><span class=' xsmall_image_border'><img class='img-circle' src='"+candidate_image+"' width='40'></span><span class='text-bold'>"+candidate_name+"</span></div>")
+        .html("<div class='xsmall_image_container' style='margin-bottom:10px'><span class=' xsmall_image_border'><img class='img-circle' src='"+candidate_image+"' width='40'></span><span class='text-bold'>"+candidate_name+"</span></div>")
         .appendTo(d)
     // $(candidate).addClass('col-xs-2')
     //     .html("<div class='xsmall_image_container'><span class=' xsmall_image_border'><img class='img-circle' src='"+candidate_image+"' width='40'></span><span class='text-bold'>"+candidate_name+"</span>&nbsp;(id:<span class='text-bold'>"+candidate_identifier+"</span>)</div>")
@@ -347,7 +347,7 @@ function submit_ballot_with_confirmation() {
     }
 }
 
-function display_selection(candidates, ballot_json) {
+function display_selection1(candidates, ballot_json) {
     let message_body = document.createElement('div')
     let d1 = document.createElement('div')
     $(d1).appendTo(message_body)
@@ -368,17 +368,73 @@ function display_selection(candidates, ballot_json) {
             var selected_image = 'generic.png'
             for(let can of candidates) {
                 //console.log('can',can)
-                //console.log('can.Description', can.Description)
-                //console.log('can.Id', can.Id)
-                if (can.Id.toString() === selected_candidate.toString()){
-                    selected_name = can.Description
-                    if (can.Image) {
-                        selected_image = can.Image
+                if (can.id.toString() === selected_candidate.toString()){
+                    selected_name = can.description
+                    if (can.image) {
+                        selected_image = can.image
                     }
                 }
             }
             let rank_choice = entry[selected_candidate]
             rank_choice = get_ordinal_suffix_of_integer(rank_choice)
+            //console.log("rank_choice", rank_choice );
+            li = $('<li>').appendTo(ul)
+            span1 = $('<span>').appendTo(li)
+            span1.text(rank_choice + ' - ' + selected_name )
+                $('<img />').attr({
+                       'src': '/img/candidates/'+selected_image,
+                       'width': 40,
+                       'class': 'img-circle'
+                }).appendTo(li)
+        }
+    });
+    return message_body
+}
+
+function display_selection2(candidates, ballot_json) {
+    //console.log('ballot_json', ballot_json)
+    let message_body = document.createElement('div')
+    let d1 = document.createElement('div')
+    $(d1).appendTo(message_body)
+    var ul = $('<ul>').appendTo(d1)
+    var obj = $.parseJSON(ballot_json)
+    //console.log('obj', obj)
+    var votes = obj.votes
+    //console.log('votes', votes)
+    //console.log("Object.keys(votes)", Object.keys(votes))
+    //console.log("Object.values(votes)", Object.values(votes))
+    var ballot_selections = Object.values(votes)
+    ballot_selections.forEach(function(entry) {
+        //console.log("entry",entry)
+        contest_votes_keys = Object.keys(entry)
+        //console.log('contest_votes_keys:', contest_votes_keys)
+        //var contest_votes_keys_array = contest_votes_keys.split(",")
+        var contest_votes_keys_array = contest_votes_keys
+        //console.log('contest_votes_keys_array:', contest_votes_keys_array)
+
+        // TODO Sort by rank - See also https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
+        for (i = 0; i < contest_votes_keys_array.length; i++) {
+            var selected_candidate_id = contest_votes_keys_array[i]
+            //console.log('selected_candidate_id:', selected_candidate_id)
+
+            var selected_rank = entry[selected_candidate_id]
+            //console.log('selected_rank:', selected_rank)
+
+            //console.log("candidates", candidates )
+            // Lookup selected_candidate name from the id.
+            var selected_name = ''
+            var selected_image = 'generic.png'
+            for(let can of candidates) {
+                //console.log('can',can)
+                if (can.id.toString() === selected_candidate_id.toString()){
+                    selected_name = can.description
+                    if (can.image) {
+                        selected_image = can.image
+                    }
+                }
+            }
+            //let rank_choice = entry[selected_candidate]
+            rank_choice = get_ordinal_suffix_of_integer(selected_rank)
             //console.log("rank_choice", rank_choice );
             li = $('<li>').appendTo(ul)
             span1 = $('<span>').appendTo(li)
@@ -498,10 +554,10 @@ function count_ballot_form() {
             if (candidate_data !== "45") {
                 var bx = {}
                 bx[candidate_data] = rank_counter
-                console.log('bx:', bx)
+                //console.log('bx:', bx)
                 var vote = {}
                 vote[candidate_data] = rank_counter
-                console.log('vote:', vote)
+                //console.log('vote:', vote)
 
                 rank_counter++
 
