@@ -12,10 +12,10 @@ function populate_ballot_checkboxes(candidates) {
     for(let candidate of candidates) {
         //console.log(candidate)
         candidate_num++
-        var candidate_nam = candidate.Description
-        var candidate_id = candidate.Id
-        if (candidate.Image)
-            var candidate_img = '/img/candidates/' + candidate.Image
+        var candidate_nam = candidate.description
+        var candidate_id = candidate.id
+        if (candidate.image)
+            var candidate_img = '/img/candidates/' + candidate.image
         else
             var candidate_img = '/img/candidates/generic.png'
         add_candidate_to_ballot(num_candidates, candidate_num, candidate_nam, candidate_id, candidate_img)
@@ -443,6 +443,7 @@ function count_ballot_form() {
     ballot_id_json[ ballot_key ] = ballot_value
     var b1 = {}
     var ballot_selections = []
+    var ballot_selections2 = {}
     var candidates_with_vote = []
     let n = num_candidates
     var flag_have_first_choice = false
@@ -471,7 +472,7 @@ function count_ballot_form() {
                 } else {
                     let candidate_id = $('#'+varname).attr('id')
                     //console.log('candidate_id:', candidate_id)
-                    if (candidate_id != 9999) {// Ignore write-in candidates
+                    if (candidate_id != 45) {// Ignore write-in candidates
                         var candidate_data = $('#'+candidate_id).attr('data-can_id')
                         //console.log('candidate_id',candidate_id)
                         //console.log('candidate_data',candidate_data)
@@ -492,39 +493,59 @@ function count_ballot_form() {
         }
         // Only push if we have valid nth choice and no overvote
         if (flag_okay_write_nth && !flag_found_overvote) {
-            // Ignore write-in id "9999" for the pilot.
+            // Ignore write-in id "45" for the pilot.
             //console.log('candidate_data', candidate_data)
-            if (candidate_data !== "9999") {
+            if (candidate_data !== "45") {
                 var bx = {}
                 bx[candidate_data] = rank_counter
+                console.log('bx:', bx)
+                var vote = {}
+                vote[candidate_data] = rank_counter
+                console.log('vote:', vote)
+
                 rank_counter++
+
                 ballot_selections.push(bx)
-    
+                ballot_selections2 = Object.assign(vote, ballot_selections2)
+                
                 // If not yet first then toggle first
                 if (!flag_have_first_choice) flag_have_first_choice = true
-    
             }
-
         }
     }
     // If ballot is invalid send blank
     if (flag_ballot_invalid) {
         ballot_selections = []
+        ballot_selections2 = {}
     }
-    manual_cvr = Object.assign({"ballot_selections": ballot_selections}, manual_cvr)
-    manual_cvr = Object.assign({"ballot_id": ballot_value}, manual_cvr)
+    var votes = {}
+    var contest_id = $('input[name="contest_id"]').val()
+    votes[contest_id] = ballot_selections2
+    manual_cvr = Object.assign({"votes": votes}, manual_cvr)
+
+    //manual_cvr = Object.assign({"ballot_selections": ballot_selections}, manual_cvr)
+
+    manual_cvr = Object.assign({"id": ballot_value}, manual_cvr)
+    //manual_cvr = Object.assign({"ballot_id": ballot_value}, manual_cvr)
+
     let mcvr_json = JSON.stringify(manual_cvr)
     return mcvr_json
 }
-function validate_imprinted_id(selected_value) {
-    return true
+function validate_imprinted_id(imprinted_id) {
     var found_ballot_id = false
-    $.each(ballots_array, function (key, entry) {
-        let imprinted_id = entry.imprinted_id
-        let imprinted_id_no_dashes = imprinted_id.replace(/-/g, "")
-        let selected_value_no_dashes = selected_value.replace(/-/g, "")
-        if (imprinted_id_no_dashes === selected_value_no_dashes) {
-            found_ballot_id = true
+    let imprinted_id_no_dashes = imprinted_id.replace(/-/g, "") // ignore dashes
+    // Loop ballots in dropdown
+    $("#imprinted_id_dropdown option").each(function(key, value){
+        //console.log("key:", key)
+        //console.log("value:", value)
+        //console.log("$(this).attr('value') ", $(this).attr('value') )
+        // See if the input field matches a dropdown value (ignore dashes)
+        let dropdown_value = $(this).attr('value')
+        if (dropdown_value) {// Value might be undefined so test for it.
+            let dropdown_value_no_dashes = dropdown_value.replace(/-/g, "")
+            if (imprinted_id_no_dashes === dropdown_value_no_dashes) {
+                found_ballot_id = true
+            }
         }
     })
     $("#ballot-id-container").removeClass("alert-success")

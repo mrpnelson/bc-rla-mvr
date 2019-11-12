@@ -6,10 +6,14 @@ var fs = require('fs')
 router.get('/', function (req, res) {
     var message = req.query.message
     // Read candidates from JSON.
+    var filepath = './data/contest/contests.json'
+    var contest = fs.readFileSync(filepath, 'utf8')
+    var contest_json = JSON.parse(contest)
+    var contest_id = contest_json.id
+    var contest_name = contest_json.description
+    // Read candidates from JSON.
     var filepath = './data/contest/candidates.json'
     var candidates = fs.readFileSync(filepath, 'utf8')
-    // TODO catch/report file read errors
-
     // Read ballots from JSON
     var filepath = './data/contest/ballots.json'
     var ballots = fs.readFileSync(filepath, 'utf8')
@@ -29,9 +33,11 @@ router.get('/', function (req, res) {
             ballots_array.splice(index, 1)
         }
     }
-    // TODO if all ballots marked go to different page
+    // TODO if all ballots marked (ie. none left for the dropdown) then go to different page
     res.render('mark-ballot', {
         message: message,
+        contest_id: contest_id,
+        contest_name: contest_name,
         candidates: candidates,
         ballots: JSON.stringify(ballots_array)
     })

@@ -112,9 +112,13 @@ router.post('/confirmed', function (req, res) {
             message: message
         })
     } else {
-        jsonContest = json.Contest
-        jsonCandidates = JSON.stringify(json.Candidates)//convert the Candidates array to a JSON object
-        //console.log('jsonCandidates',jsonCandidates)
+        jsonContests = json.contests
+        jsonCandidates = JSON.stringify(json.candidates)//convert the Candidates array to a JSON object
+        console.log('json',json)
+        console.log('jsonContests',jsonContests)
+        console.log('jsonCandidates',jsonCandidates)
+        jsonContest = jsonContests[0]
+        console.log('jsonContest',jsonContest)
         jsonBallots = JSON.stringify(ballots_array)
 
         // Remove ballots
@@ -124,7 +128,7 @@ router.post('/confirmed', function (req, res) {
         var folderpath = './data/contest/'
         // Don't clear the contest folder (unless you wrap in callback). Files in this will will automatically be overwritten
         // Write JSON to contest files
-        write_json_file(JSON.stringify(jsonContest), 'contest.json')
+        write_json_file(JSON.stringify(jsonContest), 'contests.json')
         write_json_file(jsonCandidates, 'candidates.json')
         write_json_file(jsonBallots, 'ballots.json')
         write_json_file(JSON.stringify([]), 'ballots_marked.json')
@@ -178,46 +182,50 @@ function validate_upload_json(filepath) {
     response.json = json
 
     // Check for 'Contest' object
-    if(!json.hasOwnProperty('Contest')){
+    if(!json.hasOwnProperty('contests')){
         response.message += ' The selected file is missing the object "Contest". '
         response.status = false
-    } 
-    // Check contents of 'Contest' object
-    else {
-        jsonContest = json.Contest
-        if(!jsonContest.hasOwnProperty('Description')){
-            response.message += ' The selected file is missing the object "Contest.Description". '
+    } else {
+        jsonContests = json.contests
+        if (!Array.isArray(jsonContests)) {
+            response.message += ' The "contests" object in the selected file is not an array. '
             response.status = false
-        } 
-        if(!jsonContest.hasOwnProperty('Id')){
-            response.message += ' The selected file is missing the object "Contest.Id". '
-            response.status = false
-        } 
+        } else {
+            jsonContest = jsonContests[0] // For the pilot select the one and only contest
+            if(!jsonContest.hasOwnProperty('description')){
+                response.message += ' The selected file is missing the object "contest.description". '
+                response.status = false
+            } 
+            if(!jsonContest.hasOwnProperty('id')){
+                response.message += ' The selected file is missing the object "contest.id". '
+                response.status = false
+            } 
+        }
     }
 
-    // Check for 'Candidates' object
-    if(!json.hasOwnProperty('Candidates')){
-        response.message += ' The selected file is missing the object "Candidates". '
+        // Check for 'Candidates' object
+    if(!json.hasOwnProperty('candidates')){
+        response.message += ' The selected file is missing the object "candidates". '
         response.status = false
     }
     // Check contents of 'Candidates' object
     else {
-        jsonCandidates = json.Candidates
+        jsonCandidates = json.candidates
         if (!Array.isArray(jsonCandidates)) {
-            response.message += ' The "Candidates" object in the selected file is not an array. '
+            response.message += ' The "candidates" object in the selected file is not an array. '
             response.status = false
         } else {
             for(let jsonCandidate of jsonCandidates) {
-                if(!jsonCandidate.hasOwnProperty('Description')){
-                    response.message += ' At lease one of the objects in the "Candidates" array of the selected file is missing the object "Description". '
+                if(!jsonCandidate.hasOwnProperty('description')){
+                    response.message += ' At lease one of the objects in the "candidates" array of the selected file is missing the object "description". '
                     response.status = false
                 } 
-                if(!jsonCandidate.hasOwnProperty('Id')){
-                    response.message += ' At lease one of the objects in the "Candidates" array of the selected file is missing the object "Id". '
+                if(!jsonCandidate.hasOwnProperty('id')){
+                    response.message += ' At lease one of the objects in the "candidates" array of the selected file is missing the object "id". '
                     response.status = false
                 } 
-                if(!jsonCandidate.hasOwnProperty('Type')){
-                    response.message += ' At lease one of the objects in the "Candidates" array of the selected file is missing the object "Type". '
+                if(!jsonCandidate.hasOwnProperty('type')){
+                    response.message += ' At lease one of the objects in the "candidates" array of the selected file is missing the object "type". '
                     response.status = false
                 } 
             }

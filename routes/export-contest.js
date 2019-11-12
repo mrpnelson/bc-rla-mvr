@@ -6,7 +6,7 @@ var fs = require('fs')
 router.get('/', function (req, res) {
     var message = req.query.message
     // Read contest details
-    var filepath = './data/contest/contest.json'
+    var filepath = './data/contest/contests.json'
     var contest = fs.readFileSync(filepath, 'utf8')
     var contest_json = JSON.parse(contest)
     var contest_desc = contest_json.Description
@@ -58,10 +58,9 @@ router.get('/', function (req, res) {
                 var ballot = {}
                 var ballot_contents = fs.readFileSync('./data/ballots/'+file, 'utf8')
                 var ballot_contents_json = JSON.parse(ballot_contents)
-                ballot.id = ballot_contents_json.ballot_id
-                ballot.votes = ballot_contents_json.ballot_selections
+                // ballot.id = ballot_contents_json.ballot_id
+                // ballot.votes = ballot_contents_json.ballot_selections
                 //ballot.contents = ballot_contents_json
-
                 /*
         {
             "id": "99808-81-1",
@@ -74,10 +73,10 @@ router.get('/', function (req, res) {
                 }
             }
         },
-
                 */
                 console.log('ballot_contents_json', ballot_contents_json)
-                ballots.push(ballot)
+                //ballots.push(ballot)
+                ballots.push(ballot_contents_json)
             }
         })
         export_data.ballots = ballots

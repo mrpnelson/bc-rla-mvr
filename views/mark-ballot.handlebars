@@ -46,7 +46,7 @@
 </div>
 <form name="ballot-form" id="ballot-form" action="/ballots/submit-ballot/" method="POST">
 <div id="contest-name">
-    <span class="text-bold">Contest:</span> TODO pass contest name from JSON
+    <span class="text-bold">Contest:</span> <span id="contest_name">{{contest_name}}</span>
 </div>
 <div id="ballot-panel" class="panel panel-warning">
     <div class="panel-heading">
@@ -121,6 +121,7 @@
 </div>
 <div id="candidates">candidates</div>
 <div id="ballots">ballots</div>
+<input type="hidden" name="contest_id">
 
 <script>
 // ===========================================================
@@ -131,6 +132,8 @@ $(function(){
     $('form :input').on('keypress', function(e) {
         return e.which !== 13
     });
+    var contest_id = {{{contest_id}}}
+    $('input[name="contest_id"]').val(contest_id)
 
     var candidates = {{{candidates}}}
     $("#candidates").append(JSON.stringify(candidates))
@@ -158,6 +161,5 @@ $(function(){
     })
     // Hide JSON preview
     //$("#json_preview").addClass("hidden")
-
 })
 </script>
