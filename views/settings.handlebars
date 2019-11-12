@@ -7,12 +7,31 @@
     {{/if }}
 </div>
 
-<ul>
-    <ul>Settings</ul>
-</ul>
+<div style="font-size:x-large">
+    <div style="margin-bottom:10px">
+    </div>
+    <div style="margin-bottom:10px">
+    </div>
+    <div style="margin-bottom:10px">
+    </div>
+</div>
 
-<ol>
-    <li>value for prompt for confirmation after submission</li>
-    <li>variable names to use in the output</li>
-    <li>ballot layout: colms for choices vs colms for candidates</li>
-</ol>
+<div class="container" style="font-size:x-large">
+    <div class="row" style="margin:16px"> 
+        <div class="col-sm-12">
+            <a href="/load-contest" class="btn btn-success fa fa-upload"> Load Contest</a>
+        </div>
+    </div>
+    <div class="row" style="margin:16px">
+        <div class="col-sm-12">
+            <form name="discard-all-ballots" id="discard-all-ballots" action="/ballots/discard-all-ballots/" method="POST">
+                <button type="submit" class="btn btn-danger fa fa-trash" onclick="discard_all_ballots()"> Discard All Ballots</button>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="margin:16px">
+        <div class="col-sm-12">
+            <i class="fa fa-check-circle">&nbsp;</i><code>Known TO-DO: Add option to load branding/logo</code>
+        </div>
+    </div>
+</div><!-- /container -->

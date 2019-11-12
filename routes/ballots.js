@@ -68,7 +68,7 @@ router.post('/discard-all-ballots/', function (req, res) {
         })
         var message = querystring.escape('Success discarding all ballots.')
         //console.log('message:', message)
-        res.redirect(303, '/list-ballots/?message=' + message)    
+        res.redirect(303, '/settings/?message=' + message)
     })
 })
 module.exports = router
