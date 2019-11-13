@@ -280,6 +280,36 @@ function contest_not_on_ballot() {
         }
     })
 }
+function no_consensus() {
+    let message_body = document.createElement('div')
+    $(message_body).addClass('alert alert-info')
+    let message_details = document.createElement('div')
+    $('<h2>').text('Reviewer #2, please confirm that there is no consensus with Reviewer #1. The selections will be cleared and a blank ballot will be submitted.').appendTo(message_details)
+    $('<div>')
+        .appendTo(message_details)
+    $(message_details).appendTo(message_body)
+    bootbox.confirm({
+        size: 'large',
+        message: message_body,
+        buttons: {
+            confirm: {
+                label: 'Confirmed. No Consensus. Submit blank ballot.',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'Cancel. Go back to ballot.'
+            }
+        },
+        callback: function (result) {
+            if (result) {
+                reset_ballot()
+                submit_ballot()
+            } else {
+                //alert('go back')
+            }
+        }
+    })    
+}
 function submit_ballot() {
     // Make sure ballot id is within the set
     $("#imprinted_id").removeAttr('disabled')
