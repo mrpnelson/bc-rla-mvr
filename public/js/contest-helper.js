@@ -47,9 +47,6 @@ function rla_info() {
 
     bootbox.alert({
         size: 'large',
-        message: message_body,
-        callback: function (result) {
-            $("#ballot-form").submit()
-        }
+        message: message_body
     })
 }

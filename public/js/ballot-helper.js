@@ -80,14 +80,14 @@ function populate_ballot_dropdown(ballot_id_list) {
         dropdown.append($('<option></option>').attr('value', ballot_id).text(ballot_id))
     }
 }
-
 function layout_ballot() {
     $("#reviewer-2").addClass("hidden")
     $("#verified-button").addClass("hidden")
     $("#edit-button").addClass("hidden")
     $("#no-consensus-button").addClass("hidden")
+    $("#ballot-container").addClass("hidden")
+    $("#ballot-button-container").addClass("hidden")
 }
-
 // ===========================================================
 // UI/UX Workflow Functions
 // ===========================================================
@@ -669,8 +669,17 @@ function validate_imprinted_id(imprinted_id) {
     $("#ballot-id-container").removeClass("alert-warning")
     if (found_ballot_id) {
         $("#ballot-id-container").addClass("alert-success")
+        $("#ballot-container").removeClass("hidden")
+        $("#ballot-container").addClass("show")
+        $("#ballot-button-container").removeClass("hidden")
+        $("#ballot-button-container").addClass("show")
     }else {
         $("#ballot-id-container").addClass("alert-danger")
+        $("#ballot-container").removeClass("show")
+        $("#ballot-container").addClass("hidden")
+        $("#ballot-button-container").removeClass("show")
+        $("#ballot-button-container").addClass("hidden")
+
     }
     return found_ballot_id
 }
