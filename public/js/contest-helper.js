@@ -27,3 +27,29 @@ function discard_all_ballots() {
         }
     })
 }
+
+function rla_info() {
+    let message_body = document.createElement('div')
+    let d1 = document.createElement('div')
+    $(d1).appendTo(message_body)
+    $('<img />').attr({
+        'src': '/img/Ballot_box_icon_color.png',
+        'width': 200
+    }).appendTo(d1)
+
+    let d2 = document.createElement('h2')
+    var link = $("<a>")
+    link.attr("href", "https://en.wikipedia.org/wiki/Risk-limiting_audit")
+    link.attr("title", "Wikipedia")
+    link.text("Learn more about risk-limiting audits at Wikipedia.com")
+    $(d2).html(link)
+    $(d2).appendTo(message_body)
+
+    bootbox.alert({
+        size: 'large',
+        message: message_body,
+        callback: function (result) {
+            $("#ballot-form").submit()
+        }
+    })
+}
