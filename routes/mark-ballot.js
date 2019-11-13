@@ -33,14 +33,19 @@ router.get('/', function (req, res) {
             ballots_array.splice(index, 1)
         }
     }
-    // TODO if all ballots marked (ie. none left for the dropdown) then go to different page
-    res.render('mark-ballot', {
-        message: message,
-        contest_id: contest_id,
-        contest_name: contest_name,
-        candidates: candidates,
-        ballots: JSON.stringify(ballots_array)
-    })
+    // If all ballots marked (ie. none left for the dropdown) then go to different page
+    console.log(ballots_array.length)
+    if (!ballots_array.length) {
+        res.render('all-ballots-marked')
+    } else {
+        res.render('mark-ballot', {
+            message: message,
+            contest_id: contest_id,
+            contest_name: contest_name,
+            candidates: candidates,
+            ballots: JSON.stringify(ballots_array)
+        })
+    }
 })
 
 module.exports = router

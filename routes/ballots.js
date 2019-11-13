@@ -66,6 +66,8 @@ router.post('/discard-all-ballots/', function (req, res) {
                 fs.unlinkSync('./data/ballots/'+file);
             }
         })
+        // Clear the list of ballots entered.
+        fs.writeFileSync ("data/contest/ballots_marked.json", JSON.stringify([]))
         var message = querystring.escape('Success discarding all ballots.')
         //console.log('message:', message)
         res.redirect(303, '/settings/?message=' + message)
