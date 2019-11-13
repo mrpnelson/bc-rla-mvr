@@ -34,7 +34,6 @@ router.get('/', function (req, res) {
         }
     }
     // If all ballots marked (ie. none left for the dropdown) then go to different page
-    console.log(ballots_array.length)
     if (!ballots_array.length) {
         res.render('all-ballots-marked')
     } else {

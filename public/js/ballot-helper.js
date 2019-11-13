@@ -185,12 +185,15 @@ function prepare_ballot_for_review() {
     $("#verified-button").removeClass("hidden")
     $("#verified-button").addClass("show")
 
-    // Show/hide 'Edit', 'Clear', 'No Consensus' buttons
+    // Show/hide 'Edit', 'Clear', 'No Consensus', 'Contest Not on Ballot' buttons
     $("#reset-button").addClass("hidden")
     $("#edit-button").removeClass("hidden")
     $("#edit-button").addClass("show")
     $("#no-consensus-button").removeClass("hidden")
     $("#no-consensus-button").addClass("show")
+
+    $("#not-on-ballot-button").removeClass("show")
+    $("#not-on-ballot-button").addClass("hidden")
 
     // Make ballot read-only
     disable_ballot()
@@ -244,6 +247,38 @@ function enable_ballot() {
     //    size: 'large',
     //    message: message_body
     //})
+}
+function contest_not_on_ballot() {
+    let message_body = document.createElement('div')
+    $(message_body).addClass('alert alert-info')
+    let message_details = document.createElement('div')
+    $('<h2>').text('Reviewer #2, please confirm that the contest is not the ballot.').appendTo(message_details)
+    $('<div>')
+        .appendTo(message_details)
+    $(message_details).appendTo(message_body)
+    bootbox.confirm({
+        size: 'large',
+        message: message_body,
+        buttons: {
+            confirm: {
+                label: 'Confirmed. The contest is not on this ballot.',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'Cancel. Go back to ballot.'
+            }
+        },
+        callback: function (result) {
+            if (result) {
+                reset_ballot()
+                let counted_json = count_as_not_on_ballot()
+                $('#ballot_string_calc').text(counted_json)
+                submit_ballot()
+            } else {
+                //alert('go back')
+            }
+        }
+    })
 }
 function submit_ballot() {
     // Make sure ballot id is within the set
@@ -568,6 +603,18 @@ function count_ballot_form() {
     var votes = {}
     var contest_id = $('input[name="contest_id"]').val()
     votes[contest_id] = ballot_selections2
+    manual_cvr = Object.assign({"votes": votes}, manual_cvr)
+    manual_cvr = Object.assign({"id": ballot_value}, manual_cvr)
+    let mcvr_json = JSON.stringify(manual_cvr)
+    return mcvr_json
+}
+function count_as_not_on_ballot() {
+    var manual_cvr = {}
+    var ballot_id_json = {}
+    var ballot_key = "ballot_id"
+    var ballot_value = $("#imprinted_id").val()
+    ballot_id_json[ ballot_key ] = ballot_value
+    var votes = {}
     manual_cvr = Object.assign({"votes": votes}, manual_cvr)
     manual_cvr = Object.assign({"id": ballot_value}, manual_cvr)
     let mcvr_json = JSON.stringify(manual_cvr)
