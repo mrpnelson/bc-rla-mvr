@@ -411,7 +411,6 @@ function submit_ballot_with_confirmation() {
         $('#invalidBallotModal').modal('show')
     }
 }
-
 function display_selection1(candidates, ballot_json) {
     let message_body = document.createElement('div')
     let d1 = document.createElement('div')
@@ -455,7 +454,6 @@ function display_selection1(candidates, ballot_json) {
     });
     return message_body
 }
-
 function display_selection2(candidates, ballot_json) {
     //console.log('ballot_json', ballot_json)
     let message_body = document.createElement('div')
@@ -513,7 +511,6 @@ function display_selection2(candidates, ballot_json) {
     });
     return message_body
 }
-
 // ===========================================================
 // Read and process ballot form
 // ===========================================================
@@ -684,28 +681,22 @@ function on_change_ballot_dropdown(selected_value) {
     $("#imprinted_id").val(selected_value)
     update_json_preview()
 }
-
 function reverseObject(object) {
     var newObject = {};
     var keys = [];
-
     for (var key in object) {
         //console.log('key:', key)
         keys.push(key);
     }
-
     //for (var i = 0; i < keys.length; i++) {
     for (var i = keys.length - 1; i >= 0; i--) {
         //console.log("i:", i)
         //console.log("keys[i]:", keys[i])
-
         var value = object[keys[i]]
         //console.log('value:', value)
-
         //console.log('newObject BEFORE:', newObject)
         newObject[keys[i]]= value
         //console.log('newObject AFTER:', newObject)
     }
-
     return newObject;
-  }
+}
