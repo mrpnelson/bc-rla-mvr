@@ -48,7 +48,7 @@
 <form method='post' enctype="multipart/form-data" name="contest-form" id="contest-form" action="/load-contest/preview/">
 
 <div class="alert alert-info">
-    <label for="file_to_upload">Contestants (JSON)</label>
+    <label for="file_to_upload">Contest (JSON)</label>
     <input type='file' name='contestants_upload' id='contestants_upload'>
 </div>
 
@@ -64,14 +64,19 @@
 
 <div class="panel panel-warning" style="margin-top:10px">
     <div class="panel-heading">
-        <h3 class="panel-title"><span class="fa fa-file"></span> <code>Structure and minimum requirements for uploaded JSON file:</code></h3>
+        <h3 class="panel-title"><span class="fa fa-file"></span> Structure and sample minimum requirements for uploaded <code>JSON</code> and <code>CSV</code> files</h3>
     </div>
     <div class="panel-body">
-        <pre>
+        <div class="panel panel-warning" style="margin-top:10px">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="fa fa-file"></span> <code>contest.json</code></h3>
+            </div>
+            <div class="panel-body">
+<pre>
 {
     "contests": [{
-        "Description": "TEAM MASCOT",
-        "Id": 333
+        "description": "TEAM MASCOT",
+        "id": 333
     }],
     "candidates": [
         {
@@ -91,11 +96,27 @@
         },
         {
             "description": "Write-in",
-            "id": 99,
+            "id": 14,
             "type": "WriteIn"
         }
     ]
 }
-        </pre>
+</pre>
+            </div>
+        </div>
+        <div class="panel panel-warning" style="margin-top:10px">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="fa fa-file"></span> <code>ballots.csv</code></h3>
+            </div>
+            <div class="panel-body">
+<pre>
+cart,tray,tabulator,batch,ballot in batch,imprint,absolute ballot index
+3,1,99808,81,1,99808-81-1,1
+3,1,99808,81,61,99808-81-61,61
+3,3,99804,37,10,99804-37-10,1101
+2,4,99804,42,104,99804-42-104,2100
+</pre>
+            </div>
+        </div>
     </div>
 </div>

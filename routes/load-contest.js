@@ -114,11 +114,11 @@ router.post('/confirmed', function (req, res) {
     } else {
         jsonContests = json.contests
         jsonCandidates = JSON.stringify(json.candidates)//convert the Candidates array to a JSON object
-        console.log('json',json)
-        console.log('jsonContests',jsonContests)
-        console.log('jsonCandidates',jsonCandidates)
+        //console.log('json',json)
+        //console.log('jsonContests',jsonContests)
+        //console.log('jsonCandidates',jsonCandidates)
         jsonContest = jsonContests[0]
-        console.log('jsonContest',jsonContest)
+        //console.log('jsonContest',jsonContest)
         jsonBallots = JSON.stringify(ballots_array)
 
         // Remove ballots

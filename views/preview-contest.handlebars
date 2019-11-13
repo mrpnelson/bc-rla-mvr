@@ -13,7 +13,7 @@
 
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title"><span class="fa fa-file"></span> <code>{{upload_json_name}}</code></h3>
+        <h3 class="panel-title"><span class="fa fa-file"></span> Contest <code>{{upload_json_name}}</code></h3>
     </div>
     <div class="panel-body">
         <pre id="upload_json"></pre>
@@ -22,7 +22,7 @@
 
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title"><span class="fa fa-file"></span> <code>{{upload_csv_name}}</code> converted to JSON</h3>
+        <h3 class="panel-title"><span class="fa fa-file"></span> Ballots <code>{{upload_csv_name}}</code> converted to JSON</h3>
     </div>
     <div class="panel-body">
         <pre id="upload_csv"></pre>
@@ -31,14 +31,14 @@
 
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title"><span class="fa fa-file"></span> Ballot IDs</h3>
+        <h3 class="panel-title"><span class="fa fa-file"></span> Ballot ID List</h3>
     </div>
     <div class="panel-body">
         <pre id="ballots_json"></pre>
     </div>
 </div>
 
-<div>
+<div style="margin-bottom:20px">
     <form method='post' name="contest-confirm-form" id="contest-confirm-form" action="/load-contest/confirmed/">
         <input type="hidden" name="upload_json_name" value="{{upload_json_name}}">
         <input type="hidden" name="ballots_json" value="{{ballots_json}}">
