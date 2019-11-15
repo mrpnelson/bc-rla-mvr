@@ -467,6 +467,18 @@ function display_selection2(candidates, ballot_json) {
     //console.log("Object.keys(votes)", Object.keys(votes))
     //console.log("Object.values(votes)", Object.values(votes))
     var ballot_selections = Object.values(votes)
+    //console.log('ballot_selections', ballot_selections)
+    var marks_obj = ballot_selections[0]
+    //console.log("marks_obj:", marks_obj)
+    var sorted_marks = sort_marks(marks_obj)
+    var sorted_marks_string = JSON.stringify(sorted_marks)
+    var x = sorted_marks_string.replace(/\\"/g, '')
+    //console.log("sorted_marks:", sorted_marks)
+    //console.log("sorted_marks_string:", sorted_marks_string)
+    //console.log("x:", x)
+
+    ballot_selections = [sorted_marks]
+
     ballot_selections.forEach(function(entry) {
         //console.log("entry",entry)
         contest_votes_keys = Object.keys(entry)
@@ -478,18 +490,28 @@ function display_selection2(candidates, ballot_json) {
         // TODO Sort by rank - See also https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
         for (i = 0; i < contest_votes_keys_array.length; i++) {
             var selected_candidate_id = contest_votes_keys_array[i]
+            //console.log("**************************")
             //console.log('selected_candidate_id:', selected_candidate_id)
-
             var selected_rank = entry[selected_candidate_id]
             //console.log('selected_rank:', selected_rank)
+
+            //var selected_candidate_id_x = selected_candidate_id.replace(/\\"/g, '')
+            //var selected_candidate_id_x = selected_candidate_id.replace(/\\\"/g, '')
+            //console.log('selected_candidate_id_x:', selected_candidate_id_x)
 
             //console.log("candidates", candidates )
             // Lookup selected_candidate name from the id.
             var selected_name = ''
             var selected_image = 'generic.png'
             for(let can of candidates) {
+                //console.log('-------------')
                 //console.log('can',can)
-                if (can.id.toString() === selected_candidate_id.toString()){
+                //console.log('can.id.toString()',can.id.toString())
+                let yyy = '\"' + can.id + '\"'
+                //console.log('yyy',yyy)
+                //console.log('selected_candidate_id:', selected_candidate_id)
+                if (yyy === selected_candidate_id){
+                //if (can.id.toString() === selected_candidate_id.toString()){
                     selected_name = can.description
                     if (can.image) {
                         selected_image = can.image
@@ -510,6 +532,37 @@ function display_selection2(candidates, ballot_json) {
         }
     });
     return message_body
+}
+function sort_marks(marks_obj) {
+    //console.log("sort_marks(marks_obj):", marks_obj)
+    var rank_sorted = [null,null,null,null,null]
+    let counter = 0
+    for (let mark_key in marks_obj) {
+        //console.log("mark_key:", mark_key)
+        let mark_value = marks_obj[mark_key]
+        //console.log("mark_value:", mark_value)
+        //rank_sorted.splice(mark_value, 0, mark_key)
+        let rank_index = mark_value-1
+        rank_sorted[rank_index] = mark_key;
+        counter++
+    }
+    //console.log("counter:", counter)
+    var num_marks = counter + 1
+    //console.log("num_marks:", num_marks)
+    //console.log("rank_sorted:", rank_sorted)
+
+    // Create object, loop rank sorted.
+    var obj = {}
+    for (rank_index = 0; rank_index < counter; rank_index++) {
+        //console.log("rank_index:", rank_index)
+        let rank_order = rank_index + 1
+        //console.log("rank_order:", rank_order)
+        var candidate_id = rank_sorted[rank_index]
+        //console.log("candidate_id:", candidate_id)
+        obj['"'+candidate_id+'"'] = rank_order
+    }
+    //console.log("obj:", obj)
+    return (obj)
 }
 // ===========================================================
 // Read and process ballot form

@@ -26,7 +26,6 @@
                         <h2>Processed Ballot</h2>
                         <div id="ballot_string_2" class="alert alert-success">
                         </div>
-                        <i class="fa fa-check-circle">&nbsp;</i><code>Known TO-DO: List by rank</code>
                     </div>
                 </div>
             </div>
@@ -61,4 +60,38 @@ $(function(){
         $("#ballot_status").text('Resubmitting form is disabled.')
     }
 })
+
+function sort_marks(marks_obj) {
+    //console.log("sort_marks(marks_obj):", marks_obj)
+    var rank_sorted = [null,null,null,null,null]
+    let counter = 0
+    for (let mark_key in marks_obj) {
+        //console.log("mark_key:", mark_key)
+        let mark_value = marks_obj[mark_key]
+        //console.log("mark_value:", mark_value)
+        //rank_sorted.splice(mark_value, 0, mark_key)
+        let rank_index = mark_value-1
+        rank_sorted[rank_index] = mark_key;
+        counter++
+    }
+    //console.log("counter:", counter)
+    var num_marks = counter + 1
+    //console.log("num_marks:", num_marks)
+    //console.log("rank_sorted:", rank_sorted)
+
+    // Create object, loop rank sorted.
+    var obj = {}
+    for (rank_index = 0; rank_index < counter; rank_index++) {
+        //console.log("rank_index:", rank_index)
+        let rank_order = rank_index + 1
+        //console.log("rank_order:", rank_order)
+        var candidate_id = rank_sorted[rank_index]
+        //console.log("candidate_id:", candidate_id)
+        obj['"'+candidate_id+'"'] = rank_order
+        //obj[""+candidate_id+""] = rank_order
+        //obj[candidate_id] = rank_order
+    }
+    //console.log("obj:", obj)
+    return (obj)
+}
 </script>
