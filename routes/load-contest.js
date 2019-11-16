@@ -18,20 +18,20 @@ router.post('/preview', function (req, res) {
     form.encoding = 'utf-8';
     form.uploadDir = "./data/uploads/raw";
     form.parse(req, function (err, fields, files) {
-        //console.log('form fields', fields)
-        //console.log('files', files)
+        console.log('form fields', fields)
+        console.log('files', files)
 
         var error_message = ''
         var contestants_upload = files.contestants_upload
-        //console.log('contestants_upload:',contestants_upload)
+        console.log('contestants_upload:',contestants_upload)
         if (contestants_upload.type !== 'application/json') {
             error_message += ' Please upload contestants in a JSON file (.json).'
         }
 
         var ballots_upload = files.ballots_upload
-        //console.log('ballots_upload:',ballots_upload)
+        console.log('ballots_upload:',ballots_upload)
 
-        if (ballots_upload.type !== 'text/csv') {
+        if (!((ballots_upload.type === 'text/csv') || (ballots_upload.type === 'application/vnd.ms-excel'))) {
             error_message += ' Please upload ballot in a CSV file (.csv).'
         }
 
