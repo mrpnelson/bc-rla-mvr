@@ -28,6 +28,10 @@ function discard_all_ballots() {
     })
 }
 
+function generate_random_ballots() {
+    $("#generate-random-ballots").submit()
+}
+
 function rla_info() {
     let message_body = document.createElement('div')
     let d1 = document.createElement('div')

@@ -29,6 +29,22 @@
             </form>
         </div>
     </div>
+    <div class="row" style="margin:16px">
+        <div class="col-sm-6">
+            <form name="generate-random-ballots" id="generate-random-ballots" action="/ballots/generate-random-ballots/" method="POST">
+                <button type="button" class="btn btn-info fa fa-random" onclick="generate_random_ballots()"> Generate Random Test Results</button>
+            </form>
+        </div>
+        {{#if mvr_random}}
+            <div style="margin-bottom:10px" class="col-sm-6">
+                <a type="button" href="https://rla.vptech.io/output/mvr_random.json" class="btn btn-success btn-lg fa fa-download" download="{{mvr_random}}"> Download {{mvr_random}}</a>
+<br>
+<a href="https://rla.vptech.io/output/mvr_random.json">https://rla.vptech.io/output/mvr_random.json</a>
+<br>
+                <a type="button" href="./output/{{mvr_random}}" class="btn btn-info btn-lg fa fa-download" download="{{mvr_random}}"> Download {{mvr_random}}</a>
+            </div>
+        {{/if }}
+    </div>
     <div class="row" style="margin-top:32px">
         <div class="col-sm-12">
             &nbsp;

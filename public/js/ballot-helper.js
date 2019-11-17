@@ -252,7 +252,7 @@ function contest_not_on_ballot() {
     let message_body = document.createElement('div')
     $(message_body).addClass('alert alert-info')
     let message_details = document.createElement('div')
-    $('<h2>').text('Reviewer #2, please confirm that the contest is not the ballot.').appendTo(message_details)
+    $('<h2>').text('Reviewer #2, please confirm that the contest is not on the ballot.').appendTo(message_details)
     $('<div>')
         .appendTo(message_details)
     $(message_details).appendTo(message_body)
