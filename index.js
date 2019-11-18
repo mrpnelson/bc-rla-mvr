@@ -199,13 +199,29 @@ var session = require('express-session')
 // ===============================================
 // Enable session: memory store
 // ===============================================
+// npm i -S uuid
+const uuid = require('uuid/v4')
 // npm i -S express-session
 console.log("BEGIN memory session store")
-app.use(session ({
-    resave: false,
-    saveUninitialized: false,
+
+// app.use(session ({
+//     resave: false,
+//     saveUninitialized: false,
+//     secret: settings.cookieSecret,
+// }))
+app.use(session({
+    genid: (req) => {
+      console.log('Inside the session middleware')
+      console.log(req.sessionID)
+      return uuid() // use UUIDs for session IDs
+    },
     secret: settings.cookieSecret,
+    //secret: 'replace this with a randomly generated string that is pulled from an environment variable',
+    resave: false,
+    saveUninitialized: true
 }))
+  
+
 console.log("END memory session store")
 
 // ===========================================================================
@@ -235,7 +251,13 @@ app.use(function(req, res, next){
 // Define routes
 //
 function authorize(req, res, next){
-   return next()
+    if (req.session.luckyNumber) {
+        console.log('Your existing lucky number: ' + req.session.luckyNumber)
+    } else {
+        req.session.luckyNumber = Math.floor(Math.random() * 10) + 1;  // returns a random integer from 1 to 10
+        console.log('Your brand new lucky number: ' + req.session.luckyNumber)
+    }
+    return next()
 }
 
 // Home
