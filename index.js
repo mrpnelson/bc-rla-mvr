@@ -211,7 +211,7 @@ console.log("BEGIN memory session store")
 // }))
 app.use(session({
     genid: (req) => {
-      console.log('Inside the session middleware')
+      //console.log('Inside the session middleware')
       console.log(req.sessionID)
       return uuid() // use UUIDs for session IDs
     },
@@ -252,10 +252,19 @@ app.use(function(req, res, next){
 //
 function authorize(req, res, next){
     if (req.session.luckyNumber) {
-        console.log('Your existing lucky number: ' + req.session.luckyNumber)
+        //console.log('Your existing lucky number: ' + req.session.luckyNumber)
     } else {
         req.session.luckyNumber = Math.floor(Math.random() * 10) + 1;  // returns a random integer from 1 to 10
-        console.log('Your brand new lucky number: ' + req.session.luckyNumber)
+        //console.log('Your brand new lucky number: ' + req.session.luckyNumber)
+    }
+    return next()
+}
+function load_session(req, res, next){
+    if (req.session.ballot_prefix) {
+        //console.log('Your existing ballot_prefix: ' + req.session.ballot_prefix)
+    } else {
+        req.session.ballot_prefix = '998' // TODO read from config file
+        //console.log('Your default ballot_prefix: ' + req.session.ballot_prefix)
     }
     return next()
 }
@@ -271,7 +280,7 @@ var load_contest = require('./routes/load-contest')
 app.use('/load-contest', authorize, load_contest)
 
 var mark_ballot = require('./routes/mark-ballot')
-app.use('/mark-ballot', authorize, mark_ballot)
+app.use('/mark-ballot', authorize, load_session, mark_ballot)
 
 var ballots = require('./routes/ballots')
 app.use('/ballots', authorize, ballots)
@@ -283,7 +292,7 @@ var export_contest = require('./routes/export-contest')
 app.use('/export-contest', authorize, export_contest)
 
 var settings = require('./routes/settings')
-app.use('/settings', authorize, settings)
+app.use('/settings', authorize, load_session, settings)
 
 //
 // Special routes if page not found or an error occurred

@@ -4,11 +4,24 @@ var querystring = require("querystring")
 
 // Settings
 router.get('/', function (req, res) {
+    var ballot_prefix = req.session.ballot_prefix
     var message = req.query.message
     res.render('settings', {
+        ballot_prefix: ballot_prefix,
         message: message
     })
 })
+
+router.post('/ballot_prefix/', function (req, res) {
+    var new_ballot_prefix = req.body.ballot_prefix
+    req.session.ballot_prefix = new_ballot_prefix
+    var message = 'Updated default ballot prefix to ' + new_ballot_prefix
+    res.render('settings', {
+        ballot_prefix: new_ballot_prefix,
+        message: message
+    })
+})
+
 
 router.post('/generate-random-ballots/', function (req, res) {
     var fs = require('fs')

@@ -37,7 +37,9 @@ router.get('/', function (req, res) {
     if (!ballots_array.length) {
         res.render('all-ballots-marked')
     } else {
+        var ballot_prefix = req.session.ballot_prefix
         res.render('mark-ballot', {
+            ballot_prefix: ballot_prefix,
             message: message,
             contest_id: contest_id,
             contest_name: contest_name,
