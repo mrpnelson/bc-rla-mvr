@@ -250,14 +250,32 @@ app.use(function(req, res, next){
 //
 // Define routes
 //
+var login = require('./routes/login')
+app.use('/login', login)
+
 function authorize(req, res, next){
-    if (req.session.luckyNumber) {
-        //console.log('Your existing lucky number: ' + req.session.luckyNumber)
+
+    // Check for existence of passphrase.json file 
+    // before checking for authorization
+    const fs = require('fs')
+    const path = './passphrase.json'
+    
+    if (fs.existsSync(path)) {
+        // Continue if authorized
+        if(req.session.is_logged_in) return next()
+
+        // Otherwise redirect to login
+        res.redirect(303, '/login')
     } else {
-        req.session.luckyNumber = Math.floor(Math.random() * 10) + 1;  // returns a random integer from 1 to 10
-        //console.log('Your brand new lucky number: ' + req.session.luckyNumber)
+        return next()
     }
-    return next()
+
+    // if (req.session.luckyNumber) {
+    //     //console.log('Your existing lucky number: ' + req.session.luckyNumber)
+    // } else {
+    //     req.session.luckyNumber = Math.floor(Math.random() * 10) + 1;  // returns a random integer from 1 to 10
+    //     //console.log('Your brand new lucky number: ' + req.session.luckyNumber)
+    // }
 }
 function load_session(req, res, next){
     if (req.session.ballot_prefix) {

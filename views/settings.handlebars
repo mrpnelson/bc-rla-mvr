@@ -22,7 +22,6 @@
             <a href="/load-contest" class="btn btn-success fa fa-upload"> Load Contest</a>
         </div>
     </div>
-
     <div class="row" style="margin:16px"> 
         <form name="ballot_prefix_form" id="ballot_prefix_form" action="/settings/ballot_prefix/" method="POST">
         <div class="col-sm-6 text-right">
@@ -36,11 +35,7 @@
             <button type="submit" class="btn btn-warning fa fa-arrow-right"> Submit new default ballot prefix</button>
         </div>
         </form>
-
     </div>
-
-
-
     <div class="row" style="margin:16px">
         <div class="col-sm-12">
             <form name="discard-all-ballots" id="discard-all-ballots" action="/ballots/discard-all-ballots/" method="POST">
@@ -59,6 +54,23 @@
                 <a type="button" href="/output/{{mvr_random}}" class="btn btn-info btn-lg fa fa-download" download="{{mvr_random}}"> Download {{mvr_random}}</a>
             </div>
         {{/if }}
+    </div>
+    <div class="row" style="margin:16px; display: none"> 
+        <form name="ballot_prefix_form" id="ballot_prefix_form" action="/settings/passphrase/" method="POST">
+        <div class="col-sm-3 text-right">
+            {{#if checkbox_require_passphrase}}
+                <input type="checkbox" name="checkbox_require_passphrase" checked="checked"> Require Passphrase
+            {{else}}
+                <input type="checkbox" name="checkbox_require_passphrase"> Require Passphrase
+            {{/if }}
+        </div>
+        <div class="col-sm-5">
+            <input type="text" name="passphrase" id="passphrase" value="{{passphrase}}" size="30"/>
+        </div>
+        <div class="col-sm-4">
+            <button type="submit" class="btn btn-warning fa fa-arrow-right"> Save changes</button>
+        </div>
+        </form>
     </div>
     <div class="row" style="margin-top:32px">
         <div class="col-sm-12">

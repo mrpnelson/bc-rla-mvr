@@ -22,6 +22,22 @@ router.post('/ballot_prefix/', function (req, res) {
     })
 })
 
+// TODO: Implement or remove
+router.post('/passphrase/', function (req, res) {
+    var checkbox_require_passphrase = req.body.checkbox_require_passphrase
+    var passphrase = req.body.passphrase
+    
+    var message = 'Updated checkbox_require_passphrase: ' + checkbox_require_passphrase + ' - passphrase: ' + passphrase
+    var ballot_prefix = req.session.ballot_prefix
+
+   // if (checkbox_require_passphrase)
+    res.render('settings', {
+        checkbox_require_passphrase: checkbox_require_passphrase,
+        passphrase: passphrase,
+        ballot_prefix: ballot_prefix,
+        message: message
+    })
+})
 
 router.post('/generate-random-ballots/', function (req, res) {
     var fs = require('fs')
