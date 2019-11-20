@@ -41,35 +41,51 @@
     </div>
 </div>
 
-<div class="panel-body">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title">X Ballots Entered</h3>
-        </div>
-        <div class="panel-body">
-            <ol>
-                <li>List ballot ids here</li>
-            </ol>
-        </div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h2 class="panel-title" style="font-size: xx-large">
+            <a data-toggle="collapse" href="#panel-A" aria-expanded="false" aria-controls="footwear">{{ballots_entered}} Ballots Entered</a>
+        </h2>
     </div>
-    <div class="panel panel-success">
-        <div class="panel-heading">
-            <h3 class="panel-title">Y Ballots Reviewed</h3>
-        </div>
-        <div class="panel-body">
-            <ol>
-                <li>List ballot ids here</li>
-            </ol>
-        </div>
+    <div class="panel-body collapse" id="panel-A">
+        <ol>
+            {{#each ballots_entered_json}}
+                <li>
+                    {{this}}
+                </li>
+            {{/each}}
+        </ol>
     </div>
-    <div class="panel panel-warning">
-        <div class="panel-heading">
-            <h3 class="panel-title">Z Ballots Remaining to be Reviewed</h3>
-        </div>
-        <div class="panel-body">
-            <ol>
-                <li>List ballot ids here</li>
-            </ol>
-        </div>
+</div>
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h2 class="panel-title" style="font-size: xx-large">
+            <a data-toggle="collapse" href="#panel-B" aria-expanded="false" aria-controls="footwear">{{ballots_reviewed}} Ballots Reviewed</a>
+        </h2>
+    </div>
+    <div class="panel-body collapse" id="panel-B">
+        <ol>
+            {{#each ballots_reviewed_json}}
+                <li>
+                    {{this}}
+                </li>
+            {{/each}}
+        </ol>
+    </div>
+</div>
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        <h2 class="panel-title" style="font-size: xx-large">
+            <a data-toggle="collapse" href="#panel-C" aria-expanded="false" aria-controls="footwear">{{ballots_remaining}} Ballots Remaining to be Reviewed</a>
+        </h2>
+    </div>
+    <div class="panel-body collapse" id="panel-C">
+        <ol>
+            {{#each ballots_remaining_json}}
+                <li>
+                    {{this}}
+                </li>
+            {{/each}}
+        </ol>
     </div>
 </div>
