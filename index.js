@@ -281,7 +281,7 @@ function load_session(req, res, next){
     if (req.session.ballot_prefix) {
         //console.log('Your existing ballot_prefix: ' + req.session.ballot_prefix)
     } else {
-        req.session.ballot_prefix = '998' // TODO read from config file
+        req.session.ballot_prefix = '' // TODO read from config file
         //console.log('Your default ballot_prefix: ' + req.session.ballot_prefix)
     }
     return next()
