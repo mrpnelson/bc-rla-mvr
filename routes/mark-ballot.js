@@ -33,6 +33,7 @@ router.get('/', function (req, res) {
             ballots_array.splice(index, 1)
         }
     }
+    var ballots_remaining = ballots_array.length
     // If all ballots marked (ie. none left for the dropdown) then go to different page
     if (!ballots_array.length) {
         res.render('all-ballots-marked')
@@ -44,7 +45,8 @@ router.get('/', function (req, res) {
             contest_id: contest_id,
             contest_name: contest_name,
             candidates: candidates,
-            ballots: JSON.stringify(ballots_array)
+            ballots: JSON.stringify(ballots_array),
+            ballots_remaining: ballots_remaining
         })
     }
 })
