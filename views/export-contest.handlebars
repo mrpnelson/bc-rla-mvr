@@ -77,7 +77,7 @@
 
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title"><span class="fa fa-file"></span> <code>{{export_filename}}</code></h3>
+        <h3 class="panel-title"><span class="fa fa-file"></span> <code>{{export_filename_json}}</code></h3>
     </div>
     <div class="panel-body">
         <pre>
@@ -89,7 +89,10 @@
 </div>
 
 <div style="margin-bottom:10px">
-    <a type="button" href="./output/{{export_filename}}" class="btn btn-success btn-lg fa fa-download" download="{{export_filename}}"> Download {{export_filename}}</a>
+    <a type="button" href="./output/{{export_filename_json}}" class="btn btn-success btn-lg fa fa-download" download="{{export_filename_json}}"> Download {{export_filename_json}}</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <a type="button" href="./output/{{export_filename_csv}}" class="btn btn-success btn-lg fa fa-download" download="{{export_filename_csv}}"> Download {{export_filename_csv}}</a>
+
 </div>
 
 <script>

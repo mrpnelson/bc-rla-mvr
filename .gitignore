@@ -7,6 +7,7 @@ bak
 data/
 data/ballots/
 data/ballot_history/
+data*
 
 # Logs
 logs
@@ -24,6 +25,7 @@ public/img/candidates/
 
 # Passphrase
 passphrase.json
+passphrase*.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
