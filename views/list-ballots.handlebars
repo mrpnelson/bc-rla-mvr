@@ -12,13 +12,11 @@
                 <h3 class="panel-title">Purpose of Page</h3>
             </div>
             <div class="panel-body">
-                List the following for each ballot entered:
+                List the following ballot details:
                 <ul>
-                    <li>Ballot ID</li>
-                    <li>Status of ballot</li>
-                    <li>Raw JSON of ballot as entered</li>
-                    <li>Transformed JSON based on business logic</li>
-                    <li>Options to edit or discard ballot</li>
+                    <li>Number and list of ballots submitted for review</li>
+                    <li>Number and list of ballots reviewed</li>
+                    <li>Number and list of ballots remaining to be reviewed</li>
                 </ul>
             </div>
         </div>
@@ -43,191 +41,35 @@
     </div>
 </div>
 
-<div>
-    <h2>Ballots</h2>
-    {{#if message}}
-        <div class="alert alert-info">
-            <h1><i class="fa fa-info-circle"></i> {{ message }}</h1>
+<div class="panel-body">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">X Ballots Entered</h3>
         </div>
-    {{/if }}
+        <div class="panel-body">
+            <ol>
+                <li>List ballot ids here</li>
+            </ol>
+        </div>
+    </div>
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Y Ballots Reviewed</h3>
+        </div>
+        <div class="panel-body">
+            <ol>
+                <li>List ballot ids here</li>
+            </ol>
+        </div>
+    </div>
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title">Z Ballots Remaining to be Reviewed</h3>
+        </div>
+        <div class="panel-body">
+            <ol>
+                <li>List ballot ids here</li>
+            </ol>
+        </div>
+    </div>
 </div>
-
-{{#if json_content}}
-JSON Ballot Files: {{ json json_content }}
-{{/if }}
-
-<form name="discard-all-ballots" id="discard-all-ballots" action="/ballots/discard-all-ballots/" method="POST">
-<button type="submit" class="btn btn-danger fa fa-trash" onclick="discard_all_ballots()"> Discard All Ballots</button>
-</form>
-
-<h1> TODO: Implement table below</h1>
-<h2>Note: content below is placeholder data</h2>
-<div id="templates_container" class="corner10" style="border:0px solid purple; background-color: white; margin-bottom: 1px; margin-top:1px">
-    <table id="templates_table" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th>Ballot ID</th>
-                <th>Status</th>
-                <th>Raw JSON</th>
-                <th>Transformed JSON</th>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-                <tr>
-                    <td align="right">1.</td>
-                    <td>
-                        <code>ABCDEFGHIJKLMONPQRSTUVWXYZ</code>
-                    </td>
-                    <td>
-                        <span class="fa fa-check-circle"></span>&nbsp;Valid
-                    </td>
-                    <td>
-{"ballot_id":"ABCDEFGHIJKLMONPQRSTUVWXYZ", "ballot-selections":[{"a1":8},{"b2":7},{"c3":6},{"d4":5},{"e5":4},{"f6":3},{"g7":2},{"h8":1}]}
-                    </td>
-                    <td>
-{"ballot_id":"ABCDEFGHIJKLMONPQRSTUVWXYZ", "ballot-selections":[{"a1":8},{"b2":7},{"c3":6},{"d4":5},{"e5":4},{"f6":3},{"g7":2},{"h8":1}]}
-                    </td>
-                    <td align="right">
-                        <a class="btn btn-success fa fa-pencil" href="/templates/edit/{{ this.TemplateID }}"> Edit</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger fa fa-trash" href="/templates/delete/{{ this.TemplateID }}"> Discard</a>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td align="right">2.</td>
-                    <td>
-                        <code>ABCDEFGHIJKLMONPQQQ</code>
-                    </td>
-                    <td>
-                        <span class="fa fa-exclamation-triangle"></span>&nbsp;Overvote
-                    </td>
-                    <td>
-{"ballot_id":"ABCDEFGHIJKLMONPQQQ", "ballot-selections":[{"a1":1},{"b2":2},{"c3":3},{"d4":3},{"e5":3},{"f6":3},{"g7":3},{"h8":3}]}
-                    </td>
-                    <td>
-{"ballot_id":"ABCDEFGHIJKLMONPQQQ", "ballot-selections":[{"a1":1},{"b2":2}]}
-                    </td>
-                    <td align="right">
-                        <a class="btn btn-success fa fa-pencil" href="/templates/edit/{{ this.TemplateID }}"> Edit</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger fa fa-trash" href="/templates/delete/{{ this.TemplateID }}"> Discard</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">3.</td>
-                    <td>
-                        <code>ABCDEFGHIJKLMONPRRR</code>
-                    </td>
-                    <td>
-                        <span class="fa fa-trash"></span>&nbsp;Flagged Invalid
-                    </td>
-                    <td>
-                        {"ballot_id":"ABCDEFGHIJKLMONPRRR"}
-                    </td>
-                    <td>
-                        N/A - Skipped
-                    </td>
-                    <td align="right">
-                        <a class="btn btn-success fa fa-pencil" href="/templates/edit/{{ this.TemplateID }}"> Edit</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger fa fa-trash" href="/templates/delete/{{ this.TemplateID }}"> Discard</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">4.</td>
-                    <td>
-                        <code>ABCDEFGHIJKLMONPSSS</code>
-                    </td>
-                    <td>
-                        <span class="fa fa-check-circle"></span>&nbsp;Valid
-                    </td>
-                    <td>
-                        {"ballot_id":"ABCDEFGHIJKLMONPSSS", "ballot-selections":[{"a1":1}]}
-                    </td>
-                    <td>
-                        {"ballot_id":"ABCDEFGHIJKLMONPSSS", "ballot-selections":[{"a1":1}]}
-                    </td>
-                    <td align="right">
-                        <a class="btn btn-success fa fa-pencil" href="/templates/edit/{{ this.TemplateID }}"> Edit</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger fa fa-trash" href="/templates/delete/{{ this.TemplateID }}"> Discard</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">5.</td>
-                    <td>
-                        <code>ABCDEFGHIJKLMONPTTT</code>
-                    </td>
-                    <td>
-                        <span class="fa fa-trash"></span>&nbsp;Invalid Overvote
-                    </td>
-                    <td>
-                        {"ballot_id":"ABCDEFGHIJKLMONPTTT", "ballot-selections":[{"a1":1},{"b2":1}]}
-                    </td>
-                    <td>
-                        N/A - Skipped. Invalid because more than one first choice selected.
-                    </td>
-                    <td align="right">
-                        <a class="btn btn-success fa fa-pencil" href="/templates/edit/{{ this.TemplateID }}"> Edit</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger fa fa-trash" href="/templates/delete/{{ this.TemplateID }}"> Discard</a>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td align="right">6.</td>
-                    <td>
-                        <code>ABCDEFGHIJKLMONPUUU</code>
-                    </td>
-                    <td>
-                        <span class="fa fa-exclamation-triangle"></span>&nbsp;Overvote
-                    </td>
-                    <td>
-{"ballot_id":"ABCDEFGHIJKLMONPUUU", "ballot-selections":[{"a1":1},{"a1":2},{"a1":3},{"a1":4},{"a1":5},{"a1":6},{"a1":7},{"a1":8}]}
-                    </td>
-                    <td>
-{"ballot_id":"ABCDEFGHIJKLMONPUUU", "ballot-selections":[{"a1":1}]}
-                    </td>
-                    <td align="right">
-                        <a class="btn btn-success fa fa-pencil" href="/templates/edit/{{ this.TemplateID }}"> Edit</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger fa fa-trash" href="/templates/delete/{{ this.TemplateID }}"> Discard</a>
-                    </td>
-                </tr>
-            </tbody>
-    </table>
-</div>
-
-<script>
-function discard_all_ballots() {
-    $("#discard-all-ballots").submit();
-}
-
-$(document).ready(function(){
-    templates_table = $('#templates_table').DataTable({
-        "columnDefs": [
-            { "orderable": false, "targets": [3,4,5,6] }
-        ],
-        info: true,
-        ordering: true,
-        pageLength: 10,
-        paging: false,
-        responsive: false,
-        searching: true,
-        stateSave: false,
-        order: [ 0, "asc" ]
-    });
-    new $.fn.dataTable.FixedHeader( templates_table );
-});
-</script>
-
