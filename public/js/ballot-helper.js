@@ -232,8 +232,7 @@ function enable_ballot() {
     // Update instructions to end user
     $("#reviewer-2").html("<h1>Reviewer #2 - Revise and verify</h1>")
     
-    // Enable ballot-id input and ballot checkboxes
-    $("#imprinted_id").removeAttr('disabled')
+    // Enable ballot-id dropdown and ballot checkboxes
     $("#dropdown-container").removeClass("hidden")
     $("#dropdown-container").addClass("show")
     $("input:checkbox").removeAttr('disabled')
