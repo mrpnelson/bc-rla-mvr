@@ -26,6 +26,11 @@ router.get('/', function (req, res) {
 
     var export_data = {}
 
+    var export_filename_csv = 'mvr_ballots.csv'
+
+    var export_data_string_csv = 'ballot_imprint_id,ballot_file,votes\r\n'
+    fs.writeFileSync ("public/output/"+export_filename_csv, export_data_string_csv)
+
     // Create 'contests' object and populate
     var contests = []
     var contest_obj = {}
@@ -58,35 +63,31 @@ router.get('/', function (req, res) {
                 var ballot = {}
                 var ballot_contents = fs.readFileSync('./data/ballots/'+file, 'utf8')
                 var ballot_contents_json = JSON.parse(ballot_contents)
-                // ballot.id = ballot_contents_json.ballot_id
-                // ballot.votes = ballot_contents_json.ballot_selections
-                //ballot.contents = ballot_contents_json
-                /*
-        {
-            "id": "99808-81-1",
-            "votes": {
-                "333": {
-                    "15": 1,
-                    "16": 2,
-                    "17": 3,
-                    "18": 4
-                }
-            }
-        },
-                */
-                //console.log('ballot_contents_json', ballot_contents_json)
-                //ballots.push(ballot)
+                console.log('ballot_contents_json',ballot_contents_json)
                 ballots.push(ballot_contents_json)
+                var ballot_id = ballot_contents_json.id
+                console.log('ballot_id',ballot_id)
+                var ballot_votes = JSON.stringify(ballot_contents_json.votes)
+
+
+                ballot_votes2 = ballot_votes.replace(/,/g, ' ') // TODO: instead of getting rid of commas wrap the string in single quotes
+                console.log('ballot_votes2',ballot_votes2)
+
+                var export_data_string_csv = ballot_id + ','+file + ',' + ballot_votes2 + '\r\n'
+                fs.appendFileSync ("public/output/"+export_filename_csv, export_data_string_csv)
             }
         })
         export_data.ballots = ballots
 
         // Write results to disk.
-        var export_filename = 'mvr_output.json'
+        var export_filename_json = 'mvr_output.json'
         //console.log("export_data",export_data)
         //console.log("export_data_string",JSON.stringify(export_data))
         var export_data_string = JSON.stringify(export_data)
-        fs.writeFile ("public/output/"+export_filename, export_data_string, function(err) {
+
+
+
+        fs.writeFile ("public/output/"+export_filename_json, export_data_string, function(err) {
             if (err) throw err
             // Create duplicate in data/contest_history/timestamp/
             var rawdate = getRawDate();
@@ -94,7 +95,7 @@ router.get('/', function (req, res) {
             if (!fs.existsSync(datedir)){
                 fs.mkdirSync(datedir);
             }
-            fs.writeFile (datedir+ "/"+export_filename, export_data_string, function(err) {
+            fs.writeFile (datedir+ "/"+export_filename_json, export_data_string, function(err) {
                 if (err) throw err
                 // Show results and link to download
                 res.render('export-contest', {
@@ -104,7 +105,8 @@ router.get('/', function (req, res) {
                     ballot_ids_list: ballot_ids_list,
                     ballot_contents_list: ballots,
                     export_data: export_data,
-                    export_filename: export_filename
+                    export_filename_json: export_filename_json,
+                    export_filename_csv: export_filename_csv
                 })
             })
         })
