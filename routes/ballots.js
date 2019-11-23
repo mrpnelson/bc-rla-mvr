@@ -12,15 +12,15 @@ router.post('/submit-ballot/', function (req, res) {
     var ballot_string_calc = req.body.ballot_string_calc
 
     // Write ballot and history to JSON
-    let filepath='data/ballots/'
-    let historypath='data/ballots_history/'
-    var filenameprefix=getRawDate();
-    let filename = filenameprefix + '.json'
-    let filedata = ballot_string_calc
+    var filepath='data/ballots/'
+    var historypath='data/ballots_history/'
+    var filedata = ballot_string_calc
+    var ballot_id = req.body.imprinted_id
+    var filenameprefix=getRawDate() + '_' + ballot_id
+    var filename = filenameprefix + '.json'
     write_data_to_disk(filepath, historypath, filename, filedata)
 
     // Append ballot id to list of marked ballots
-    var ballot_id = req.body.imprinted_id
     var ballots_marked = fs.readFileSync('data/contest/ballots_marked.json', 'utf8')
     var ballots_marked_json = JSON.parse(ballots_marked)
     var ballots_marked_array = []
