@@ -89,6 +89,6 @@ function getRawDate() {
     var date = new Date()
     var moment = require('moment')
     var dt = moment.tz(date, 'America/Los_Angeles')
-    dt = dt.format('YYYYMMDDHHmmss')
+    dt = dt.format('YYYYMMDDHHmmssSSS')
     return dt
 }
