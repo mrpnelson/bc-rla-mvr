@@ -9,5 +9,8 @@
 ### Install
 `$ npm install`
 
+### Optional: copy sample ballots, candidates, and contests
+`$ cp data/contest_sample/* data/contest`
+
 ### Run
 `$ node index.js`
