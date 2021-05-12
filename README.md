@@ -2,9 +2,11 @@
 
 # Risk-Limiting Audit Manual Cast Vote Record Ballot Entry Tool
 
-## This is an early alpha release.
+## This is a component related to the Sets of Half-Average Nulls Generate Risk-Limiting Audits (SHANGRLA) project (https://github.com/pbstark/SHANGRLA) by Philip B. Stark et al.
 
-## Expect significant changes in late alpha and early beta releases.
+## This MVR tool is an alpha release written in NodeJS.
+
+## The beta is currently in development and will be written in Python.
 
 ### Install
 `$ npm install`
