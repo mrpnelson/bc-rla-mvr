@@ -6,11 +6,35 @@
 *.bak
 bak
 
-# Run-time data
-data/
-data/ballots/
-data/ballot_history/
-data*
+# Ignore data files
+data/*
+
+# Keep data folder structure
+!data/ballots
+data/ballots/*
+!data/ballots/.gitkeep
+
+!data/ballots_history
+data/ballots_history/*
+!data/ballots_history/.gitkeep
+
+!data/contest
+data/contest/*
+!data/contest/.gitkeep
+
+!data/contest_history
+data/contest_history/*
+!data/contest_history/.gitkeep
+
+!data/uploads
+data/uploads/*
+!data/uploads/raw
+data/uploads/raw/*
+!data/uploads/raw/.gitkeep
+
+# Keep contest samples
+!data/contest_sample
+
 
 # Logs
 logs
