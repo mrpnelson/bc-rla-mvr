@@ -1,3 +1,6 @@
+# IDE
+*.code-workspace
+
 # Ignore files such as .DS_Store (OSX), *.bak
 .DS_STORE
 *.bak
