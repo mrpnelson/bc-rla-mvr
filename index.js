@@ -167,7 +167,7 @@ var querystring = require("querystring")
 // ===============================================
 // Specify port to listen on 
 // ===============================================
-app.set('port', process.env.PORT || 3001)
+app.set('port', process.env.PORT || 8887)
 
 // ===============================================
 // Load settings
@@ -340,7 +340,7 @@ app.use(function(err, req, res, next){
 //
 // Listen on the provided port
 //
-app.listen(app.get('port'), function(){
+app.listen(app.get('port'), '0.0.0.0', function(){
     console.log( 'Express started on http://localhost:' +
     app.get('port') + ' press Ctrl-C to terminate.' )
 })
